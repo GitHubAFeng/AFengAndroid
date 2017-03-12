@@ -42,15 +42,12 @@ public class XOutdatedUtils {
     }
 
     /**
-     * getColor过时方法处理
+     * getColor过时方法处理.  20170312,多此一举，ContextCompat直接用就行，已经默认做判断了
      *
      * @param id
      * @return
      */
     public static int getColor(@ColorRes int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            return ContextCompat.getColor(XFrame.getContext(), id);
-        else
-            return XFrame.getResources().getColor(id);
+        return ContextCompat.getColor(XFrame.getContext(), id);
     }
 }

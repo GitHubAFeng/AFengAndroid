@@ -1,11 +1,15 @@
 package com.youth.xf.utils.AFengUtils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.youth.xf.App;
 import com.youth.xf.R;
 import com.youth.xf.view.GlideCircleTransform;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * 作者： AFeng
@@ -28,7 +32,7 @@ public class ImgLoadUtil {
 
 
     /**
-     * 加载圆角图,暂时用到显示头像
+     * 从网络RUL加载圆角图,暂时用到显示头像
      */
     public static void displayCircle(Context context, ImageView imageView, String imageUrl) {
         Glide.with(context)
@@ -39,6 +43,20 @@ public class ImgLoadUtil {
                 .into(imageView);
     }
 
-
+    /**
+     * 从Bitmap加载圆角图,暂时用到显示头像
+     */
+    public static void displayCircleByBitmap(Context context, final ImageView imageView, Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        //Glide不能直接加载Bitmap，传递前需要先转为byte[]比特流就可以了
+        Glide.with(context)
+                .load(bytes)
+                .crossFade(500)
+                .error(R.drawable.ic_avatar_default)
+                .transform(new GlideCircleTransform(context))
+                .into(imageView);
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.youth.xf.ui.demo;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,16 +17,27 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.BitmapCallback;
 import com.youth.xf.BaseActivity;
 import com.youth.xf.R;
 import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
+
+import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.fragments.OneFragment;
 import com.youth.xf.ui.demo.test.SimpleCardFragment;
-import com.youth.xframe.utils.XOutdatedUtils;
+import com.youth.xf.utils.AFengUtils.ImgLoadUtil;
+import com.youth.xf.utils.AFengUtils.findview.AnnotateUtils;
+import com.youth.xf.utils.AFengUtils.findview.ViewInject;
+import com.youth.xframe.utils.log.XLog;
 import com.youth.xframe.utils.statusbar.XStatusBar;
 import com.youth.xframe.widget.XToast;
 
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Response;
+
 
 /**
  * 作者： AFeng
@@ -40,6 +53,8 @@ public class AFengActivity extends BaseActivity implements View.OnClickListener,
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
 
+    private Context mContext;
+
 
     @Override
     public int getLayoutId() {
@@ -48,11 +63,13 @@ public class AFengActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
     }
 
     @Override
     public void initView() {
+        AnnotateUtils.injectViews(this);
+        mContext = this;
+
         initId();
         initBar();
         initNav();
@@ -80,8 +97,12 @@ public class AFengActivity extends BaseActivity implements View.OnClickListener,
         //添加头部视图
         mNavigationView.inflateHeaderView(R.layout.afeng_nav_main);
         View view = mNavigationView.getHeaderView(0);
+
         ImageView mAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
-//        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, Constants.IC_AVATAR);
+        //使用Glide来加载网络图片有点慢
+//        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, ConstantsImageUrls.AVATAR);
+
+        loadAvatar(mAvatar);  //加载 下载好的图片
 
         LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
         LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);
@@ -95,10 +116,27 @@ public class AFengActivity extends BaseActivity implements View.OnClickListener,
         mNavExit.setOnClickListener(this);
     }
 
+    private void loadAvatar(final ImageView view) {
+
+        OkGo.get(ConstantsImageUrls.AVATAR).tag(this).execute(new BitmapCallback() {
+            @Override
+            public void onSuccess(Bitmap bitmap, Call call, Response response) {
+                ImgLoadUtil.displayCircleByBitmap(mContext, view, bitmap);
+            }
+
+            @Override
+            public void onError(Call call, Response response, Exception e) {
+                super.onError(call, response, e);
+                XLog.e("用户头像加载错误！");
+            }
+        });
+
+    }
+
 
     private void initBar() {
         //自定义状态栏颜色
-        XStatusBar.setColorNoTranslucentForDrawerLayout(AFengActivity.this, drawerLayout, XOutdatedUtils.getColor(R.color.colorAccent));
+        XStatusBar.setColorNoTranslucentForDrawerLayout(AFengActivity.this, drawerLayout, ContextCompat.getColor(this, R.color.colorAccent));
 
         //自定义标题栏
         setSupportActionBar(toolbar);
