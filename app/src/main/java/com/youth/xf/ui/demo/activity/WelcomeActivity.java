@@ -9,30 +9,31 @@ import android.widget.ImageView;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.BitmapCallback;
-import com.youth.xf.BaseActivity;
+import com.orhanobut.logger.Logger;
+import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 import com.youth.xf.ui.constants.ConstantsImageUrls;
-import com.youth.xf.ui.demo.AFengActivity;
+import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
 import com.youth.xf.utils.AFengUtils.findview.AnnotateUtils;
 import com.youth.xf.utils.AFengUtils.findview.ViewInject;
-import com.youth.xframe.utils.XOutdatedUtils;
-import com.youth.xframe.utils.log.XLog;
+import com.youth.xf.utils.xutils.XOutdatedUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.Response;
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
+
 
 /**
  * Created by AFeng on 2017/3/12.
  */
 
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends AFengActivity {
 
     private static final String WELCOME_KEY = "welcome";
     private boolean isInMain;
@@ -49,26 +50,48 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void initView() {
+    protected void initView(Bundle savedInstanceState) {
         AnnotateUtils.injectViews(this);
         mImageViewPic.setAlpha(0f);
         //默认启动图
         mImageViewDefPic.setImageDrawable(XOutdatedUtils.getDrawable(R.drawable.welcome_def));
         requestImage();
 
-        Subscription goApp = Observable.timer(2, TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+       Observable.timer(2, TimeUnit.SECONDS).subscribeWith(new Observer<Long>() {
             @Override
-            public void call(Long aLong) {
-                enterApp();
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                    enterApp();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
-        addSubscription(goApp);
+
     }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+
+    }
+
+
 
     private void requestImage() {
         OkGo.get(ConstantsImageUrls.WELCOME_PIC)
@@ -85,7 +108,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
-                        XLog.e("启动图下载失败！");
+                        Logger.e("启动图下载失败！");
                     }
                 });
     }
@@ -126,7 +149,7 @@ public class WelcomeActivity extends BaseActivity {
         if (isInMain) {
             return;
         }
-        Intent intent = new Intent(this, AFengActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
         isInMain = true;

@@ -29,7 +29,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.demo.AFengActivity"
+            android:name=".ui.demo.MainActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data android:name="design_width" android:value="768">

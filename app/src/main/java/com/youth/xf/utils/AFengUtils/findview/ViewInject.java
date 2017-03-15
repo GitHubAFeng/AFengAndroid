@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by spc on 16-8-10.
  * 需要在onCreate方法中引用   AnnotateUtils.injectViews(this);
+ * 在fragment中     AnnotateUtils.injectViews(getActivity());
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

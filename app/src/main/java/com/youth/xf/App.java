@@ -1,19 +1,36 @@
 package com.youth.xf;
 
+import android.app.Application;
+
 import com.lzy.okgo.OkGo;
-import com.youth.xframe.base.XApplication;
-import com.youth.xframe.XFrame;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
+import com.youth.xf.base.AFengConfig;
 
 import java.util.logging.Level;
 
-public class App extends XApplication {
+public class App extends Application {
+
+    private static App instance;
+
+    public static App getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        XFrame.initXLog();
-        XFrame.initXLoadingView()
-                .setErrorViewResId(R.layout._loading_layout_error);
+        instance = this;
+        AFengConfig.init(this);
+
+        if (BuildConfig.DEBUG) {
+            Logger
+                    .init("AFeng")                  // default PRETTYLOGGER or use just init()
+                    .methodCount(3)                 // default 2
+                    .logLevel(LogLevel.FULL)        // default LogLevel.FULL
+                    .methodOffset(2)                // default 0
+            ;
+        }
 
 
         //---------这里给出的是示例代码,告诉你可以这么传,实际使用的时候,根据需要传,不需要就不传-------------//
@@ -82,6 +99,7 @@ public class App extends XApplication {
             e.printStackTrace();
         }
     }
+
 
     /**
      * 这里只是我谁便写的认证规则，具体每个业务是否需要验证，以及验证规则是什么，请与服务端或者leader确定

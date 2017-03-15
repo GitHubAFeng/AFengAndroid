@@ -48,7 +48,7 @@ public class ImgLoadUtil {
      */
     public static void displayCircleByBitmap(Context context, final ImageView imageView, Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);  // 100表示不压缩。例如给值30的意思就是压缩70%
         byte[] bytes = baos.toByteArray();
         //Glide不能直接加载Bitmap，传递前需要先转为byte[]比特流就可以了
         Glide.with(context)

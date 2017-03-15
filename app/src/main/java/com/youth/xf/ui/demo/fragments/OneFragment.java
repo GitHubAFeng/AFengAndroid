@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
-import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.R;
 import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
-import com.youth.xf.ui.demo.AFengFragment;
-import com.youth.xf.ui.demo.test.SimpleCardFragment;
+import com.youth.xf.base.AFengFragment;
 
 import java.util.ArrayList;
 
@@ -40,17 +38,21 @@ public class OneFragment extends AFengFragment {
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
+    protected void initView(Bundle savedInstanceState) {
+        mViewPager = getViewById(R.id.one_t1_vp);
+        mTabLayout = getViewById(R.id.one_tl_tab);
+    }
+
+    @Override
+    protected void setListener() {
 
     }
 
     @Override
-    public void initView() {
-        mViewPager = getViewById(R.id.one_t1_vp);
-        mTabLayout = getViewById(R.id.one_tl_tab);
-
+    protected void processLogic(Bundle savedInstanceState) {
         initVP();
     }
+
 
     private void initVP() {
 
@@ -59,7 +61,7 @@ public class OneFragment extends AFengFragment {
         };
 
         for (String title : mTitles) {
-            fragmentArrayList.add(SimpleCardFragment.getInstance(title));
+            fragmentArrayList.add(SimpleFragment.getInstance(title));
         }
 
 
