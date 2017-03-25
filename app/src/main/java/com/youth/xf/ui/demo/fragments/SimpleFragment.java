@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.entity.testStatus;
@@ -71,7 +72,8 @@ public class SimpleFragment extends AFengFragment {
         TextView card_title_tv = (TextView) headerView.findViewById(R.id.card_title_tv);
         card_title_tv.setText(mTitle);
         initBanner();
-//        initRecyclerView();
+        initRecyclerView();
+
     }
 
     @Override

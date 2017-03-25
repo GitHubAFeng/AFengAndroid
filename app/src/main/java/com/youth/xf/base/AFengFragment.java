@@ -52,6 +52,7 @@ public abstract class AFengFragment extends Fragment {
         // 避免多次从xml中加载布局文件
         if (mContentView == null) {
             mContentView = inflater.inflate(getLayoutId(), container, false);
+            mbinder = ButterKnife.bind(this,mContentView);
             initView(savedInstanceState);
             setListener();
             processLogic(savedInstanceState);
@@ -61,7 +62,6 @@ public abstract class AFengFragment extends Fragment {
                 parent.removeView(mContentView);
             }
         }
-        mbinder = ButterKnife.bind(this,mContentView);
         return mContentView;
     }
 
