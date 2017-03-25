@@ -16,14 +16,14 @@ import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
-import com.youth.xf.utils.AFengUtils.findview.AnnotateUtils;
-import com.youth.xf.utils.AFengUtils.findview.ViewInject;
 import com.youth.xf.utils.xutils.XOutdatedUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -39,9 +39,9 @@ public class WelcomeActivity extends AFengActivity {
     private boolean isInMain;
     private boolean isInSplash;
 
-    @ViewInject(R.id.iv_pic)
+    @BindView(R.id.iv_pic)
     ImageView mImageViewPic;
-    @ViewInject(R.id.iv_defult_pic)
+    @BindView(R.id.iv_defult_pic)
     ImageView mImageViewDefPic;
 
     @Override
@@ -51,33 +51,34 @@ public class WelcomeActivity extends AFengActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        AnnotateUtils.injectViews(this);
         mImageViewPic.setAlpha(0f);
         //默认启动图
         mImageViewDefPic.setImageDrawable(XOutdatedUtils.getDrawable(R.drawable.welcome_def));
         requestImage();
 
-       Observable.timer(2, TimeUnit.SECONDS).subscribeWith(new Observer<Long>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        Observable.timer(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe((Long) -> enterApp());
 
-            }
-
-            @Override
-            public void onNext(Long aLong) {
-                    enterApp();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
+//       Observable.timer(2, TimeUnit.SECONDS).subscribeWith(new Observer<Long>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(Long aLong) {
+//                    enterApp();
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//        });
 
     }
 
@@ -90,7 +91,6 @@ public class WelcomeActivity extends AFengActivity {
     protected void processLogic(Bundle savedInstanceState) {
 
     }
-
 
 
     private void requestImage() {

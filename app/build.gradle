@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -16,6 +17,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+
+
 }
 
 dependencies {
@@ -46,5 +56,8 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'  //日志
     compile 'com.afollestad.material-dialogs:core:0.9.4.1'  //弹窗
     //compile 'com.afollestad.material-dialogs:commons:0.9.4.1' //提示颜色选择器、文件选择弹窗
+
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
 }

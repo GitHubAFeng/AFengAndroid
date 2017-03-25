@@ -29,7 +29,6 @@ import com.youth.xf.ui.demo.fragments.SimpleFragment;
 import com.youth.xf.ui.demo.fragments.OneFragment;
 import com.youth.xf.utils.AFengUtils.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
-import com.youth.xf.utils.AFengUtils.findview.AnnotateUtils;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -83,7 +82,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        AnnotateUtils.injectViews(this);
         mContext = this;
 
         initBar();

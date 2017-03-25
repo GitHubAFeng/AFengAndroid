@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -19,6 +18,7 @@ import com.youth.xf.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import cn.bingoogolapple.bgabanner.BGABanner;
 
 /**
@@ -33,7 +33,7 @@ public class SimpleFragment extends AFengFragment {
     private String mType = "Android";
     private String mTitle;
     private BGABanner mBGABanner;
-
+    @BindView(R.id.one_rv_list)
     RecyclerView mRecyclerView;
     View headerView;
 
@@ -71,7 +71,7 @@ public class SimpleFragment extends AFengFragment {
         TextView card_title_tv = (TextView) headerView.findViewById(R.id.card_title_tv);
         card_title_tv.setText(mTitle);
         initBanner();
-        initRecyclerView();
+//        initRecyclerView();
     }
 
     @Override
@@ -90,12 +90,7 @@ public class SimpleFragment extends AFengFragment {
         mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
         mBGABanner.setData(R.drawable.test_baner01, R.drawable.test_baner02, R.drawable.test_banner03);
 
-        mBGABanner.setDelegate(new BGABanner.Delegate<ImageView, String>() {
-            @Override
-            public void onBannerItemClick(BGABanner banner, ImageView itemView, String model, int position) {
-                ToastUtil.showToast("点击了" + position);
-            }
-        });
+        mBGABanner.setDelegate((banner, itemView, model, position) -> ToastUtil.showToast("点击了" + position));
 
 
     }

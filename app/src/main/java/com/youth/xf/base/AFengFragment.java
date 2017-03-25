@@ -3,7 +3,6 @@ package com.youth.xf.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.App;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -24,7 +25,6 @@ import io.reactivex.disposables.Disposable;
 
 public abstract class AFengFragment extends Fragment {
 
-    protected boolean mIsVisible = false;
     private CompositeDisposable mdisposables;
 
     protected String TAG;
@@ -34,6 +34,8 @@ public abstract class AFengFragment extends Fragment {
     protected AFengActivity mActivity;
 
     protected boolean mIsLoadedData = false;
+
+    Unbinder mbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -59,6 +61,7 @@ public abstract class AFengFragment extends Fragment {
                 parent.removeView(mContentView);
             }
         }
+        mbinder = ButterKnife.bind(this,mContentView);
         return mContentView;
     }
 
@@ -186,5 +189,9 @@ public abstract class AFengFragment extends Fragment {
         this.mdisposables.add(d);
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mbinder.unbind();
+    }
 }

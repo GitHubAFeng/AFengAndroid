@@ -38,12 +38,9 @@ public class SplashActivity extends AFengActivity {
          * 在 BGABanner 里已经帮开发者处理了防止重复点击事件
          * 在 BGABanner 里已经帮开发者处理了「跳过按钮」和「进入按钮」的显示与隐藏
          */
-        mForegroundBanner.setEnterSkipViewIdAndDelegate(R.id.btn_guide_enter, R.id.tv_guide_skip, new BGABanner.GuideDelegate() {
-            @Override
-            public void onClickEnterOrSkip() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
-            }
+        mForegroundBanner.setEnterSkipViewIdAndDelegate(R.id.btn_guide_enter, R.id.tv_guide_skip, () -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
         });
     }
 
