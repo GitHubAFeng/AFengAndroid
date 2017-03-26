@@ -138,12 +138,13 @@ public class WelcomeActivity extends AFengActivity {
             toSplashActivity();
             SPDataUtils.putBoolean(WELCOME_KEY, false);
         } else {
-            toMainActivity();
+//            toMainActivity();
+            startActivity(new Intent(this, UserLoginActivity.class));
+
         }
 //        toSplashActivity();
         finish();
     }
-
 
     private void toMainActivity() {
         if (isInMain) {
