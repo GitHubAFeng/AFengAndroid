@@ -25,6 +25,8 @@ import com.youth.xf.R;
 import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
+import com.youth.xf.ui.demo.fragments.ACGFragment;
+import com.youth.xf.ui.demo.fragments.BookFragment;
 import com.youth.xf.ui.demo.fragments.SimpleFragment;
 import com.youth.xf.ui.demo.fragments.OneFragment;
 import com.youth.xf.utils.AFengUtils.ImgLoadUtil;
@@ -209,10 +211,9 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private void initContent() {
         ArrayList<Fragment> mFragmentList = new ArrayList<>();
 
-//        mFragmentList.add(SimpleFragment.getInstance("一"));
         mFragmentList.add(new OneFragment());
-        mFragmentList.add(SimpleFragment.getInstance("二"));
-        mFragmentList.add(SimpleFragment.getInstance("三"));
+        mFragmentList.add(new BookFragment());
+        mFragmentList.add(new ACGFragment());
 
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);
         mViewPager.setAdapter(adapter);

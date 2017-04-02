@@ -24,6 +24,7 @@ public abstract class AFengActivity extends AppCompatActivity {
     protected boolean mIsLoadedData = false;
     private CompositeDisposable mdisposables;
 
+
     Unbinder mbinder;
 
 

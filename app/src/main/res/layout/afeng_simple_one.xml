@@ -6,6 +6,7 @@
               android:orientation="vertical"
               tools:context=".ui.demo.MainActivity">
 
+    <!--首页内容下拉-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/one_rv_list"
         android:layout_width="match_parent"

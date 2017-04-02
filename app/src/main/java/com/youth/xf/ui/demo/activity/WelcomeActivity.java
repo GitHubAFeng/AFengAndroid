@@ -18,13 +18,16 @@ import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
 import com.youth.xf.utils.xutils.XOutdatedUtils;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -56,30 +59,23 @@ public class WelcomeActivity extends AFengActivity {
         mImageViewDefPic.setImageDrawable(XOutdatedUtils.getDrawable(R.drawable.welcome_def));
         requestImage();
 
-        Observable.timer(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe((Long) -> enterApp());
+        Disposable dis = getObservable().observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<Long>() {
+            @Override
+            public void onNext(Long aLong) {
 
-//       Observable.timer(2, TimeUnit.SECONDS).subscribeWith(new Observer<Long>() {
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//
-//            }
-//
-//            @Override
-//            public void onNext(Long aLong) {
-//                    enterApp();
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//
-//            }
-//        });
+            }
 
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                enterApp();
+            }
+        });
+        addDisposable(dis);
     }
 
     @Override
@@ -90,6 +86,15 @@ public class WelcomeActivity extends AFengActivity {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 
+    }
+
+
+    private Observable<Long> getObservable() {
+        return Observable.defer(new Callable<ObservableSource<? extends Long>>() {
+            @Override public ObservableSource<? extends Long> call() throws Exception {
+                return Observable.timer(2, TimeUnit.SECONDS);
+            }
+        });
     }
 
 
@@ -138,8 +143,8 @@ public class WelcomeActivity extends AFengActivity {
             toSplashActivity();
             SPDataUtils.putBoolean(WELCOME_KEY, false);
         } else {
-//            toMainActivity();
-            startActivity(new Intent(this, UserLoginActivity.class));
+            toMainActivity();
+//            startActivity(new Intent(this, UserLoginActivity.class));
 
         }
 //        toSplashActivity();

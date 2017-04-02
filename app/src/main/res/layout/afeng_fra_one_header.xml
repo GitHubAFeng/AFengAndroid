@@ -7,12 +7,16 @@
     android:orientation="vertical"
     tools:context=".ui.demo.MainActivity">
 
-
+    <!--首页正文内容-->
+    <!--轮播-->
     <cn.bingoogolapple.bgabanner.BGABanner
         android:id="@+id/banner_main"
+        android:layout_height="133dp"
+        android:layout_width="match_parent"
         style="@style/BannerDefaultStyle"
         app:banner_transitionEffect="accordion"/>
 
+    <!--导航按钮-->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

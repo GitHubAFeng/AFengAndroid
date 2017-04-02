@@ -7,10 +7,8 @@
               android:orientation="vertical"
               tools:context=".ui.demo.MainActivity">
 
-
-    <!--首页Tab-->
     <com.flyco.tablayout.SlidingTabLayout
-        android:id="@+id/one_tl_tab"
+        android:id="@+id/acg_tab"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#E45171"
@@ -20,7 +18,7 @@
 
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/one_t1_vp"
+        android:id="@+id/acg_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -192,6 +192,7 @@ public abstract class AFengFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mbinder.unbind();
+//        如果onCreateView里面view是全局的或者你在其它地方调用了，那么onDestroyView调用unbind函数，那么就会出现空指针异常
+//        mbinder.unbind();
     }
 }

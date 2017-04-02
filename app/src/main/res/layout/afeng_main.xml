@@ -8,13 +8,13 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ui.demo.MainActivity">
-
+<!--可见区域-->
     <include
         android:id="@+id/include"
         layout="@layout/afeng_toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
+<!--左侧滑边栏-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"

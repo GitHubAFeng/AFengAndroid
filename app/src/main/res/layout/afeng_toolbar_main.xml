@@ -7,7 +7,7 @@
                                      android:fitsSystemWindows="true"
                                      android:orientation="vertical"
                                      tools:context=".ui.demo.MainActivity">
-
+<!--标题-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -68,8 +68,8 @@
             </com.zhy.autolayout.AutoLinearLayout>
         </HorizontalScrollView>
     </android.support.v7.widget.Toolbar>
-
-
+<!--标题结束-->
+<!--正文-->
     <com.zhy.autolayout.AutoFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
