@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.fragments;
+package com.youth.xf.ui.demo.book;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -18,7 +18,7 @@ import butterknife.Unbinder;
  * Created by AFeng on 2017/4/2.
  */
 
-public class BookFragment extends AFengFragment {
+public class BookFragment extends AFengFragment implements BookContract.View {
 
 
     @BindView(R.id.book_tab)
@@ -57,4 +57,23 @@ public class BookFragment extends AFengFragment {
     }
 
 
+    @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
+    public void setUpFAB(BookContract.View view) {
+
+    }
+
+    @Override
+    public void startFABAnimation() {
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
 }

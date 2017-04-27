@@ -26,7 +26,7 @@ import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.fragments.ACGFragment;
-import com.youth.xf.ui.demo.fragments.BookFragment;
+import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fragments.SimpleFragment;
 import com.youth.xf.ui.demo.fragments.OneFragment;
 import com.youth.xf.utils.AFengUtils.ImgLoadUtil;
