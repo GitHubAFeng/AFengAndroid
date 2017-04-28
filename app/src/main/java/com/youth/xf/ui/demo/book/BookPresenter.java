@@ -24,6 +24,7 @@ public class BookPresenter implements BookContract.Presenter {
 
     }
 
+
     @Override
     public void doSearch(String keyword) {
 
