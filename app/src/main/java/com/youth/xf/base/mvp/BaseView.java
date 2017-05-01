@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.mvp.basemvp;
+package com.youth.xf.base.mvp;
 
 /**
  * Created by Administrator on 2017/4/27.
@@ -6,4 +6,5 @@ package com.youth.xf.ui.demo.mvp.basemvp;
 
 public interface BaseView<T> {
     void setPresenter(T presenter);
+    boolean isActive();
 }

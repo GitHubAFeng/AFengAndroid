@@ -1,7 +1,6 @@
 package com.youth.xf.ui.demo;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -17,9 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.BitmapCallback;
-import com.orhanobut.logger.Logger;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
@@ -27,16 +23,12 @@ import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.fragments.ACGFragment;
 import com.youth.xf.ui.demo.book.BookFragment;
-import com.youth.xf.ui.demo.fragments.SimpleFragment;
 import com.youth.xf.ui.demo.fragments.OneFragment;
-import com.youth.xf.utils.AFengUtils.ImgLoadUtil;
+import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
@@ -98,10 +90,8 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         View view = mNavigationView.getHeaderView(0);
 
         ImageView mAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
-        //使用Glide来加载网络图片有点慢
-//        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, ConstantsImageUrls.AVATAR);
-
-        loadAvatar(mAvatar);  //加载 下载好的图片
+        //使用Glide来加载网络图片
+        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, ConstantsImageUrls.AVATAR);
 
         LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
         LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);
@@ -115,22 +105,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         mNavExit.setOnClickListener(this);
     }
 
-    private void loadAvatar(final ImageView view) {
-
-        OkGo.get(ConstantsImageUrls.AVATAR).tag(this).execute(new BitmapCallback() {
-            @Override
-            public void onSuccess(Bitmap bitmap, Call call, Response response) {
-                ImgLoadUtil.displayCircleByBitmap(mContext, view, bitmap);
-            }
-
-            @Override
-            public void onError(Call call, Response response, Exception e) {
-                super.onError(call, response, e);
-                Logger.e(TAG,"用户头像加载错误！");
-            }
-        });
-
-    }
 
 
     private void initBar() {

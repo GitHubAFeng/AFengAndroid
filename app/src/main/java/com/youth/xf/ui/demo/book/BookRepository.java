@@ -1,21 +1,21 @@
 package com.youth.xf.ui.demo.book;
 
-import com.youth.xf.ui.demo.mvp.basemvp.BaseModelCallback;
-import com.youth.xf.ui.demo.mvp.basemvp.RequestBiz;
+import com.youth.xf.base.mvp.BaseModelCallback;
 
 /**
  * Created by Administrator on 2017/4/28.
  */
 
-public class BookRepository implements RequestBiz {
-    private static BookRepository INSTANCE;
+public class BookRepository implements BookContract.DataSource {
+    private static BookRepository INSTANCE = null;
     public String key;
 
     public void setKey(String key) {
         this.key = key;
     }
 
-    private BookRepository() {}
+    private BookRepository() {
+    }
 
     public static BookRepository getInstance() {
         if (INSTANCE == null) {
@@ -24,17 +24,22 @@ public class BookRepository implements RequestBiz {
         return INSTANCE;
     }
 
-    private static final String BASE_URL = "https://api.douban.com/v2/";
+    public static void destroyInstance() {
+        INSTANCE = null;
+    }
+
+    private static final String BASE_URL = "http://gank.io/api/data/Android/10/1";
 
     private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }
 
     @Override
-    public void requestForData(BaseModelCallback listener) {
-
-
-
+    public void getBooks(BaseModelCallback listener) {
 
     }
+
+
+
+
 }

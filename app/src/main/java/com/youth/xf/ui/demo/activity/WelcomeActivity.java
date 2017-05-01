@@ -7,8 +7,10 @@ import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.BitmapCallback;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
@@ -24,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -99,23 +100,9 @@ public class WelcomeActivity extends AFengActivity {
 
 
     private void requestImage() {
-        OkGo.get(ConstantsImageUrls.WELCOME_PIC)
-                .tag(this)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap, Call call, Response response) {
-                        AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
-//                        mImageViewDefPic.setVisibility(View.GONE);
-                        mImageViewPic.setImageBitmap(bitmap);
-                        AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
-                    }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.e("启动图下载失败！");
-                    }
-                });
+        Glide.with(this).load(ConstantsImageUrls.WELCOME_PIC).into(mImageViewPic);
+        AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
+        AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
     }
 
 

@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.activity;
+package com.youth.xf.ui.demo.Login;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,9 +7,6 @@ import android.widget.EditText;
 
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
-import com.youth.xf.ui.demo.mvp.model.User;
-import com.youth.xf.ui.demo.mvp.presenter.UserLoginPresenter;
-import com.youth.xf.ui.demo.mvp.view.IUserLoginView;
 import com.youth.xf.utils.ToastUtil;
 
 import butterknife.BindView;
@@ -20,8 +17,8 @@ import butterknife.OnClick;
  * Created by AFeng on 2017/3/26.
  */
 
-public class UserLoginActivity extends AFengActivity implements IUserLoginView {
-    private UserLoginPresenter mUserLoginPresenter = new UserLoginPresenter(this);
+public class UserLoginActivity extends AFengActivity implements LoginContract.View {
+//    private UserLoginPresenter mUserLoginPresenter = new UserLoginPresenter(this);
 
     @BindView(R.id.id_et_username)
     EditText mIdEtUsername;
@@ -103,11 +100,21 @@ public class UserLoginActivity extends AFengActivity implements IUserLoginView {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.id_btn_login:
-                mUserLoginPresenter.login();
+//                mUserLoginPresenter.login();
                 break;
             case R.id.id_btn_clear:
-                mUserLoginPresenter.clear();
+//                mUserLoginPresenter.clear();
                 break;
         }
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
     }
 }

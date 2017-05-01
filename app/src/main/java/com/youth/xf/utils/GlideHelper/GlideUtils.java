@@ -1,4 +1,4 @@
-package com.youth.xf.utils.imageloader;
+package com.youth.xf.utils.GlideHelper;
 
 import android.app.Activity;
 import android.content.Context;

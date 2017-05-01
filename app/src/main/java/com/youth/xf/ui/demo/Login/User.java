@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.mvp.model;
+package com.youth.xf.ui.demo.Login;
 
 /**
  * Created by AFeng on 2017/3/26.

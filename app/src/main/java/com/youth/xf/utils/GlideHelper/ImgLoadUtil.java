@@ -1,14 +1,11 @@
-package com.youth.xf.utils.AFengUtils;
+package com.youth.xf.utils.GlideHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.youth.xf.App;
 import com.youth.xf.R;
-import com.youth.xf.view.GlideCircleTransform;
-
 import java.io.ByteArrayOutputStream;
 
 /**

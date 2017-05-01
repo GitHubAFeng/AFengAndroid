@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.orhanobut.logger.Logger;
 import com.youth.xf.App;
-import com.youth.xf.utils.imageloader.GlideUtils;
+import com.youth.xf.utils.GlideHelper.GlideUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

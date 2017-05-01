@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.mvp.basemvp;
+package com.youth.xf.base.mvp;
 
 import java.util.List;
 
