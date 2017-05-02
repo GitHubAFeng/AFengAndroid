@@ -89,6 +89,7 @@
             android:layout_alignRight="@+id/vp_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="32px"
+            android:visibility="gone"
             android:src="@android:drawable/ic_dialog_email"/>
     </com.zhy.autolayout.AutoFrameLayout>
 

@@ -4,14 +4,17 @@ import com.youth.xf.base.mvp.BaseModelCallback;
 import com.youth.xf.base.mvp.BasePresenter;
 import com.youth.xf.base.mvp.BaseView;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/4/27.
  */
 
 public interface BookContract {
-    interface View extends BaseView{
-        void setUpFAB(View view);
+    interface View extends BaseView<Presenter>{
+        void setUpFAB();
         void startFABAnimation();
+        void setUpRecyclerView();
     }
 
     interface Presenter extends BasePresenter{

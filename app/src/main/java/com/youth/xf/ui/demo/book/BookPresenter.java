@@ -1,5 +1,9 @@
 package com.youth.xf.ui.demo.book;
 
+import com.youth.xf.base.mvp.BaseModelCallback;
+
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/4/27.
  */
@@ -9,10 +13,9 @@ public class BookPresenter implements BookContract.Presenter {
     private BookRepository mBookRepository;
     private BookContract.View mBookView;
 
-    private String mTaskId;
 
-    public BookPresenter(String taskId, BookRepository bookRepository, BookContract.View bookView) {
-        mTaskId = taskId;
+    public BookPresenter(BookRepository bookRepository, BookContract.View bookView) {
+
         mBookRepository = bookRepository;
         mBookView = bookView;
 
@@ -21,6 +24,7 @@ public class BookPresenter implements BookContract.Presenter {
 
     @Override
     public void start() {
+
 
     }
 
