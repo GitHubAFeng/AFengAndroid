@@ -24,6 +24,7 @@ import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.fragments.ACGFragment;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fragments.OneFragment;
+import com.youth.xf.ui.demo.movie.MovieFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.ToastUtil;
@@ -187,7 +188,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         mFragmentList.add(new OneFragment());
         mFragmentList.add(new BookFragment());
-        mFragmentList.add(new ACGFragment());
+        mFragmentList.add(new MovieFragment());
 
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);
         mViewPager.setAdapter(adapter);

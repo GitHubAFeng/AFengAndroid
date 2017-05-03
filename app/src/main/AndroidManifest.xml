@@ -37,6 +37,10 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".ui.demo.movie.MovieDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".ui.demo.MainActivity"
             android:screenOrientation="portrait"/>
 

@@ -2,6 +2,8 @@ package com.youth.xf.ui.demo.api;
 
 import com.youth.xf.ui.demo.book.BookBean;
 import com.youth.xf.ui.demo.book.BookDetailBean;
+import com.youth.xf.ui.demo.movie.HotMovieBean;
+import com.youth.xf.ui.demo.movie.MovieDetailBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -61,8 +63,8 @@ public interface HttpClient {
      *
      * @param id 电影bean里的id
      */
-//    @GET("v2/movie/subject/{id}")
-//    Observable<MovieDetailBean> getMovieDetail(@Path("id") String id);
+    @GET("v2/movie/subject/{id}")
+    Observable<MovieDetailBean> getMovieDetail(@Path("id") String id);
 
     /**
      * 获取豆瓣电影top250
@@ -70,8 +72,8 @@ public interface HttpClient {
      * @param start 从多少开始，如从"0"开始
      * @param count 一次请求的数目，如"10"条，最多100
      */
-//    @GET("v2/movie/top250")
-//    Observable<HotMovieBean> getMovieTop250(@Query("start") int start, @Query("count") int count);
+    @GET("v2/movie/top250")
+    Observable<HotMovieBean> getMovieTop250(@Query("start") int start, @Query("count") int count);
 
     /**
      * 根据tag获取图书
