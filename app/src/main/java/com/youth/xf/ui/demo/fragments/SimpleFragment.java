@@ -27,7 +27,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
  * 时间：2017/3/2
  */
 
-
+//此注解用来忽略检查
 @SuppressLint("ValidFragment")
 public class SimpleFragment extends AFengFragment {
     private static final String TYPE = "mType";
