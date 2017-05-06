@@ -52,6 +52,7 @@ public class MovieFragment extends AFengFragment {
 
     private static final int ANIM_DURATION_FAB = 400;
 
+    MovieFragment.oneAdapter mAdapter = null;
 
     @Override
     protected int getLayoutId() {
@@ -60,6 +61,14 @@ public class MovieFragment extends AFengFragment {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        mAdapter = new MovieFragment.oneAdapter(R.layout.moive_item, null);
+
+        //构造器中，第一个参数表示列数或者行数，第二个参数表示滑动方向,瀑布流
+//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+
 
     }
 
@@ -70,18 +79,35 @@ public class MovieFragment extends AFengFragment {
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+
+    }
+
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
+    @Override
+    protected void onLazyLoadOnce() {
+
+    }
+
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
+    @Override
+    protected void onVisibleToUser() {
+//        startFABAnimation();
         setUpRecyclerView();
+
     }
 
+    /**
+     * 对用户不可见时触发该方法
+     */
     @Override
-    protected void onVisible() {
-        startFABAnimation();
-    }
-
-    @Override
-    protected void onInvisible() {
+    protected void onInvisibleToUser() {
 
     }
+
 
     public void setUpFAB() {
         mFabButton.setOnClickListener(new View.OnClickListener() {
@@ -123,13 +149,8 @@ public class MovieFragment extends AFengFragment {
     }
 
 
-
-
     public void setUpRecyclerView() {
-
-        //构造器中，第一个参数表示列数或者行数，第二个参数表示滑动方向,瀑布流
-//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProgressBar.setVisibility(View.VISIBLE);
         HttpClient.Builder.getDouBanService()
                 .getMovieTop250(mStart, mCount)
                 .subscribeOn(Schedulers.io())
@@ -137,6 +158,7 @@ public class MovieFragment extends AFengFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<HotMovieBean>() {
                     Disposable d;
+
                     @Override
                     public void onSubscribe(Disposable disposable) {
                         d = disposable;
@@ -145,11 +167,11 @@ public class MovieFragment extends AFengFragment {
                     @Override
                     public void onNext(HotMovieBean hotMovieBean) {
 
-                        if (mStart == 0){
-                            if (hotMovieBean != null && hotMovieBean.getSubjects() != null && hotMovieBean.getSubjects().size() > 0){
-                                MovieFragment.oneAdapter mAdapter = new MovieFragment.oneAdapter(R.layout.moive_item,hotMovieBean.getSubjects());
+                        if (mStart == 0) {
+                            if (hotMovieBean != null && hotMovieBean.getSubjects() != null && hotMovieBean.getSubjects().size() > 0) {
+                                mAdapter.setNewData(hotMovieBean.getSubjects());
+                                mAdapter.notifyDataSetChanged();
                                 mAdapter.openLoadAnimation();
-                                mRecyclerView.setAdapter(mAdapter);
                                 mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
                                     @Override
                                     public void onSimpleItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -174,11 +196,13 @@ public class MovieFragment extends AFengFragment {
                     @Override
                     public void onError(Throwable throwable) {
                         d.dispose();
+                        mProgressBar.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onComplete() {
                         d.dispose();
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 });
     }

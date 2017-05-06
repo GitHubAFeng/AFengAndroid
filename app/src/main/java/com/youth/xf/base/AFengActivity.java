@@ -42,7 +42,9 @@ public abstract class AFengActivity extends AppCompatActivity {
 
     }
 
-    //获取布局文件
+    /**
+     * 初始化布局,返回layout
+     */
     protected abstract int getLayoutId();
 
     /**

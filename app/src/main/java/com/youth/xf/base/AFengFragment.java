@@ -66,7 +66,10 @@ public abstract class AFengFragment extends Fragment {
     }
 
 
-    //初始化布局
+
+    /**
+     * 初始化布局,返回layout
+     */
     protected abstract int getLayoutId();
 
     /**
@@ -138,25 +141,19 @@ public abstract class AFengFragment extends Fragment {
     /**
      * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
      */
-    protected void onLazyLoadOnce() {
-    }
+    protected abstract void onLazyLoadOnce();
 
     /**
      * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
      */
-    protected void onVisibleToUser() {
-    }
+    protected abstract void onVisibleToUser();
 
     /**
      * 对用户不可见时触发该方法
      */
-    protected void onInvisibleToUser() {
-    }
+    protected abstract void onInvisibleToUser();
 
 
-    protected abstract void onVisible();
-
-    protected abstract void onInvisible();
 
     @SuppressWarnings("unchecked")
     public final <E extends View> E getViewById(@IdRes int id) {

@@ -45,13 +45,29 @@ public class BookDetailFragment extends AFengFragment {
 
     }
 
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
     @Override
-    protected void onVisible() {
+    protected void onLazyLoadOnce() {
 
     }
 
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
     @Override
-    protected void onInvisible() {
+    protected void onVisibleToUser() {
 
     }
+
+    /**
+     * 对用户不可见时触发该方法
+     */
+    @Override
+    protected void onInvisibleToUser() {
+
+    }
+
+
 }

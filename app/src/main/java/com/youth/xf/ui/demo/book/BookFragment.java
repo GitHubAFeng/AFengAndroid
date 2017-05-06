@@ -67,8 +67,7 @@ public class BookFragment extends AFengFragment implements BookContract.View {
     // 一次请求的数量
     private int mCount = 18;
 
-
-//    private BookContract.Presenter mPresenter;
+    BookFragment.oneAdapter adapter = null;
 
 
     @Override
@@ -78,6 +77,11 @@ public class BookFragment extends AFengFragment implements BookContract.View {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        adapter = new BookFragment.oneAdapter(R.layout.book_item, null);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(adapter);
 
     }
 
@@ -89,18 +93,34 @@ public class BookFragment extends AFengFragment implements BookContract.View {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         setUpFAB();
-        setUpRecyclerView();
     }
 
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
     @Override
-    protected void onVisible() {
+    protected void onLazyLoadOnce() {
+
+    }
+
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
+    @Override
+    protected void onVisibleToUser() {
+        setUpRecyclerView();
+
         startFABAnimation();
     }
 
+    /**
+     * 对用户不可见时触发该方法
+     */
     @Override
-    protected void onInvisible() {
+    protected void onInvisibleToUser() {
 
     }
+
 
 
     private void doSearch(String keyword) {
@@ -144,8 +164,7 @@ public class BookFragment extends AFengFragment implements BookContract.View {
 
     @Override
     public void setUpRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        mProgressBar.setVisibility(View.VISIBLE);
         HttpClient.Builder.getDouBanService()
                 .getBook(mType, mStart, mCount)
                 .subscribeOn(Schedulers.io())
@@ -165,14 +184,12 @@ public class BookFragment extends AFengFragment implements BookContract.View {
 
                         if (mStart == 0) {
                             if (bookBean != null && bookBean.getBooks() != null && bookBean.getBooks().size() > 0) {
-//                                ToastUtil.showToast(bookBean.getBooks());
-                                BookFragment.oneAdapter adapter = new BookFragment.oneAdapter(R.layout.book_item, bookBean.getBooks());
+                                adapter.setNewData(bookBean.getBooks());
+                                adapter.notifyDataSetChanged();
                                 adapter.openLoadAnimation();
-                                mRecyclerView.setAdapter(adapter);
                                 mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
                                     @Override
                                     public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                                        ToastUtil.showToast(Integer.toString(position));
 
                                         BooksBean book = bookBean.getBooks().get(position);
                                         Intent intent = new Intent(getActivity(), BookDetailActivity.class);
@@ -196,55 +213,23 @@ public class BookFragment extends AFengFragment implements BookContract.View {
                     @Override
                     public void onError(Throwable throwable) {
                         d.dispose();
+                        mProgressBar.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onComplete() {
                         d.dispose();
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 });
 
 
-//        BookRepository.getInstance().getJoke(new Observer<List<BookBean>>() {
-//            Disposable d;
-//            @Override
-//            public void onSubscribe(Disposable disposable) {
-//                d=disposable;
-//            }
-//
-//            @Override
-//            public void onNext(List<BookBean> bookBeans) {
-//                ToastUtil.showToast(bookBeans.get(0).getResults().get(0).getDesc());
-//                BookFragment.oneAdapter adapter = new BookFragment.oneAdapter(R.layout.book_item, bookBeans);
-//                adapter.openLoadAnimation();
-//                mRecyclerView.setAdapter(adapter);
-//                mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-//                    @Override
-//                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                        ToastUtil.showToast(Integer.toString(position));
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(Throwable throwable) {
-//                d.dispose();
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                d.dispose();
-//            }
-//        });
-
-
-//        adapter.addHeaderView(headerView);
     }
 
 
     @Override
     public void setPresenter(BookContract.Presenter presenter) {
-//        mPresenter = presenter;
+
     }
 
     @Override

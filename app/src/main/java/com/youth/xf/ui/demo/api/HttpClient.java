@@ -1,5 +1,6 @@
 package com.youth.xf.ui.demo.api;
 
+import com.youth.xf.ui.demo.bean.GankIoDataBean;
 import com.youth.xf.ui.demo.book.BookBean;
 import com.youth.xf.ui.demo.book.BookDetailBean;
 import com.youth.xf.ui.demo.movie.HotMovieBean;
@@ -20,9 +21,11 @@ public interface HttpClient {
         public static HttpClient getDouBanService() {
             return HttpUtils.getInstance().getDouBanServer(HttpClient.class);
         }
+
         public static HttpClient getTingServer() {
             return HttpUtils.getInstance().getTingServer(HttpClient.class);
         }
+
         public static HttpClient getGankIOServer() {
             return HttpUtils.getInstance().getGankIOServer(HttpClient.class);
         }
@@ -42,8 +45,8 @@ public interface HttpClient {
      * 第几页：数字，大于0
      * eg: http://gank.io/api/data/Android/10/1
      */
-//    @GET("data/{type}/{pre_page}/{page}")
-//    Observable<GankIoDataBean> getGankIoData(@Path("type") String id, @Path("page") int page, @Path("pre_page") int pre_page);
+    @GET("data/{type}/{pre_page}/{page}")
+    Observable<GankIoDataBean> getGankIoData(@Path("type") String id, @Path("page") int page, @Path("pre_page") int pre_page);
 
     /**
      * 每日数据： http://gank.io/api/day/年/月/日
@@ -99,8 +102,6 @@ public interface HttpClient {
 
 //    @GET("v2/music/{id}")
 //    Observable<Musics> getMusicDetail(@Path("id") String id);
-
-
 
 
 }

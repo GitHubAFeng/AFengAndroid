@@ -10,6 +10,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.R;
 import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 
 import java.util.ArrayList;
 
@@ -53,16 +54,45 @@ public class OneFragment extends AFengFragment {
         initVP();
     }
 
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
+    @Override
+    protected void onLazyLoadOnce() {
+
+    }
+
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
+    @Override
+    protected void onVisibleToUser() {
+
+    }
+
+    /**
+     * 对用户不可见时触发该方法
+     */
+    @Override
+    protected void onInvisibleToUser() {
+
+    }
+
 
     private void initVP() {
 
         final String[] mTitles = {
-                "首页", "消息", "联系人", "更多"
+                "首页", "消息", "妹纸", "更多"
         };
 
-        for (String title : mTitles) {
-            fragmentArrayList.add(SimpleFragment.getInstance(title));
-        }
+//        for (String title : mTitles) {
+//            fragmentArrayList.add(SimpleFragment.getInstance(title));
+//        }
+
+        fragmentArrayList.add(SimpleFragment.getInstance("首页"));
+        fragmentArrayList.add(SimpleFragment.getInstance("消息"));
+        fragmentArrayList.add(MeiZiFragment.getInstance());
+        fragmentArrayList.add(SimpleFragment.getInstance("更多"));
 
 
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentArrayList, mTitles));
@@ -102,15 +132,6 @@ public class OneFragment extends AFengFragment {
     }
 
 
-    @Override
-    protected void onVisible() {
-
-    }
-
-    @Override
-    protected void onInvisible() {
-
-    }
 
     @Override
     public void onAttach(Context context) {
