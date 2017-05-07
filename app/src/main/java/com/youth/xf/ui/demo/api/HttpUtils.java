@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2017/5/3.
+ * 创建 Retrofit.Builder
  */
 
 public class HttpUtils {

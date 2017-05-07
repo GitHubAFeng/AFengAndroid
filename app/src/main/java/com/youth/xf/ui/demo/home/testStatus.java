@@ -1,4 +1,4 @@
-package com.youth.xf.ui.entity;
+package com.youth.xf.ui.demo.home;
 
 /**
  * Created by AFeng on 2017/3/13.

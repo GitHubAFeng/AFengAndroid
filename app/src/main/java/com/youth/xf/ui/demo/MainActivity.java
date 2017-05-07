@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -18,17 +20,17 @@ import android.widget.LinearLayout;
 
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
-import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.book.BookFragment;
-import com.youth.xf.ui.demo.fragments.OneFragment;
+import com.youth.xf.ui.demo.home.OneFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -106,7 +108,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
-
     private void initBar() {
         //自定义状态栏颜色
         StatusBarUtil.setColorNoTranslucentForDrawerLayout(MainActivity.this, drawerLayout, ContextCompat.getColor(this, R.color.colorAccent));
@@ -119,7 +120,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             actionBar.setDisplayShowTitleEnabled(false);
         }
     }
-
 
 
     @Override
@@ -135,7 +135,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                     mTitleTwo.setSelected(false);
                     mTitleOne.setSelected(false);
                     mViewPager.setCurrentItem(2);
-                    ToastUtil.showToast("thr");
+//                    ToastUtil.showToast("thr");
                 }
                 break;
             case R.id.iv_title_two:
@@ -144,7 +144,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                     mTitleTwo.setSelected(true);
                     mTitleOne.setSelected(false);
                     mViewPager.setCurrentItem(1);
-                    ToastUtil.showToast("two");
+//                    ToastUtil.showToast("two");
                 }
                 break;
             case R.id.iv_title_one:
@@ -153,7 +153,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                     mTitleTwo.setSelected(false);
                     mTitleOne.setSelected(true);
                     mViewPager.setCurrentItem(0);
-                    ToastUtil.showToast("one");
+//                    ToastUtil.showToast("one");
                 }
                 break;
             case R.id.ll_nav_homepage:// 主页
@@ -251,6 +251,54 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     @Override
     public void onPageScrollStateChanged(int state) {
+
+    }
+
+
+    class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+        private List<?> fragments;
+        private String[] titles;
+
+        /**
+         * 普通，主页使用
+         */
+        public MyFragmentPagerAdapter(FragmentManager fm, List<?> mFragment) {
+            super(fm);
+            this.fragments = mFragment;
+        }
+
+        public MyFragmentPagerAdapter(FragmentManager fm, List<?> fragments, String[] titles) {
+            super(fm);
+            this.fragments = fragments;
+            this.titles = titles;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return (Fragment) fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        //此方法用来显示tab上的名字
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (titles != null) {
+                return titles[position];
+            } else {
+                return "";
+            }
+        }
+
+        public void addFragmentList(List<?> fragment) {
+            this.fragments.clear();
+            this.fragments = null;
+            this.fragments = fragment;
+            notifyDataSetChanged();
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.fragments;
+package com.youth.xf.ui.demo.home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,10 +10,8 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
-import com.youth.xf.ui.entity.testStatus;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -125,7 +123,12 @@ public class SimpleFragment extends AFengFragment {
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtil.showToast(Integer.toString(position));
+//                ToastUtil.showToast(Integer.toString(position));
+
+                if (position == 0 || position == 1 || position == 3) {
+                    ToastUtil.showToast("正在施工中……");
+
+                }
             }
         });
 

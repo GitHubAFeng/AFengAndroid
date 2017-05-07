@@ -1,18 +1,23 @@
-package com.youth.xf.ui.demo.fragments;
+package com.youth.xf.ui.demo.home;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.R;
-import com.youth.xf.ui.adapter.MyFragmentPagerAdapter;
+
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
+import com.youth.xf.ui.demo.more.MoreFragment;
+import com.youth.xf.ui.demo.news.NewsFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by AFeng on 2017/3/4.
@@ -42,6 +47,7 @@ public class OneFragment extends AFengFragment {
     protected void initView(Bundle savedInstanceState) {
         mViewPager = getViewById(R.id.one_t1_vp);
         mTabLayout = getViewById(R.id.one_tl_tab);
+
     }
 
     @Override
@@ -82,7 +88,7 @@ public class OneFragment extends AFengFragment {
     private void initVP() {
 
         final String[] mTitles = {
-                "首页", "消息", "妹纸", "更多"
+                "首页", "头条", "妹纸", "更多"
         };
 
 //        for (String title : mTitles) {
@@ -90,9 +96,9 @@ public class OneFragment extends AFengFragment {
 //        }
 
         fragmentArrayList.add(SimpleFragment.getInstance("首页"));
-        fragmentArrayList.add(SimpleFragment.getInstance("消息"));
+        fragmentArrayList.add(NewsFragment.getInstance());
         fragmentArrayList.add(MeiZiFragment.getInstance());
-        fragmentArrayList.add(SimpleFragment.getInstance("更多"));
+        fragmentArrayList.add(MoreFragment.getInstance());
 
 
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentArrayList, mTitles));
@@ -127,10 +133,9 @@ public class OneFragment extends AFengFragment {
             }
         });
 
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(0);
 
     }
-
 
 
     @Override
@@ -138,5 +143,54 @@ public class OneFragment extends AFengFragment {
         super.onAttach(context);
         this.mContext = context;
     }
+
+
+    class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+        private List<?> fragments;
+        private String[] titles;
+
+        /**
+         * 普通，主页使用
+         */
+        public MyFragmentPagerAdapter(FragmentManager fm, List<?> mFragment) {
+            super(fm);
+            this.fragments = mFragment;
+        }
+
+        public MyFragmentPagerAdapter(FragmentManager fm, List<?> fragments, String[] titles) {
+            super(fm);
+            this.fragments = fragments;
+            this.titles = titles;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return (Fragment) fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        //此方法用来显示tab上的名字
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (titles != null) {
+                return titles[position];
+            } else {
+                return "";
+            }
+        }
+
+        public void addFragmentList(List<?> fragment) {
+            this.fragments.clear();
+            this.fragments = null;
+            this.fragments = fragment;
+            notifyDataSetChanged();
+        }
+
+    }
+
 
 }

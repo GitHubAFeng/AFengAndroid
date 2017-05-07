@@ -13,6 +13,7 @@ import retrofit2.http.Query;
 
 /**
  * Created by Administrator on 2017/5/3.
+ * 实现 获取 不同的API连接地址
  */
 
 public interface HttpClient {

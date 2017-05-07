@@ -18,6 +18,7 @@ import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.demo.api.HttpClient;
 import com.youth.xf.ui.demo.bean.GankIoDataBean;
+import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.Reply;
 
 /**
  * Created by Administrator on 2017/5/6.
@@ -86,7 +88,8 @@ public class MeiZiFragment extends AFengFragment {
             @Override
             public void onLoadMoreRequested() {
                 page++;
-
+//                Logger.d("page"+page);
+                loadNetData(true);
             }
         });
 
@@ -137,20 +140,21 @@ public class MeiZiFragment extends AFengFragment {
 //            mAdapter.setNewData(meiziBean.getResults());
 
         } else {
-            loadNetData();
+            loadNetData(false);
         }
     }
 
 
-    private void loadNetData() {
+    private void loadNetData(boolean isupdate) {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        HttpClient.Builder.getGankIOServer()
-                .getGankIoData(id, page, per_page)
+//        HttpClient.Builder.getGankIOServer()
+//                .getGankIoData(id, page, per_page)
+        MeiZiRepository.getInstance().getGankIoData(id, page, per_page, id, isupdate)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<GankIoDataBean>() {
+                .subscribe(new Observer<Reply<GankIoDataBean>>() {
                     Disposable d;
 
                     @Override
@@ -160,17 +164,21 @@ public class MeiZiFragment extends AFengFragment {
                     }
 
                     @Override
-                    public void onNext(GankIoDataBean gankIoDataBean) {
+                    public void onNext(Reply<GankIoDataBean> gankIoDataBean) {
+
+                        meiziBean = gankIoDataBean.getData();
 
                         if (page == 1) {
-                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
+                            if (gankIoDataBean != null && gankIoDataBean.getData().getResults() != null && gankIoDataBean.getData().getResults().size() > 0) {
                                 imgUrlList.clear();
-                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
+                                for (int i = 0; i < gankIoDataBean.getData().getResults().size(); i++) {
+                                    imgUrlList.add(gankIoDataBean.getData().getResults().get(i).getUrl());
                                 }
-                                mAdapter.setNewData(gankIoDataBean.getResults());
+                                mAdapter.setNewData(gankIoDataBean.getData().getResults());
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.openLoadAnimation();
+
+//                                Logger.d("DD",gankIoDataBean.getSource().toString());
 
                                 //TODO  进行本地缓存
 
@@ -179,24 +187,31 @@ public class MeiZiFragment extends AFengFragment {
                                     public void onSimpleItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                                         //点击进入详情页
 
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
+                                        bundle.putInt("code", i);//第几张
+                                        bundle.putStringArrayList("imageuri", imgUrlList);
+                                        Intent intent = new Intent(getContext(), MeiZiBigImageActivity.class);
+                                        intent.putExtras(bundle);
+                                        getContext().startActivity(intent);
+
                                     }
                                 });
 
                             }
 
                         } else {
-                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
+                            if (gankIoDataBean != null && gankIoDataBean.getData().getResults() != null && gankIoDataBean.getData().getResults().size() > 0) {
 
-                                mAdapter.setNewData(gankIoDataBean.getResults());
+                                mAdapter.setNewData(gankIoDataBean.getData().getResults());
                                 mAdapter.notifyDataSetChanged();
 
-                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
+                                for (int i = 0; i < gankIoDataBean.getData().getResults().size(); i++) {
+                                    imgUrlList.add(gankIoDataBean.getData().getResults().get(i).getUrl());
                                 }
 
                             }
                         }
-
 
                     }
 
@@ -207,7 +222,7 @@ public class MeiZiFragment extends AFengFragment {
                             page--;
                         }
                         mProgressBar.setVisibility(View.GONE);
-                        Logger.d("HH3 网络请求错误："+throwable.toString());
+                        Logger.d("HH3 网络请求错误：" + throwable.toString());
                     }
 
                     @Override

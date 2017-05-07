@@ -87,6 +87,8 @@ dependencies {
 
     compile 'org.greenrobot:greendao:3.2.2'  //ORM
 
+    //图片查看器
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
 
 
 }

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -18,10 +19,12 @@ import com.bumptech.glide.request.target.Target;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
+import com.youth.xf.ui.demo.meizi.MeiZiBigImageActivity;
 import com.youth.xf.utils.xutils.XDensityUtils;
 
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Glide封装类
@@ -483,5 +486,27 @@ public abstract class GlideUtils {
         clearDiskCache(context);
         clearMemory(context);
     }
+
+
+    /**
+     * 下载并且获得图片缓存路径
+     * @param context 上下文
+     * @param imgUrl  图片下载路径
+     * @return 图片缓存位置
+     */
+    public static String getImagePath(Context context, String imgUrl) {
+        String path = null;
+        FutureTarget<File> future = Glide.with(context)
+                .load(imgUrl)
+                .downloadOnly(500, 500);
+        try {
+            File cacheFile = future.get();
+            path = cacheFile.getAbsolutePath();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return path;
+    }
+
 
 }
