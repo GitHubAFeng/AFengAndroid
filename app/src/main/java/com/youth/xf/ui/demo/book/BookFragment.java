@@ -100,7 +100,7 @@ public class BookFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-
+        setUpRecyclerView();
     }
 
     /**
@@ -108,8 +108,6 @@ public class BookFragment extends AFengFragment {
      */
     @Override
     protected void onVisibleToUser() {
-        setUpRecyclerView();
-
         startFABAnimation();
     }
 
@@ -182,21 +180,11 @@ public class BookFragment extends AFengFragment {
                                     public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                                         BooksBean book = bookBean.getBooks().get(position);
-
-                                        EventBus.getDefault().post(book.getId());
-
+                                        //先发送后注册的要使用postSticky粘性事件
+                                        EventBus.getDefault().postSticky(new BookEvent(book));
                                         Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-//                                        intent.putExtra("movie", movie);
-
-//                                        ActivityOptionsCompat options =
-//                                                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-//                                                        view.findViewById(R.id.iv_top_photo), getString(R.string.transition_book_img));
-//
-//                                        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-
                                         startActivity(intent);
-
-
+                                        hideSoftInput();
                                     }
                                 });
 

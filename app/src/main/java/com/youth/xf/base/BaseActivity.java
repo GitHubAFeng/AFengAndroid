@@ -2,6 +2,7 @@ package com.youth.xf.base;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -12,12 +13,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.yokeyword.fragmentation.SupportActivity;
+
 
 /**
- * 适合拥有多个Fragment的Activity基类，方便管理
+ * 普通的Activity基类
  */
-public abstract class AFengActivity extends SupportActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected String TAG;
     protected App mApp;

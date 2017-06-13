@@ -25,19 +25,6 @@ import java.util.concurrent.ExecutionException;
 
 public class ImgLoadUtil {
 
-    private static ImgLoadUtil instance;
-
-    private ImgLoadUtil() {
-    }
-
-    public static ImgLoadUtil getInstance() {
-        if (instance == null) {
-            instance = new ImgLoadUtil();
-        }
-        return instance;
-    }
-
-
     /**
      * 从网络RUL加载圆角图,暂时用到显示头像
      */
@@ -105,13 +92,14 @@ public class ImgLoadUtil {
 
     /**
      * 根据URL获取Bitmap
+     *
      * @param context
      * @param url
      * @return
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    public static Bitmap getBitmapByUrl(Context context,String url) throws ExecutionException, InterruptedException {
+    public static Bitmap getBitmapByUrl(Context context, String url) throws ExecutionException, InterruptedException {
         Bitmap myBitmap = Glide.with(context)
                 .load(url)
                 .asBitmap() //必须

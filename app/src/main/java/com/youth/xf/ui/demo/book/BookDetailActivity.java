@@ -1,15 +1,24 @@
 package com.youth.xf.ui.demo.book;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
+import com.youth.xf.base.BaseActivity;
+import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
+import com.youth.xf.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import io.reactivex.Observer;
@@ -17,11 +26,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.youth.xf.base.AFengConfig.getContext;
+
 /**
  * Created by Administrator on 2017/5/3.
  */
 
-public class BookDetailActivity extends AFengActivity {
+public class BookDetailActivity extends BaseActivity {
 
 
     @BindView(R.id.book_detail_des)
@@ -30,12 +41,6 @@ public class BookDetailActivity extends AFengActivity {
     @BindView(R.id.book_detail_title_img)
     KenBurnsView mKenBurnsView;
 
-
-
-    public static BookDetailActivity newInstance() {
-        BookDetailActivity fragment = new BookDetailActivity();
-        return fragment;
-    }
 
     @Override
     protected int getLayoutId() {
@@ -75,10 +80,17 @@ public class BookDetailActivity extends AFengActivity {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(String bookid) {
-        if (bookid != null) {
-            BookRepository.getInstance().getBookDetail(bookid,"",false)
+    int index = 0;
+
+    //参数一致才能收到
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEventMainThread(BookEvent event) {
+        index++;
+        String temp =""+index;
+        ToastUtil.showToast(temp);
+        if (event.getbook() != null) {
+//            ToastUtil.showToast(event.getbook().getId());
+            BookRepository.getInstance().getBookDetail(event.getbook().getId(), "", false)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -93,16 +105,18 @@ public class BookDetailActivity extends AFengActivity {
                         @Override
                         public void onNext(BookDetailBean bookDetailBean) {
 
-//                            try {
-//                                Bitmap myBitmap =ImgLoadUtil.getBitmapByUrl(getContext(),bookDetailBean.getImages().getLarge());
-//                                mKenBurnsView.setImageBitmap(myBitmap);
-//                                decsTextView.setText(bookDetailBean.getSummary());
-//
-//                            } catch (ExecutionException e) {
-//                                e.printStackTrace();
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
+                            decsTextView.setText(bookDetailBean.getSummary());
+
+                            new Thread(() -> {
+                                try {
+                                    Bitmap myBitmap = ImgLoadUtil.getBitmapByUrl(getContext(), bookDetailBean.getImages().getLarge());
+                                    BookDetailActivity.this.runOnUiThread(()-> mKenBurnsView.setImageBitmap(myBitmap));
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
                         }
 
                         @Override
@@ -116,8 +130,16 @@ public class BookDetailActivity extends AFengActivity {
                         }
                     });
 
+        } else {
+
+            ToastUtil.showToast("bookid为空");
         }
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }
