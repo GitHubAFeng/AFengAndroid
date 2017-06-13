@@ -28,7 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.Reply;
+
 
 /**
  * Created by AFeng on 2017/4/2.
@@ -157,7 +157,7 @@ public class BookFragment extends AFengFragment implements BookContract.View {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Reply<BookBean>>() {
+                .subscribe(new Observer<BookBean>() {
 
                     Disposable d;
 
@@ -167,18 +167,18 @@ public class BookFragment extends AFengFragment implements BookContract.View {
                     }
 
                     @Override
-                    public void onNext(Reply<BookBean> bookBean) {
+                    public void onNext(BookBean bookBean) {
 
                         if (mStart == 0) {
-                            if (bookBean != null && bookBean.getData().getBooks() != null && bookBean.getData().getBooks().size() > 0) {
-                                adapter.setNewData(bookBean.getData().getBooks());
+                            if (bookBean != null && bookBean.getBooks() != null && bookBean.getBooks().size() > 0) {
+                                adapter.setNewData(bookBean.getBooks());
                                 adapter.notifyDataSetChanged();
                                 adapter.openLoadAnimation();
                                 mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
                                     @Override
                                     public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                                        BooksBean book = bookBean.getData().getBooks().get(position);
+                                        BooksBean book = bookBean.getBooks().get(position);
                                         Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                                         intent.putExtra("book", book);
 

@@ -16,9 +16,9 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
-import com.youth.xf.ui.demo.api.HttpClient;
+
 import com.youth.xf.ui.demo.bean.GankIoDataBean;
-import com.youth.xf.utils.ToastUtil;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.Reply;
+
 
 /**
  * Created by Administrator on 2017/5/6.
@@ -159,7 +159,7 @@ public class MeiZiFragment extends AFengFragment {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Reply<GankIoDataBean>>() {
+                .subscribe(new Observer<GankIoDataBean>() {
                     Disposable d;
 
                     @Override
@@ -169,17 +169,17 @@ public class MeiZiFragment extends AFengFragment {
                     }
 
                     @Override
-                    public void onNext(Reply<GankIoDataBean> gankIoDataBean) {
+                    public void onNext(GankIoDataBean gankIoDataBean) {
 
-                        meiziBean = gankIoDataBean.getData();
+                        meiziBean = gankIoDataBean;
                         Logger.d("onNext" + page);
                         if (page == 1) {
-                            if (gankIoDataBean != null && gankIoDataBean.getData().getResults() != null && gankIoDataBean.getData().getResults().size() > 0) {
+                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
                                 imgUrlList.clear();
-                                for (int i = 0; i < gankIoDataBean.getData().getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getData().getResults().get(i).getUrl());
+                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
+                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
                                 }
-                                mAdapter.setNewData(gankIoDataBean.getData().getResults());
+                                mAdapter.setNewData(gankIoDataBean.getResults());
 
 //                                Logger.d("DD",gankIoDataBean.getSource().toString());
                                 Logger.d("正在加载");
@@ -207,14 +207,14 @@ public class MeiZiFragment extends AFengFragment {
                             }
 
                         } else {
-                            if (gankIoDataBean != null && gankIoDataBean.getData().getResults() != null && gankIoDataBean.getData().getResults().size() > 0) {
+                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
                                 mAdapter.loadMoreComplete();  //加载完成
-                                mAdapter.setNewData(gankIoDataBean.getData().getResults());
+                                mAdapter.setNewData(gankIoDataBean.getResults());
                                 mAdapter.notifyDataSetChanged();
 
                                 imgUrlList.clear();
-                                for (int i = 0; i < gankIoDataBean.getData().getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getData().getResults().get(i).getUrl());
+                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
+                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
                                 }
                                 Logger.d("加载");
                             } else {

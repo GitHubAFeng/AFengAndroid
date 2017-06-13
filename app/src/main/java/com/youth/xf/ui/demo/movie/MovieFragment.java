@@ -32,7 +32,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.Reply;
+
 
 /**
  * Created by Administrator on 2017/5/3.
@@ -158,7 +158,7 @@ public class MovieFragment extends AFengFragment {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Reply<HotMovieBean>>() {
+                .subscribe(new Observer<HotMovieBean>() {
                     Disposable d;
 
                     @Override
@@ -167,11 +167,11 @@ public class MovieFragment extends AFengFragment {
                     }
 
                     @Override
-                    public void onNext(Reply<HotMovieBean> hotMovieBean) {
+                    public void onNext(HotMovieBean hotMovieBean) {
 
                         if (mStart == 0) {
-                            if (hotMovieBean != null && hotMovieBean.getData().getSubjects() != null && hotMovieBean.getData().getSubjects().size() > 0) {
-                                mAdapter.setNewData(hotMovieBean.getData().getSubjects());
+                            if (hotMovieBean != null && hotMovieBean.getSubjects() != null && hotMovieBean.getSubjects().size() > 0) {
+                                mAdapter.setNewData(hotMovieBean.getSubjects());
                                 mAdapter.notifyDataSetChanged();
                                 mAdapter.openLoadAnimation();
                                 mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
@@ -179,7 +179,7 @@ public class MovieFragment extends AFengFragment {
                                     public void onSimpleItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
 
                                         //传递该点击单元的数据对象给详情页
-                                        SubjectsBean movie = hotMovieBean.getData().getSubjects().get(i);
+                                        SubjectsBean movie = hotMovieBean.getSubjects().get(i);
                                         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                                         intent.putExtra("movie", movie);
 

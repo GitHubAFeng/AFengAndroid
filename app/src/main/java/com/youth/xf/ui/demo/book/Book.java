@@ -1,18 +1,13 @@
 package com.youth.xf.ui.demo.book;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-
-import java.util.List;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Administrator on 2017/5/1.
  */
 
-@Entity
+
 public class Book {
-    @Id(autoincrement = true)
+
     private Long id;
     private String book_id;
     private String createdAt;
@@ -24,7 +19,7 @@ public class Book {
     private boolean used;
     private String who;
     private String images;
-    @Generated(hash = 1836168726)
+
     public Book(Long id, String book_id, String createdAt, String desc,
             String publishedAt, String source, String type, String url,
             boolean used, String who, String images) {
@@ -40,7 +35,7 @@ public class Book {
         this.who = who;
         this.images = images;
     }
-    @Generated(hash = 1839243756)
+
     public Book() {
     }
     public Long getId() {

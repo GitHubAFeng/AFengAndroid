@@ -25,7 +25,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.Reply;
+
 
 /**
  * Created by Administrator on 2017/5/3.
@@ -99,13 +99,11 @@ public class MovieDetailActivity extends AFengActivity {
 
     private void setupViewPager(ViewPager mViewPager) {
 
-//        HttpClient.Builder.getDouBanService()
-//                .getMovieDetail(mMovie.getId())
         MovieRepository.getInstance().getMovieDetail(mMovie.getId(), mMovie.getId(), false)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Reply<MovieDetailBean>>() {
+                .subscribe(new Observer<MovieDetailBean>() {
                     Disposable d;
 
                     @Override
@@ -114,19 +112,19 @@ public class MovieDetailActivity extends AFengActivity {
                     }
 
                     @Override
-                    public void onNext(Reply<MovieDetailBean> movieDetailBean) {
+                    public void onNext(MovieDetailBean movieDetailBean) {
 
                         StringBuilder NameBuilder = new StringBuilder();
-                        for (PersonBean personBean : movieDetailBean.getData().getDirectors()) {
+                        for (PersonBean personBean : movieDetailBean.getDirectors()) {
                             NameBuilder.append("\n" + personBean.getName());
                         }
 
                         StringBuilder CastBuilder = new StringBuilder();
-                        for (PersonBean personBean : movieDetailBean.getData().getCasts()) {
+                        for (PersonBean personBean : movieDetailBean.getCasts()) {
                             CastBuilder.append("\n" + personBean.getName());
                         }
 
-                        adapter.addFragment(MovieDetailFragment.newInstance(movieDetailBean.getData().getSummary()), "剧情简介");
+                        adapter.addFragment(MovieDetailFragment.newInstance(movieDetailBean.getSummary()), "剧情简介");
                         adapter.addFragment(MovieDetailFragment.newInstance(NameBuilder.toString()), "导演简介");
                         adapter.addFragment(MovieDetailFragment.newInstance(CastBuilder.toString()), "演员列表");
                         adapter.notifyDataSetChanged();  //因为是异步请求，所以数据请求回来后要通知更新

@@ -5,7 +5,7 @@ import android.app.Application;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.base.AFengConfig;
-import com.youth.xf.utils.DB.GreenDaoManager;
+
 
 
 public class App extends Application {
@@ -21,7 +21,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         AFengConfig.init(this);
-        GreenDaoManager.getInstance(); //ORM初始化
 
         if (BuildConfig.DEBUG) {
             Logger
