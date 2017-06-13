@@ -17,7 +17,7 @@ import butterknife.OnClick;
  * Created by AFeng on 2017/3/26.
  */
 
-public class UserLoginActivity extends AFengActivity implements LoginContract.View {
+public class UserLoginActivity extends AFengActivity{
 //    private UserLoginPresenter mUserLoginPresenter = new UserLoginPresenter(this);
 
     @BindView(R.id.id_et_username)
@@ -49,45 +49,7 @@ public class UserLoginActivity extends AFengActivity implements LoginContract.Vi
 
     }
 
-    @Override
-    public String getUserName() {
-        return mIdEtUsername.getText().toString();
-    }
 
-    @Override
-    public String getPassword() {
-        return mIdEtPassword.getText().toString();
-    }
-
-    @Override
-    public void clearUserName() {
-        mIdEtUsername.setText("");
-    }
-
-    @Override
-    public void clearPassword() {
-        mIdEtPassword.setText("");
-    }
-
-    @Override
-    public void showLoading() {
-        //显示进度条
-    }
-
-    @Override
-    public void hideLoading() {
-        //隐藏进度条
-    }
-
-    @Override
-    public void toMainActivity(User user) {
-        ToastUtil.showToast("登陆成功，进入主页面！");
-    }
-
-    @Override
-    public void showFailedError() {
-        ToastUtil.showToast("登陆失败！");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,21 +62,13 @@ public class UserLoginActivity extends AFengActivity implements LoginContract.Vi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.id_btn_login:
-//                mUserLoginPresenter.login();
+
                 break;
             case R.id.id_btn_clear:
-//                mUserLoginPresenter.clear();
+
                 break;
         }
     }
 
-    @Override
-    public void setPresenter(Object presenter) {
 
-    }
-
-    @Override
-    public boolean isActive() {
-        return false;
-    }
 }

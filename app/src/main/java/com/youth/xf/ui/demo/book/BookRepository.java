@@ -1,7 +1,5 @@
 package com.youth.xf.ui.demo.book;
 
-import com.youth.xf.App;
-
 import com.youth.xf.ui.demo.api.HttpClient;
 
 import io.reactivex.Observable;

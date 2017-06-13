@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                                     xmlns:tools="http://schemas.android.com/tools"
-                                     android:layout_width="match_parent"
-                                     android:layout_height="match_parent"
-                                     android:fitsSystemWindows="true"
-                                     android:orientation="vertical"
-                                     tools:context=".ui.demo.MainActivity">
-<!--标题-->
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".ui.demo.MainActivity">
+    <!--标题-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_width="46px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/titlebar_menu"/>
+                android:src="@drawable/titlebar_menu" />
         </com.zhy.autolayout.AutoFrameLayout>
 
         <HorizontalScrollView
@@ -49,7 +49,7 @@
                     android:layout_width="110px"
                     android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/titlebar_music"/>
+                    android:src="@drawable/titlebar_music" />
 
                 <ImageView
                     android:id="@+id/iv_title_two"
@@ -57,40 +57,28 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/titlebar_disco"/>
+                    android:src="@drawable/titlebar_disco" />
 
                 <ImageView
                     android:id="@+id/iv_title_thr"
                     android:layout_width="110px"
                     android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/titlebar_friends"/>
+                    android:src="@drawable/titlebar_friends" />
             </com.zhy.autolayout.AutoLinearLayout>
         </HorizontalScrollView>
     </android.support.v7.widget.Toolbar>
-<!--标题结束-->
-<!--正文-->
+    <!--标题结束-->
+
+    <!--正文内容-->
     <com.zhy.autolayout.AutoFrameLayout
+        android:id="@+id/main_content"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tl_10"
-            android:background="@color/cadetblue"
-            android:descendantFocusability="blocksDescendants"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/vp_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="32px"
-            android:visibility="gone"
-            android:src="@android:drawable/ic_dialog_email"/>
+
     </com.zhy.autolayout.AutoFrameLayout>
 
 </com.zhy.autolayout.AutoLinearLayout>

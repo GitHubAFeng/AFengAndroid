@@ -1,32 +1,21 @@
 package com.youth.xf.ui.demo.book;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.widget.TextView;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
+import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
 
 /**
  * Created by Administrator on 2017/5/3.
@@ -34,23 +23,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BookDetailActivity extends AFengActivity {
 
-    @BindView(R.id.viewpager)
-    ViewPager mViewPager;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
-    @BindView(R.id.ivImage)
-    ImageView ivImage;
-    @BindView(R.id.sliding_tabs)
-    TabLayout tabLayout;
+
+    @BindView(R.id.book_detail_des)
+    TextView decsTextView;
+
+    @BindView(R.id.book_detail_title_img)
+    KenBurnsView mKenBurnsView;
 
 
-    MyPagerAdapter adapter = null;
 
-    BookDetailBean bookDetailBean;
-
-    BooksBean mBook;
+    public static BookDetailActivity newInstance() {
+        BookDetailActivity fragment = new BookDetailActivity();
+        return fragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -59,45 +44,14 @@ public class BookDetailActivity extends AFengActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mBook = (BooksBean) getIntent().getSerializableExtra("book");
-
-        Glide.with(ivImage.getContext())
-                .load(mBook.getImages().getLarge())
-                .fitCenter()
-                .into(ivImage);
-
-        setupViewPager(mViewPager);
-
-
-        adapter = new MyPagerAdapter(getSupportFragmentManager());
-
-        if(bookDetailBean!=null){
-            adapter.addFragment(BookDetailFragment.newInstance(bookDetailBean.getSummary()), "内容简介");
-            adapter.addFragment(BookDetailFragment.newInstance(bookDetailBean.getAuthor_intro()), "作者简介");
-            adapter.addFragment(BookDetailFragment.newInstance(bookDetailBean.getCatalog()), "目录");
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
         }
-
-        mViewPager.setAdapter(adapter);
-
-
-        tabLayout.addTab(tabLayout.newTab().setText("内容简介"));
-        tabLayout.addTab(tabLayout.newTab().setText("作者简介"));
-        tabLayout.addTab(tabLayout.newTab().setText("目录"));
-        tabLayout.setupWithViewPager(mViewPager);
-
     }
 
     @Override
     protected void setListener() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+
     }
 
     @Override
@@ -105,76 +59,64 @@ public class BookDetailActivity extends AFengActivity {
 
     }
 
-
-    private void setupViewPager(ViewPager mViewPager) {
-
-        BookRepository.getInstance().getBookDetail(mBook.getId(), mBook.getId(), false)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BookDetailBean>() {
-                    Disposable d;
-
-                    @Override
-                    public void onSubscribe(Disposable disposable) {
-                        d = disposable;
-                    }
-
-                    @Override
-                    public void onNext(BookDetailBean bookDetailBeanReply) {
-//                        adapter.clearAll();
-                        bookDetailBean = bookDetailBeanReply;
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        d.dispose();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        d.dispose();
-                    }
-                });
+    /**
+     * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
+     */
+    @Override
+    protected void onLazyLoadOnce() {
 
     }
 
 
-    static class MyPagerAdapter extends FragmentStatePagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String bookid) {
+        if (bookid != null) {
+            BookRepository.getInstance().getBookDetail(bookid,"",false)
+                    .subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BookDetailBean>() {
+                        Disposable d;
+
+                        @Override
+                        public void onSubscribe(Disposable disposable) {
+                            d = disposable;
+                        }
+
+                        @Override
+                        public void onNext(BookDetailBean bookDetailBean) {
+
+//                            try {
+//                                Bitmap myBitmap =ImgLoadUtil.getBitmapByUrl(getContext(),bookDetailBean.getImages().getLarge());
+//                                mKenBurnsView.setImageBitmap(myBitmap);
+//                                decsTextView.setText(bookDetailBean.getSummary());
+//
+//                            } catch (ExecutionException e) {
+//                                e.printStackTrace();
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            d.dispose();
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            d.dispose();
+                        }
+                    });
+
         }
-
-        public void addFragment(Fragment fragment, String title) {
-
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-
-        public void clearAll() {
-            mFragmentTitles.clear();
-            mFragments.clear();
-        }
-
     }
 
 

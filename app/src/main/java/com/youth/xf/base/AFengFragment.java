@@ -4,18 +4,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
-import com.youth.xf.App;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 
 /**
@@ -23,14 +23,13 @@ import io.reactivex.disposables.Disposable;
  * 时间：2017/3/2
  */
 
-public abstract class AFengFragment extends Fragment {
+public abstract class AFengFragment extends SwipeBackFragment {
 
     private CompositeDisposable mdisposables;
 
     protected String TAG;
     protected App mApp;
     protected View mContentView;
-    //    protected Engine mEngine;
     protected AFengActivity mActivity;
 
     protected boolean mIsLoadedData = false;
@@ -43,7 +42,6 @@ public abstract class AFengFragment extends Fragment {
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
         mActivity = (AFengActivity) getActivity();
-//        mEngine = mApp.getEngine();
     }
 
     @Nullable
@@ -62,7 +60,9 @@ public abstract class AFengFragment extends Fragment {
                 parent.removeView(mContentView);
             }
         }
-        return mContentView;
+        // 需要支持SwipeBack则这里必须调用toSwipeBackFragment(view);
+        return attachToSwipeBack(mContentView);
+//        return mContentView;
     }
 
 

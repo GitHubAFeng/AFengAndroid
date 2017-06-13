@@ -2,25 +2,23 @@ package com.youth.xf.base;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
-import com.youth.xf.App;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import me.yokeyword.fragmentation.SupportActivity;
 
 
-public abstract class AFengActivity extends AppCompatActivity {
+public abstract class AFengActivity extends SupportActivity {
 
     protected String TAG;
     protected App mApp;
-    //    protected Engine mEngine;
     protected boolean mIsLoadedData = false;
     private CompositeDisposable mdisposables;
 
@@ -35,7 +33,6 @@ public abstract class AFengActivity extends AppCompatActivity {
         mbinder = ButterKnife.bind(this);
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
-//        mEngine = mApp.getEngine();
         initView(savedInstanceState);
         setListener();
         processLogic(savedInstanceState);

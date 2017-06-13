@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 作者： AFeng
@@ -99,6 +100,25 @@ public class ImgLoadUtil {
         }
         // 最后通知图库更新
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsoluteFile())));
+    }
+
+
+    /**
+     * 根据URL获取Bitmap
+     * @param context
+     * @param url
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    public static Bitmap getBitmapByUrl(Context context,String url) throws ExecutionException, InterruptedException {
+        Bitmap myBitmap = Glide.with(context)
+                .load(url)
+                .asBitmap() //必须
+                .centerCrop()
+                .into(500, 500)
+                .get();
+        return myBitmap;
     }
 
 

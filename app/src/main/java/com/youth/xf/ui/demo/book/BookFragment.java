@@ -20,6 +20,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.ui.demo.movie.MovieDetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -34,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by AFeng on 2017/4/2.
  */
 
-public class BookFragment extends AFengFragment implements BookContract.View {
+public class BookFragment extends AFengFragment {
 
 
     @BindView(R.id.book_recyclerView)
@@ -55,6 +58,16 @@ public class BookFragment extends AFengFragment implements BookContract.View {
     private int mCount = 18;
 
     BookFragment.oneAdapter adapter = null;
+
+
+    public static BookFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        BookFragment fragment = new BookFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 
     @Override
@@ -111,32 +124,23 @@ public class BookFragment extends AFengFragment implements BookContract.View {
 
     private void doSearch(String keyword) {
         mProgressBar.setVisibility(View.VISIBLE);
-//        mAdapter.clearItems();
-//        searchObservable.doSearch(keyword);
+
     }
 
-    @Override
+
     public void setUpFAB() {
-        mFabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MaterialDialog.Builder(getActivity())
-                        .title("搜索")
-                        //.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                        .input("请输入关键字", "", new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                // Do something
-                                if (!TextUtils.isEmpty(input)) {
-                                    doSearch(input.toString());
-                                }
-                            }
-                        }).show();
-            }
-        });
+        mFabButton.setOnClickListener(view -> new MaterialDialog.Builder(getActivity())
+                .title("搜索")
+                //.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input("请输入关键字", "", (dialog, input) -> {
+                    // Do something
+                    if (!TextUtils.isEmpty(input)) {
+                        doSearch(input.toString());
+                    }
+                }).show());
     }
 
-    @Override
+
     public void startFABAnimation() {
 
         mFabButton.animate()
@@ -148,11 +152,10 @@ public class BookFragment extends AFengFragment implements BookContract.View {
 
     }
 
-    @Override
+
     public void setUpRecyclerView() {
         mProgressBar.setVisibility(View.VISIBLE);
-//        HttpClient.Builder.getDouBanService()
-//                .getBook(mType, mStart, mCount)
+
         BookRepository.getInstance().getBook(mType, mStart, mCount, mStart, false)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -179,14 +182,20 @@ public class BookFragment extends AFengFragment implements BookContract.View {
                                     public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                                         BooksBean book = bookBean.getBooks().get(position);
+
+                                        EventBus.getDefault().post(book.getId());
+
                                         Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                                        intent.putExtra("book", book);
+//                                        intent.putExtra("movie", movie);
 
-                                        ActivityOptionsCompat options =
-                                                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                                                        view.findViewById(R.id.ivBook_img), getString(R.string.transition_book_img));
+//                                        ActivityOptionsCompat options =
+//                                                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+//                                                        view.findViewById(R.id.iv_top_photo), getString(R.string.transition_book_img));
+//
+//                                        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
 
-                                        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                                        startActivity(intent);
+
 
                                     }
                                 });
@@ -211,17 +220,6 @@ public class BookFragment extends AFengFragment implements BookContract.View {
                 });
 
 
-    }
-
-
-    @Override
-    public void setPresenter(BookContract.Presenter presenter) {
-
-    }
-
-    @Override
-    public boolean isActive() {
-        return false;
     }
 
 

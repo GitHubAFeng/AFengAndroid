@@ -124,9 +124,9 @@ public class MovieDetailActivity extends AFengActivity {
                             CastBuilder.append("\n" + personBean.getName());
                         }
 
-                        adapter.addFragment(MovieDetailFragment.newInstance(movieDetailBean.getSummary()), "剧情简介");
-                        adapter.addFragment(MovieDetailFragment.newInstance(NameBuilder.toString()), "导演简介");
-                        adapter.addFragment(MovieDetailFragment.newInstance(CastBuilder.toString()), "演员列表");
+//                        adapter.addFragment(MovieDetailFragment.newInstance(movieDetailBean.getSummary()), "剧情简介");
+//                        adapter.addFragment(MovieDetailFragment.newInstance(NameBuilder.toString()), "导演简介");
+//                        adapter.addFragment(MovieDetailFragment.newInstance(CastBuilder.toString()), "演员列表");
                         adapter.notifyDataSetChanged();  //因为是异步请求，所以数据请求回来后要通知更新
                     }
 

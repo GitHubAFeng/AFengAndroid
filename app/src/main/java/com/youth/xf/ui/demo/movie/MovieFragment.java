@@ -55,6 +55,12 @@ public class MovieFragment extends AFengFragment {
 
     MovieFragment.oneAdapter mAdapter = null;
 
+
+    public static MovieFragment newInstance() {
+        MovieFragment fragment = new MovieFragment();
+        return fragment;
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_moive_top;

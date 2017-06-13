@@ -3,9 +3,6 @@ package com.youth.xf.ui.demo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -23,14 +20,14 @@ import com.youth.xf.R;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.book.BookFragment;
-import com.youth.xf.ui.demo.home.OneFragment;
+import com.youth.xf.ui.demo.movie.MovieDetailFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.ToastUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 
 /**
@@ -38,16 +35,23 @@ import java.util.List;
  * 时间：2017/2/26
  */
 
-public class MainActivity extends AFengActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends AFengActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
 
     private Toolbar toolbar;
     private FrameLayout TitleMenuFra;
     private DrawerLayout drawerLayout;
-    private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
     private NavigationView mNavigationView;
-    private ViewPager mViewPager;
-
+    private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
     private Context mContext;
+
+
+    public static final int MAIN = 0;
+    public static final int BOOK = 1;
+    public static final int MOVIEW = 2;
+
+
+    private SupportFragment[] mFragments = new SupportFragment[3];
+
 
     @Override
     protected int getLayoutId() {
@@ -56,20 +60,44 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        toolbar = getViewById(R.id.toolbar);
-        TitleMenuFra = getViewById(R.id.ll_title_menu);
-        drawerLayout = getViewById(R.id.drawer_layout);
         mTitleOne = getViewById(R.id.iv_title_one);
         mTitleTwo = getViewById(R.id.iv_title_two);
         mTitleThr = getViewById(R.id.iv_title_thr);
         mTitleMenu = getViewById(R.id.iv_title_menu);
+        toolbar = getViewById(R.id.toolbar);
+        TitleMenuFra = getViewById(R.id.ll_title_menu);
+        drawerLayout = getViewById(R.id.drawer_layout);
         drawerLayout = getViewById(R.id.drawer_layout);
         mNavigationView = getViewById(R.id.nav_view);
-        mViewPager = getViewById(R.id.vp_content);
+
+
+        //装载Fragments
+        if (savedInstanceState == null) {
+            mFragments[MAIN] = MainFragment.newInstance();
+            mFragments[BOOK] = BookFragment.newInstance();
+            mFragments[MOVIEW] = MovieFragment.newInstance();
+
+            loadMultipleRootFragment(R.id.main_content, MAIN
+                    ,mFragments[MAIN]
+                    ,mFragments[BOOK]
+                    ,mFragments[MOVIEW]
+
+            );
+
+        } else {
+            // 这里库已经做了Fragment恢复工作，不需要额外的处理
+            // 这里我们需要拿到mFragments的引用，用下面的方法查找更方便些，也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些)
+            mFragments[MAIN] = findFragment(MainFragment.class);
+            mFragments[BOOK] = findFragment(BookFragment.class);
+            mFragments[MOVIEW] = findFragment(MovieFragment.class);
+
+        }
+
     }
 
     @Override
     protected void setListener() {
+
         mTitleOne.setOnClickListener(this);
         mTitleTwo.setOnClickListener(this);
         mTitleThr.setOnClickListener(this);
@@ -125,37 +153,31 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_title_thr:
+
+                mTitleThr.setSelected(true);
+                mTitleTwo.setSelected(false);
+                mTitleOne.setSelected(false);
+                showHideFragment(mFragments[MOVIEW]);
+
+                break;
+            case R.id.iv_title_two:
+                mTitleThr.setSelected(false);
+                mTitleTwo.setSelected(true);
+                mTitleOne.setSelected(false);
+                showHideFragment(mFragments[BOOK]);
+                break;
+            case R.id.iv_title_one:
+                mTitleThr.setSelected(false);
+                mTitleTwo.setSelected(false);
+                mTitleOne.setSelected(true);
+                showHideFragment(mFragments[MAIN]);
+                break;
             case R.id.ll_title_menu:
                 drawerLayout.openDrawer(GravityCompat.START);
                 ToastUtil.showToast("打开侧滑菜单");
                 break;
-            case R.id.iv_title_thr:
-                if (mViewPager.getCurrentItem() != 2) {
-                    mTitleThr.setSelected(true);
-                    mTitleTwo.setSelected(false);
-                    mTitleOne.setSelected(false);
-                    mViewPager.setCurrentItem(2);
-//                    ToastUtil.showToast("thr");
-                }
-                break;
-            case R.id.iv_title_two:
-                if (mViewPager.getCurrentItem() != 1) {
-                    mTitleThr.setSelected(false);
-                    mTitleTwo.setSelected(true);
-                    mTitleOne.setSelected(false);
-                    mViewPager.setCurrentItem(1);
-//                    ToastUtil.showToast("two");
-                }
-                break;
-            case R.id.iv_title_one:
-                if (mViewPager.getCurrentItem() != 0) {
-                    mTitleThr.setSelected(false);
-                    mTitleTwo.setSelected(false);
-                    mTitleOne.setSelected(true);
-                    mViewPager.setCurrentItem(0);
-//                    ToastUtil.showToast("one");
-                }
-                break;
+
             case R.id.ll_nav_homepage:// 主页
 //                drawerLayout.closeDrawer(GravityCompat.START);
                 ToastUtil.showToast("打开主页");
@@ -179,26 +201,15 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         }
     }
 
+
     /**
      * 初始化内容
      */
     private void initContent() {
-        ArrayList<Fragment> mFragmentList = new ArrayList<>();
-
-        mFragmentList.add(new OneFragment());
-        mFragmentList.add(new BookFragment());
-        mFragmentList.add(new MovieFragment());
-
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.addOnPageChangeListener(this);
 
         //默认选中第一项
         mTitleOne.setSelected(true);
-        mViewPager.setCurrentItem(0);
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -215,22 +226,25 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressedSupport() {
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            super.onBackPressedSupport();
         }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
 
+
     @Override
-    public void onPageSelected(int position) {
-        switch (position) {
+    public void onPageScrolled(int i, float v, int i1) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        switch (i) {
             case 0:
                 mTitleOne.setSelected(true);
                 mTitleThr.setSelected(false);
@@ -250,57 +264,11 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(int i) {
 
     }
 
 
-    class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-        private List<?> fragments;
-        private String[] titles;
-
-        /**
-         * 普通，主页使用
-         */
-        public MyFragmentPagerAdapter(FragmentManager fm, List<?> mFragment) {
-            super(fm);
-            this.fragments = mFragment;
-        }
-
-        public MyFragmentPagerAdapter(FragmentManager fm, List<?> fragments, String[] titles) {
-            super(fm);
-            this.fragments = fragments;
-            this.titles = titles;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return (Fragment) fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        //此方法用来显示tab上的名字
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (titles != null) {
-                return titles[position];
-            } else {
-                return "";
-            }
-        }
-
-        public void addFragmentList(List<?> fragment) {
-            this.fragments.clear();
-            this.fragments = null;
-            this.fragments = fragment;
-            notifyDataSetChanged();
-        }
-
-    }
 
 
 }

@@ -1,6 +1,5 @@
 package com.youth.xf.ui.demo.meizi;
 
-import com.youth.xf.App;
 import com.youth.xf.ui.demo.api.HttpClient;
 import com.youth.xf.ui.demo.bean.GankIoDataBean;
 

@@ -18,11 +18,8 @@ public class MovieDetailFragment extends AFengFragment {
     @BindView(R.id.tvInfo)
     TextView tvInfo;
 
-    public static MovieDetailFragment newInstance(String info) {
-        Bundle args = new Bundle();
+    public static MovieDetailFragment newInstance() {
         MovieDetailFragment fragment = new MovieDetailFragment();
-        args.putString("info", info);
-        fragment.setArguments(args);
         return fragment;
     }
 

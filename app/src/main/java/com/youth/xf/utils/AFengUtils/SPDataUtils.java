@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Base64;
 
-import com.youth.xf.App;
+import com.youth.xf.base.App;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
