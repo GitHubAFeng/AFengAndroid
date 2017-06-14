@@ -2,13 +2,13 @@ package com.youth.xf.ui.demo.book;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.support.v7.widget.Toolbar;
+
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.youth.xf.R;
-import com.youth.xf.base.AFengActivity;
+
 import com.youth.xf.base.BaseActivity;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.ToastUtil;
@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
+
 
 import butterknife.BindView;
 import io.reactivex.Observer;
@@ -38,8 +38,16 @@ public class BookDetailActivity extends BaseActivity {
     @BindView(R.id.book_detail_des)
     TextView decsTextView;
 
+    @BindView(R.id.book_detail_author)
+    TextView authorTextView;
+
+    @BindView(R.id.book_detail_cata)
+    TextView cataTextView;
+
     @BindView(R.id.book_detail_title_img)
     KenBurnsView mKenBurnsView;
+
+
 
 
     @Override
@@ -49,6 +57,8 @@ public class BookDetailActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -80,16 +90,12 @@ public class BookDetailActivity extends BaseActivity {
     }
 
 
-    int index = 0;
 
     //参数一致才能收到
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventMainThread(BookEvent event) {
-        index++;
-        String temp =""+index;
-        ToastUtil.showToast(temp);
+
         if (event.getbook() != null) {
-//            ToastUtil.showToast(event.getbook().getId());
             BookRepository.getInstance().getBookDetail(event.getbook().getId(), "", false)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -106,6 +112,8 @@ public class BookDetailActivity extends BaseActivity {
                         public void onNext(BookDetailBean bookDetailBean) {
 
                             decsTextView.setText(bookDetailBean.getSummary());
+                            authorTextView.setText(bookDetailBean.getAuthor_intro());
+                            cataTextView.setText(bookDetailBean.getCatalog());
 
                             new Thread(() -> {
                                 try {

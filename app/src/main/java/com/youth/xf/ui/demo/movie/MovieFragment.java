@@ -25,6 +25,8 @@ import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.demo.api.HttpClient;
 
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -94,7 +96,7 @@ public class MovieFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-
+        setUpRecyclerView();
     }
 
     /**
@@ -103,8 +105,6 @@ public class MovieFragment extends AFengFragment {
     @Override
     protected void onVisibleToUser() {
 //        startFABAnimation();
-        setUpRecyclerView();
-
     }
 
     /**
@@ -117,23 +117,15 @@ public class MovieFragment extends AFengFragment {
 
 
     public void setUpFAB() {
-        mFabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MaterialDialog.Builder(getActivity())
-                        .title("搜索")
-                        //.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                        .input("请输入关键字", "", new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                // Do something
-                                if (!TextUtils.isEmpty(input)) {
-                                    doSearch(input.toString());
-                                }
-                            }
-                        }).show();
-            }
-        });
+        mFabButton.setOnClickListener(view -> new MaterialDialog.Builder(getActivity())
+                .title("搜索")
+                //.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input("请输入关键字", "", (dialog, input) -> {
+                    // Do something
+                    if (!TextUtils.isEmpty(input)) {
+                        doSearch(input.toString());
+                    }
+                }).show());
     }
 
 
@@ -158,8 +150,6 @@ public class MovieFragment extends AFengFragment {
 
     public void setUpRecyclerView() {
         mProgressBar.setVisibility(View.VISIBLE);
-//        HttpClient.Builder.getDouBanService()
-//                .getMovieTop250(mStart, mCount)
         MovieRepository.getInstance().getMovieTop250(mStart, mCount, mStart, false)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -186,8 +176,9 @@ public class MovieFragment extends AFengFragment {
 
                                         //传递该点击单元的数据对象给详情页
                                         SubjectsBean movie = hotMovieBean.getSubjects().get(i);
+                                        EventBus.getDefault().postSticky(movie.getId().toString());
+
                                         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                                        intent.putExtra("movie", movie);
 
                                         ActivityOptionsCompat options =
                                                 ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),

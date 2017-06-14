@@ -18,8 +18,11 @@ public class MovieDetailFragment extends AFengFragment {
     @BindView(R.id.tvInfo)
     TextView tvInfo;
 
-    public static MovieDetailFragment newInstance() {
+    public static MovieDetailFragment newInstance(String info) {
         MovieDetailFragment fragment = new MovieDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("str", info);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -30,7 +33,7 @@ public class MovieDetailFragment extends AFengFragment {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        tvInfo.setText(getArguments().getString("info"));
+        tvInfo.setText(getArguments().getString("str"));
     }
 
     @Override

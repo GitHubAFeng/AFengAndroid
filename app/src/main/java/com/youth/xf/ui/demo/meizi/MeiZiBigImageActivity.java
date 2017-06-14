@@ -182,43 +182,35 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     private void getView() {
         /************************* 接收控件 ***********************/
 
-        to_save_big_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        to_save_big_image.setOnClickListener(view -> {
 
-                ToastUtil.showToast("开始下载图片");
-                if (isApp) {// 本地图片
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
-                    if (bitmap != null) {
-                        saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                        ToastUtil.showToast("保存成功");
+            ToastUtil.showToast("开始下载图片");
+            if (isApp) {// 本地图片
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
+                if (bitmap != null) {
+                    saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+                    ToastUtil.showToast("保存成功");
 //                        Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {// 网络图片
-                    final BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 子线程获得图片路径
-                            final String imagePath = getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
-                            // 主线程更新
-                            MeiZiBigImageActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (imagePath != null) {
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
-                                        if (bitmap != null) {
-                                            saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                                            ToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
-//                                            Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }).start();
                 }
+
+            } else {
+                // 网络图片
+                final BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                new Thread(() -> {
+                    // 子线程获得图片路径
+                    final String imagePath = getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
+                    // 主线程更新
+                    MeiZiBigImageActivity.this.runOnUiThread(() -> {
+                        if (imagePath != null) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
+                            if (bitmap != null) {
+                                saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+                                ToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
+//                                            Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }).start();
             }
         });
         /************************* 接收传值 ***********************/

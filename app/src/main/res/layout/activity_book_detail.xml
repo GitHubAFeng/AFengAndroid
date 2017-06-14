@@ -37,6 +37,7 @@
 
         </com.github.florent37.arclayout.ArcLayout>
 
+
         <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
-                android:text="Story"
+                android:text="简介"
                 android:textColor="#3A3A3A"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -97,18 +98,41 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
-                android:text="Development"
+                android:text="作者"
                 android:textColor="#3A3A3A"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
 
             <TextView
+                android:id="@+id/book_detail_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
                 android:fontFamily="sans-serif"
-                android:text="developmentdevelopmentdevelopmentdevelopmentdevelopmentdevelopmentdevelopmentdevelopmentdevelopmentdevelopment"
+                android:text="……"
+                android:textColor="#979696"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:text="目录"
+                android:textColor="#3A3A3A"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/book_detail_cata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:fontFamily="sans-serif"
+                android:text="……"
                 android:textColor="#979696"
                 android:textSize="15sp"
                 />

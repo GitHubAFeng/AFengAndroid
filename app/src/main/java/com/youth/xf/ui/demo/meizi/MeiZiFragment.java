@@ -86,13 +86,9 @@ public class MeiZiFragment extends AFengFragment {
     @Override
     protected void setListener() {
 
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                page++;
-//                Logger.d("page"+page);
-                loadNetData(true);
-            }
+        mAdapter.setOnLoadMoreListener(() -> {
+            page++;
+            loadNetData(true);
         });
 
         isPrepared = true;
@@ -108,7 +104,7 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-
+        loadData();
     }
 
     /**
@@ -116,7 +112,7 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onVisibleToUser() {
-        loadData();
+
     }
 
     /**
@@ -142,8 +138,6 @@ public class MeiZiFragment extends AFengFragment {
             }
 
             //获取缓存
-//            meiziBean = (GankIoDataBean) aCache.getAsObject(Constants.GANK_MEIZI);
-//            mAdapter.setNewData(meiziBean.getResults());
 
         } else {
             loadNetData(false);
@@ -181,8 +175,6 @@ public class MeiZiFragment extends AFengFragment {
                                 }
                                 mAdapter.setNewData(gankIoDataBean.getResults());
 
-//                                Logger.d("DD",gankIoDataBean.getSource().toString());
-                                Logger.d("正在加载");
                                 //TODO  进行本地缓存
 
                                 mAdapter.notifyDataSetChanged();
