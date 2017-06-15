@@ -27,6 +27,7 @@
         <item name="titleTextAppearance">@style/ToolBar.Title</item>
         <item name="subtitleTextAppearance">@style/Toolbar.SubTitle</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:homeAsUpIndicator">@drawable/cha</item>
         <!--<item name="android:textSize">18sp</item> &lt;!&ndash;  搞掂字体大小&ndash;&gt;-->
     </style>
 

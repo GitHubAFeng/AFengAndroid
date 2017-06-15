@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.demo.mv.BiliActivity;
+import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -152,7 +153,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.home_mv_btn:
                 //打开B站
-                startActivity(new Intent(this.getContext(), BiliActivity.class));
+//                startActivity(new Intent(this.getContext(), BiliActivity.class));
+                startActivity(new Intent(this.getContext(), BiliAgentWebActivity.class));
 
                 break;
         }

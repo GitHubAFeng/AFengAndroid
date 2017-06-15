@@ -27,31 +27,45 @@
 
         <activity
             android:name=".ui.demo.activity.SplashActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.Login.UserLoginActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.movie.MovieDetailActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.book.BookDetailActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.mv.BiliActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize"
+            android:name=".ui.demo.mv.BiliAgentWebActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.demo.meizi.MeiZiBigImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <meta-data android:name="design_width" android:value="768">
         </meta-data>

@@ -1,0 +1,172 @@
+package com.youth.xf.ui.demo.mv;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.webkit.WebView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.just.library.AgentWeb;
+import com.just.library.ChromeClientCallbackManager;
+import com.youth.xf.R;
+import com.youth.xf.base.BaseActivity;
+
+import butterknife.BindView;
+
+/**
+ * Created by Administrator on 2017/6/15.
+ */
+
+public class BiliAgentWebActivity extends BaseActivity {
+
+    final String mUrl = "http://m.acfun.cn/";
+
+    AgentWeb mAgentWeb = null;
+
+    @BindView(R.id.bili_swipe_container)
+    SwipeRefreshLayout mSwipeLayout;
+    @BindView(R.id.bili_toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.bili_toolbar_title)
+    TextView mTitleTextView;
+
+
+    /**
+     * 初始化布局,返回layout
+     */
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_bili;
+    }
+
+    /**
+     * 初始化布局以及View控件
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+
+        // 设置标题栏
+        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setSupportActionBar(mToolbar);
+
+        // 设置了回退按钮，及点击事件的效果
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(v -> finish());
+
+
+        if (mAgentWeb == null) {
+
+            mAgentWeb = AgentWeb.with(this)//传入Activity
+                    .setAgentWebParent(mSwipeLayout, new SwipeRefreshLayout.LayoutParams(-1, -1))//传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams
+                    .useDefaultIndicator()// 使用默认进度条
+                    .defaultProgressBarColor() // 使用默认进度条颜色
+                    .setReceivedTitleCallback(mCallback) //设置 Web 页面的 title 回调
+                    .setSecutityType(AgentWeb.SecurityType.strict)
+                    .createAgentWeb()//
+                    .ready()
+                    .go(mUrl);
+
+            mAgentWeb.getLoader().loadUrl(mUrl);
+
+        }
+
+
+    }
+
+    /**
+     * 给View控件添加事件监听器
+     */
+    @Override
+    protected void setListener() {
+        //下拉刷新当前网页
+        mSwipeLayout.setOnRefreshListener(() -> {
+                    mAgentWeb.getLoader().reload();
+                    mSwipeLayout.setRefreshing(false);
+                }
+        );
+    }
+
+    /**
+     * 处理业务逻辑，状态恢复等操作
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+
+    }
+
+
+    //两秒内按返回键两次退出程序
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (mAgentWeb.handleKeyEvent(keyCode, event)) {
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出A站~", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onPause() {
+        mAgentWeb.getWebLifeCycle().onPause();
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+        mAgentWeb.getWebLifeCycle().onResume();
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mAgentWeb.uploadFileResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //mAgentWeb.destroy();
+        mAgentWeb.getWebLifeCycle().onDestroy();
+    }
+
+
+    private ChromeClientCallbackManager.ReceivedTitleCallback mCallback = new ChromeClientCallbackManager.ReceivedTitleCallback() {
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+
+            //标题
+            if (mTitleTextView != null)
+                mTitleTextView.setText(title);
+
+        }
+    };
+
+}

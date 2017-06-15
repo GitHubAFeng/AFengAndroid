@@ -100,6 +100,9 @@ dependencies {
     //数据持久化
     compile 'xiaofei.library:android-data-storage:1.3.0'
 
+    //WEBVIEW库
+    compile 'com.just.agentweb:agentweb:1.2.1'
+
 
 
 }

@@ -20,6 +20,7 @@ import butterknife.BindView;
 
 /**
  * Created by Administrator on 2017/6/15.
+ * 使用原生的WEBVIEW，暂时不用
  */
 
 public class BiliActivity extends BaseActivity {
