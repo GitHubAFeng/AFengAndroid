@@ -91,12 +91,9 @@ public class OneFragment extends AFengFragment {
                 "首页", "头条", "妹纸", "更多"
         };
 
-//        for (String title : mTitles) {
-//            fragmentArrayList.add(SimpleFragment.getInstance(title));
-//        }
 
         fragmentArrayList.add(SimpleFragment.getInstance("首页"));
-        fragmentArrayList.add(NewsFragment.getInstance());
+        fragmentArrayList.add(NewsFragment.getInstance());  //头条
         fragmentArrayList.add(MeiZiFragment.getInstance());
         fragmentArrayList.add(MoreFragment.getInstance());
 

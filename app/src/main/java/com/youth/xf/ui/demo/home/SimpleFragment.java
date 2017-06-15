@@ -1,10 +1,12 @@
 package com.youth.xf.ui.demo.home;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -12,6 +14,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.ui.demo.mv.BiliActivity;
 import com.youth.xf.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 
 //此注解用来忽略检查
 @SuppressLint("ValidFragment")
-public class SimpleFragment extends AFengFragment {
+public class SimpleFragment extends AFengFragment implements View.OnClickListener {
     private static final String TYPE = "mType";
     private String mType = "Android";
     private String mTitle;
@@ -35,6 +38,7 @@ public class SimpleFragment extends AFengFragment {
     @BindView(R.id.one_rv_list)
     RecyclerView mRecyclerView;
     View headerView;
+    ImageButton mHomeMvBtn;
 
 
     public static SimpleFragment getInstance(String title) {
@@ -54,15 +58,18 @@ public class SimpleFragment extends AFengFragment {
             mType = getArguments().getString(TYPE);
         }
 
+        //动态嵌入布局
         if (headerView == null) {
             headerView = View.inflate(getContext(), R.layout.afeng_fra_one_header, null);
         }
+
+        mHomeMvBtn = (ImageButton) headerView.findViewById(R.id.home_mv_btn);
 
     }
 
     @Override
     protected void setListener() {
-
+        mHomeMvBtn.setOnClickListener(this);
     }
 
     @Override
@@ -133,6 +140,22 @@ public class SimpleFragment extends AFengFragment {
         });
 
         adapter.addHeaderView(headerView);
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.home_mv_btn:
+                //打开B站
+                startActivity(new Intent(this.getContext(), BiliActivity.class));
+
+                break;
+        }
     }
 
 

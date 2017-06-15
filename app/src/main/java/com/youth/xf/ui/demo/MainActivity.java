@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
@@ -35,7 +36,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * 时间：2017/2/26
  */
 
-public class MainActivity extends AFengActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
+public class MainActivity extends AFengActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private Toolbar toolbar;
     private FrameLayout TitleMenuFra;
@@ -78,9 +79,9 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             mFragments[MOVIEW] = MovieFragment.newInstance();
 
             loadMultipleRootFragment(R.id.main_content, MAIN
-                    ,mFragments[MAIN]
-                    ,mFragments[BOOK]
-                    ,mFragments[MOVIEW]
+                    , mFragments[MAIN]
+                    , mFragments[BOOK]
+                    , mFragments[MOVIEW]
 
             );
 
@@ -211,16 +212,31 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         mTitleOne.setSelected(true);
     }
 
+
+    //两秒内按返回键两次退出程序
+    private long exitTime = 0;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START);
+            } else if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出本应用！", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
             } else {
+
+                //退回后台并且返回桌面
                 moveTaskToBack(true);
+
+//                finish();
+//                System.exit(0); //终止程序 ， 不常用
             }
             return true;
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -267,8 +283,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     public void onPageScrollStateChanged(int i) {
 
     }
-
-
 
 
 }

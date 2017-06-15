@@ -44,7 +44,7 @@
                         android:orientation="vertical">
 
                         <ImageButton
-                            android:id="@+id/ib_xiandu"
+                            android:id="@+id/home_mv_btn"
                             android:layout_width="53dp"
                             android:layout_height="53dp"
                             android:background="@drawable/home_middle_fm"/>
@@ -54,7 +54,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="8dp"
-                            android:text="干货闲读"
+                            android:text="有趣视频"
                             android:textColor="@color/colorContent"
                             android:textSize="12sp"/>
                     </LinearLayout>

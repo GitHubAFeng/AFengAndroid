@@ -3,8 +3,10 @@ package com.youth.xf.base;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
@@ -130,5 +132,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         GlideUtils.clearMemory(this);
         System.gc();
     }
+
+
+
+
 
 }
