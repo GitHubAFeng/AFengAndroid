@@ -16,7 +16,7 @@ import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.demo.mv.BiliActivity;
 import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
-import com.youth.xf.utils.ToastUtil;
+import com.youth.xf.utils.xToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 public class SimpleFragment extends AFengFragment implements View.OnClickListener {
     private static final String TYPE = "mType";
     private String mType = "Android";
-    private String mTitle;
+
     private BGABanner mBGABanner;
     @BindView(R.id.one_rv_list)
     RecyclerView mRecyclerView;
@@ -42,9 +42,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     ImageButton mHomeMvBtn;
 
 
-    public static SimpleFragment getInstance(String title) {
+    public static SimpleFragment getInstance() {
         SimpleFragment sf = new SimpleFragment();
-        sf.mTitle = title;
         return sf;
     }
 
@@ -76,7 +75,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         TextView card_title_tv = (TextView) headerView.findViewById(R.id.card_title_tv);
-        card_title_tv.setText(mTitle);
+        card_title_tv.setText("首页");
         initBanner();
         initRecyclerView();
 
@@ -112,7 +111,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
         mBGABanner.setData(R.drawable.test_baner01, R.drawable.test_baner02, R.drawable.test_banner03);
 
-        mBGABanner.setDelegate((banner, itemView, model, position) -> ToastUtil.showToast("点击了" + position));
+        mBGABanner.setDelegate((banner, itemView, model, position) -> xToastUtil.showToast("点击了" + position));
 
 
     }
@@ -131,10 +130,10 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                ToastUtil.showToast(Integer.toString(position));
+//                xToastUtil.showToast(Integer.toString(position));
 
                 if (position == 0 || position == 1 || position == 3) {
-                    ToastUtil.showToast("正在施工中……");
+                    xToastUtil.showToast("正在施工中……");
 
                 }
             }
@@ -152,7 +151,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_mv_btn:
-                //打开B站
+
 //                startActivity(new Intent(this.getContext(), BiliActivity.class));
                 startActivity(new Intent(this.getContext(), BiliAgentWebActivity.class));
 

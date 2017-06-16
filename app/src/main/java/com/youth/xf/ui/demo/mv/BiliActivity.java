@@ -1,6 +1,8 @@
 package com.youth.xf.ui.demo.mv;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -33,6 +35,9 @@ public class BiliActivity extends BaseActivity {
     @BindView(R.id.bili_swipe_container)
     SwipeRefreshLayout mSwipeLayout;
 
+    @BindView(R.id.bili_web_container)
+    NestedScrollView mwebContainer;
+
 
     /**
      * 初始化布局,返回layout
@@ -47,6 +52,7 @@ public class BiliActivity extends BaseActivity {
      *
      * @param savedInstanceState
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView(Bundle savedInstanceState) {
 
@@ -59,14 +65,13 @@ public class BiliActivity extends BaseActivity {
             mWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
-            mSwipeLayout.addView(mWebView);
+            mwebContainer.addView(mWebView);
             mWebView.loadUrl(mUrl);
 
             //添加javaScript支持
             mWebView.getSettings().setJavaScriptEnabled(true);
             //设置通过JS打开新窗口的支持
             mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-            mWebView.requestFocus();
 
             // 设置 缓存模式
             if (NetworkAvailableUtils.isNetworkAvailable(this)) {
@@ -115,23 +120,20 @@ public class BiliActivity extends BaseActivity {
             });
 
             //防止下拉冲突
-            mWebView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            if (mWebView.getScrollY() <= 0) {
-                                mSwipeLayout.setEnabled(true);
-                            } else {
-                                mSwipeLayout.setEnabled(false);
-                            }
+            mWebView.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        if (mWebView.getScrollY() <= 0) {
+                            mSwipeLayout.setEnabled(true);
+                        } else {
+                            mSwipeLayout.setEnabled(false);
                         }
-                        default:
-                            break;
-
                     }
-                    return false;
+                    default:
+                        break;
+
                 }
+                return false;
             });
         }
 

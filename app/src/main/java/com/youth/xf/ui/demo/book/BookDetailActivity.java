@@ -2,7 +2,6 @@ package com.youth.xf.ui.demo.book;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 
 import android.widget.TextView;
 
@@ -11,7 +10,7 @@ import com.youth.xf.R;
 
 import com.youth.xf.base.BaseActivity;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
-import com.youth.xf.utils.ToastUtil;
+import com.youth.xf.utils.xToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -140,7 +139,7 @@ public class BookDetailActivity extends BaseActivity {
 
         } else {
 
-            ToastUtil.showToast("bookid为空");
+            xToastUtil.showToast("bookid为空");
         }
     }
 

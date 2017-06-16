@@ -1,5 +1,4 @@
-<com.zhy.autolayout.AutoLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,10 +10,10 @@
     <!--轮播-->
     <cn.bingoogolapple.bgabanner.BGABanner
         android:id="@+id/banner_main"
-        android:layout_height="133dp"
-        android:layout_width="match_parent"
         style="@style/BannerDefaultStyle"
-        app:banner_transitionEffect="accordion"/>
+        android:layout_width="match_parent"
+        android:layout_height="133dp"
+        app:banner_transitionEffect="accordion" />
 
     <!--导航按钮-->
     <RelativeLayout
@@ -47,7 +46,7 @@
                             android:id="@+id/home_mv_btn"
                             android:layout_width="53dp"
                             android:layout_height="53dp"
-                            android:background="@drawable/home_middle_fm"/>
+                            android:background="@drawable/home_middle_fm" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -56,7 +55,7 @@
                             android:layout_marginTop="8dp"
                             android:text="有趣视频"
                             android:textColor="@color/colorContent"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -81,7 +80,7 @@
                                 android:id="@+id/daily_btn"
                                 android:layout_width="53dp"
                                 android:layout_height="53dp"
-                                android:background="@drawable/home_middle_day"/>
+                                android:background="@drawable/home_middle_day" />
 
                             <TextView
                                 android:id="@+id/tv_daily_text"
@@ -90,7 +89,7 @@
                                 android:layout_gravity="center"
                                 android:text="xx"
                                 android:textColor="@drawable/select_gank_day"
-                                android:textSize="25sp"/>
+                                android:textSize="25sp" />
 
                         </FrameLayout>
 
@@ -101,7 +100,7 @@
                             android:layout_marginTop="8dp"
                             android:text="每日干货推荐"
                             android:textColor="@color/colorContent"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -124,7 +123,7 @@
                             android:layout_width="53dp"
                             android:layout_height="53dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/home_middle_rank"/>
+                            android:background="@drawable/home_middle_rank" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -133,7 +132,7 @@
                             android:layout_marginTop="8dp"
                             android:text="新电影热映榜"
                             android:textColor="@color/colorContent"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -146,13 +145,13 @@
             android:layout_height="0.4dp"
             android:layout_below="@+id/personal_recommend"
             android:layout_marginTop="13dp"
-            android:background="@color/colorHomeLine"/>
+            android:background="@color/colorHomeLine" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/card_title_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 
 </com.zhy.autolayout.AutoLinearLayout>

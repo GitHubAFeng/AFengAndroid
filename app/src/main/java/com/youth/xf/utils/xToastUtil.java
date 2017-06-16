@@ -10,11 +10,11 @@ import com.youth.xf.base.AFengConfig;
  * 创建时间:15/7/2 10:17
  * 描述:
  */
-public class ToastUtil {
+public class xToastUtil {
 
     private static Toast sToast;
 
-    private ToastUtil() {
+    private xToastUtil() {
     }
 
     /**

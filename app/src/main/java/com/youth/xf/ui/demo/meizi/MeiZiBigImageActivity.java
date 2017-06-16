@@ -21,7 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
-import com.youth.xf.utils.ToastUtil;
+import com.youth.xf.utils.xToastUtil;
 
 import java.util.List;
 
@@ -184,12 +184,12 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
         to_save_big_image.setOnClickListener(view -> {
 
-            ToastUtil.showToast("开始下载图片");
+            xToastUtil.showToast("开始下载图片");
             if (isApp) {// 本地图片
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
                 if (bitmap != null) {
                     saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                    ToastUtil.showToast("保存成功");
+                    xToastUtil.showToast("保存成功");
 //                        Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                 }
 
@@ -205,7 +205,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
                             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
                             if (bitmap != null) {
                                 saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                                ToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
+                                xToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
 //                                            Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
-import com.youth.xf.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

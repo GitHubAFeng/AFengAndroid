@@ -3,6 +3,9 @@ package com.youth.xf.ui.demo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -16,18 +19,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.book.BookFragment;
-import com.youth.xf.ui.demo.movie.MovieDetailFragment;
+import com.youth.xf.ui.demo.home.SimpleFragment;
+import com.youth.xf.ui.demo.meizi.MeiZiFragment;
+import com.youth.xf.ui.demo.more.MoreFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
+import com.youth.xf.ui.demo.news.NewsFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
-import com.youth.xf.utils.ToastUtil;
-
-
+import com.youth.xf.utils.xToastUtil;
+import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
 
 
@@ -38,6 +45,12 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends AFengActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
+    @BindView(R.id.main_viewPager)
+    ViewPager mMainViewPager;
+    @BindView(R.id.main_tab)
+    SlidingTabLayout mMainTabLayout;
+
+
     private Toolbar toolbar;
     private FrameLayout TitleMenuFra;
     private DrawerLayout drawerLayout;
@@ -45,13 +58,17 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
     private Context mContext;
 
+    public String[] mTitles = {"首页", "头条", "妹纸", "更多", "读书", "电影"};
 
     public static final int MAIN = 0;
-    public static final int BOOK = 1;
-    public static final int MOVIEW = 2;
+    public static final int NEW = 1;
+    public static final int MEIZI = 2;
+    public static final int MORE = 3;
+    public static final int BOOK = 4;
+    public static final int MOVIEW = 5;
 
 
-    private SupportFragment[] mFragments = new SupportFragment[3];
+    public SupportFragment[] mFragments = new SupportFragment[6];
 
 
     @Override
@@ -74,27 +91,78 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         //装载Fragments
         if (savedInstanceState == null) {
-            mFragments[MAIN] = MainFragment.newInstance();
+            mFragments[MAIN] = SimpleFragment.getInstance();
+            mFragments[NEW] = NewsFragment.getInstance();
+            mFragments[MEIZI] = MeiZiFragment.getInstance();
+            mFragments[MORE] = MoreFragment.getInstance();
             mFragments[BOOK] = BookFragment.newInstance();
             mFragments[MOVIEW] = MovieFragment.newInstance();
 
-            loadMultipleRootFragment(R.id.main_content, MAIN
-                    , mFragments[MAIN]
-                    , mFragments[BOOK]
-                    , mFragments[MOVIEW]
-
-            );
+//            loadMultipleRootFragment(R.id.main_tab_container, MAIN
+//                    , mFragments[MAIN]
+//                    , mFragments[NEW]
+//                    , mFragments[MEIZI]
+//                    , mFragments[MORE]
+//                    , mFragments[BOOK]
+//                    , mFragments[MOVIEW]
+//
+//            );
 
         } else {
             // 这里库已经做了Fragment恢复工作，不需要额外的处理
             // 这里我们需要拿到mFragments的引用，用下面的方法查找更方便些，也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些)
-            mFragments[MAIN] = findFragment(MainFragment.class);
+            mFragments[MAIN] = findFragment(SimpleFragment.class);
+            mFragments[NEW] = findFragment(NewsFragment.class);
+            mFragments[MEIZI] = findFragment(MeiZiFragment.class);
+            mFragments[MORE] = findFragment(MoreFragment.class);
             mFragments[BOOK] = findFragment(BookFragment.class);
             mFragments[MOVIEW] = findFragment(MovieFragment.class);
 
         }
 
+        initViewPager();
     }
+
+
+    private void initViewPager() {
+
+
+        mMainViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), mFragments, mTitles));
+        mMainTabLayout.setViewPager(mMainViewPager);
+        mMainTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+
+            @Override
+            public void onTabSelect(int position) {
+//                mMainViewPager.setCurrentItem(position);
+                showHideFragment(mFragments[position]);  //使用这个 在点击选项卡时不会出现滑动
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+
+            }
+        });
+
+        mMainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mMainTabLayout.setCurrentTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mMainViewPager.setCurrentItem(0);
+    }
+
 
     @Override
     protected void setListener() {
@@ -159,42 +227,47 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleThr.setSelected(true);
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(false);
-                showHideFragment(mFragments[MOVIEW]);
+//                showHideFragment(mFragments[MOVIEW]);
+                xToastUtil.showToast("3频道建设中……");
 
                 break;
             case R.id.iv_title_two:
                 mTitleThr.setSelected(false);
                 mTitleTwo.setSelected(true);
                 mTitleOne.setSelected(false);
-                showHideFragment(mFragments[BOOK]);
+//                showHideFragment(mFragments[BOOK]);
+                xToastUtil.showToast("2频道建设中……");
+
                 break;
             case R.id.iv_title_one:
                 mTitleThr.setSelected(false);
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(true);
-                showHideFragment(mFragments[MAIN]);
+//                showHideFragment(mFragments[MAIN]);
+                xToastUtil.showToast("1频道建设中……");
+
                 break;
             case R.id.ll_title_menu:
                 drawerLayout.openDrawer(GravityCompat.START);
-                ToastUtil.showToast("打开侧滑菜单");
+                xToastUtil.showToast("打开侧滑菜单");
                 break;
 
             case R.id.ll_nav_homepage:// 主页
 //                drawerLayout.closeDrawer(GravityCompat.START);
-                ToastUtil.showToast("打开主页");
+                xToastUtil.showToast("打开主页");
                 break;
 
             case R.id.ll_nav_scan_download://扫码下载
 //                drawerLayout.closeDrawer(GravityCompat.START);
-                ToastUtil.showToast("扫码下载");
+                xToastUtil.showToast("扫码下载");
                 break;
             case R.id.ll_nav_deedback:// 问题反馈
 //                drawerLayout.closeDrawer(GravityCompat.START);
-                ToastUtil.showToast("问题反馈");
+                xToastUtil.showToast("问题反馈");
                 break;
             case R.id.ll_nav_about:// 关于
 //                drawerLayout.closeDrawer(GravityCompat.START);
-                ToastUtil.showToast("打开关于");
+                xToastUtil.showToast("打开关于");
                 break;
             case R.id.ll_nav_exit:// 退出应用
                 finish();
@@ -231,8 +304,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 //退回后台并且返回桌面
                 moveTaskToBack(true);
 
-//                finish();
-//                System.exit(0); //终止程序 ， 不常用
             }
             return true;
         }
@@ -282,6 +353,34 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     @Override
     public void onPageScrollStateChanged(int i) {
 
+    }
+
+
+    class MainViewPagerAdapter extends FragmentPagerAdapter {
+
+        private Fragment[] mAdapterFragments;
+        private String[] mAdapterTitles;
+
+        public MainViewPagerAdapter(FragmentManager fm, Fragment[] fragments, String[] titles) {
+            super(fm);
+            this.mAdapterFragments = fragments;
+            this.mAdapterTitles = titles;
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return mAdapterFragments[i];
+        }
+
+        @Override
+        public int getCount() {
+            return mAdapterFragments.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mAdapterTitles[position];
+        }
     }
 
 

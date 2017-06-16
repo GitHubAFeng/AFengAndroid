@@ -1,11 +1,15 @@
 package com.youth.xf.ui.demo.mv;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +18,8 @@ import com.just.library.AgentWeb;
 import com.just.library.ChromeClientCallbackManager;
 import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
+import com.youth.xf.utils.xToastUtil;
+
 
 import butterknife.BindView;
 
@@ -34,6 +40,15 @@ public class BiliAgentWebActivity extends BaseActivity {
     @BindView(R.id.bili_toolbar_title)
     TextView mTitleTextView;
 
+    @BindView(R.id.bili_web_container)
+    NestedScrollView mwebContainer;
+
+    @BindView(R.id.bili_appbar_layout)
+    AppBarLayout mAppbarlayout;
+
+    WebView mWebView = null;
+
+
 
     /**
      * 初始化布局,返回layout
@@ -48,8 +63,14 @@ public class BiliAgentWebActivity extends BaseActivity {
      *
      * @param savedInstanceState
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        mSwipeLayout.setColorSchemeResources(R.color.holo_blue_bright,
+                R.color.holo_green_light, R.color.holo_orange_light,
+                R.color.holo_red_light);
+
 
         // 设置标题栏
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -67,7 +88,7 @@ public class BiliAgentWebActivity extends BaseActivity {
         if (mAgentWeb == null) {
 
             mAgentWeb = AgentWeb.with(this)//传入Activity
-                    .setAgentWebParent(mSwipeLayout, new SwipeRefreshLayout.LayoutParams(-1, -1))//传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams
+                    .setAgentWebParent(mwebContainer, new NestedScrollView.LayoutParams(-1, -1))//传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams
                     .useDefaultIndicator()// 使用默认进度条
                     .defaultProgressBarColor() // 使用默认进度条颜色
                     .setReceivedTitleCallback(mCallback) //设置 Web 页面的 title 回调
@@ -80,14 +101,30 @@ public class BiliAgentWebActivity extends BaseActivity {
 
         }
 
+        if (mWebView == null) {
+            mWebView = mAgentWeb.getWebCreator().get();
+        }
+
 
     }
+
 
     /**
      * 给View控件添加事件监听器
      */
     @Override
     protected void setListener() {
+
+        //防止滑动冲突
+        mAppbarlayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+
+            if (verticalOffset >= 0) {
+                mSwipeLayout.setEnabled(true);
+            } else {
+                mSwipeLayout.setEnabled(false);
+            }
+        });
+
         //下拉刷新当前网页
         mSwipeLayout.setOnRefreshListener(() -> {
                     mAgentWeb.getLoader().reload();
