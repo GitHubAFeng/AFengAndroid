@@ -84,4 +84,39 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+
+    <!--搜索框样式-->
+    <style name="DialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+    <!--<style name="DialogEmptyAnimation" parent="android:Animation">-->
+    <!--<item name="@android:windowEnterAnimation">@null</item>-->
+    <!--<item name="@android:windowExitAnimation">@null</item>-->
+    <!--</style>-->
+
+
+    <!--底部弹出菜单样式-->
+    <!--其中 background设置的是空白区的背景色(不是菜单背景)-->
+    <!--其中 windowBackGround设置的也是空白背景色-->
+    <!--backgroundDimEbaled 是否让空白区的背景着色-->
+    <!--解决办法-->
+    <!--colorBackground 设置的是内容在整体背景颜色-->
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackground">@color/transparent</item>
+    </style>
+
+
+
+
+
 </resources>

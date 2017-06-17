@@ -13,6 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -34,6 +36,8 @@ import com.youth.xf.ui.demo.news.NewsFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.xToastUtil;
+import com.youth.xf.widget.searchbox.SearchFragment;
+
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -50,6 +54,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     @BindView(R.id.main_tab)
     SlidingTabLayout mMainTabLayout;
 
+    private SearchFragment searchFragment;
 
     private Toolbar toolbar;
     private FrameLayout TitleMenuFra;
@@ -205,6 +210,14 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
+    //创建工具栏右上角菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //加载菜单文件
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     private void initBar() {
         //自定义状态栏颜色
         StatusBarUtil.setColorNoTranslucentForDrawerLayout(MainActivity.this, drawerLayout, ContextCompat.getColor(this, R.color.colorAccent));
@@ -216,6 +229,18 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             //去除默认Title显示
             actionBar.setDisplayShowTitleEnabled(false);
         }
+
+        toolbar.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.action_search://点击搜索
+                    searchFragment.show(getSupportFragmentManager(), SearchFragment.TAG);
+                    break;
+            }
+            return true;
+        });
+
+        searchFragment = SearchFragment.newInstance();
+        searchFragment.setOnSearchClickListener((info) -> xToastUtil.showToast("搜索:" + info));
     }
 
 

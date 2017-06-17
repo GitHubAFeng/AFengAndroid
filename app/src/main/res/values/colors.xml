@@ -84,6 +84,24 @@
     <color name="holo_blue_bright">#ff00ddff</color>
 
 
+    <!--搜索框配置色-->
+    <color name="transparent">#0000</color>
+    <color name="text_black">#737373</color>
+    <color name="text_grey">#9DA0A3</color>
+    <color name="divider">#e6e6e6</color>
+
+
+    <!--SnackBar Light 工具配色-->
+    <color name="color_error">#F44336</color>
+    <color name="color_info">#3F51B5</color>
+    <color name="color_warning">#FF9800</color>
+    <color name="color_success">#4CAF50</color>
+    <color name="accent_color_error">#009688</color>
+    <color name="accent_color_info">#FFC107</color>
+    <color name="accent_color_warning">#2196F3</color>
+    <color name="accent_color_success">#03A9F4</color>
+
+
     <!--颜色配置大全-->
     <color name="colorPrimary">#3F51B5</color><!--首要颜色-->
     <color name="colorPrimaryDark">#303F9F</color><!--首要颜色暗色-->

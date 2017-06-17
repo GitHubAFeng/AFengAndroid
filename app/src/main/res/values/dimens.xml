@@ -6,4 +6,13 @@
     <dimen name="card_margin">5dp</dimen>
     <dimen name="btn_fab_size">56dp</dimen>
     <dimen name="btn_fab_margins">10dp</dimen>>
+
+    <!--SnackBar Light 工具-->
+    <dimen name="light_padding_top">14dp</dimen>
+    <dimen name="light_padding_bottom">14dp</dimen>
+    <dimen name="light_padding_left">12dp</dimen>
+    <dimen name="light_padding_right">12dp</dimen>
+    <dimen name="light_padding_normal">8dp</dimen>
+
+
 </resources>

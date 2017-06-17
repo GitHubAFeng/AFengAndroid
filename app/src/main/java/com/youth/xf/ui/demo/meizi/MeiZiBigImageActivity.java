@@ -1,12 +1,21 @@
 package com.youth.xf.ui.demo.meizi;
 
 
+import android.app.WallpaperManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +31,11 @@ import com.bumptech.glide.request.target.Target;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.utils.xToastUtil;
+import com.youth.xf.widget.bottomsheetdialog.xBottomMenuDialog;
+import com.youth.xf.widget.downloadingview.GADownloadingView;
+import com.youth.xf.widget.snackbarlight.Light;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -33,6 +46,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 import static com.youth.xf.utils.GlideHelper.GlideUtils.getImagePath;
 import static com.youth.xf.utils.GlideHelper.ImgLoadUtil.saveImageToGallery;
 
+
 /**
  * Created by Administrator on 2017/5/7.
  */
@@ -41,16 +55,27 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
 
     // 保存图片
-    @BindView(R.id.to_save_big_image)
-    TextView to_save_big_image;
+    @BindView(R.id.meizi_toolbar_title)
+    TextView mToolbartitle;
     // 接收传过来的uri地址
     List<String> imageuri;
+
+    @BindView(R.id.meizi_fab)
+    FloatingActionButton mTabBtn;
+
+    @BindView(R.id.meizi_toolbar)
+    Toolbar mToolbar;
+
+    private int mProgress;  //下载进度
 
     /**
      * 显示当前图片的页数
      */
     @BindView(R.id.meizi_image_viewpager_text)
     TextView image_viewpager_text;
+
+    @BindView(R.id.ga_downloading)
+    GADownloadingView mGADownloadingView;
 
     // 用于管理图片的滑动
     @BindView(R.id.meizi_image_viewpager)
@@ -100,6 +125,19 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
      */
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        // 设置标题栏
+        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setSupportActionBar(mToolbar);
+
+        // 设置了回退按钮，及点击事件的效果
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(v -> finish());
+
         getView();
     }
 
@@ -122,27 +160,12 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     }
 
 
-    /**
-     * This method will be invoked when the current page is scrolled, either as part
-     * of a programmatically initiated smooth scroll or a user initiated touch scroll.
-     *
-     * @param position             Position index of the first page currently being displayed.
-     *                             Page position+1 will be visible if positionOffset is nonzero.
-     * @param positionOffset       Value from [0, 1) indicating the offset from the page at position.
-     * @param positionOffsetPixels Value in pixels indicating the offset from position.
-     */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
 
-    /**
-     * This method will be invoked when a new page becomes selected. Animation is not
-     * necessarily complete.
-     * 本方法主要监听viewpager滑动的时候的操作
-     *
-     * @param position Position index of the new selected page.
-     */
+
     @Override
     public void onPageSelected(int position) {
         // 每当页数发生改变时重新设定一遍当前的页数和总页数
@@ -151,16 +174,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
     }
 
-    /**
-     * Called when the scroll state changes. Useful for discovering when the user
-     * begins dragging, when the pager is automatically settling to the current page,
-     * or when it is fully stopped/idle.
-     *
-     * @param state The new scroll state.
-     * @see ViewPager#SCROLL_STATE_IDLE
-     * @see ViewPager#SCROLL_STATE_DRAGGING
-     * @see ViewPager#SCROLL_STATE_SETTLING
-     */
+
     @Override
     public void onPageScrollStateChanged(int state) {
 
@@ -178,41 +192,48 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     }
 
 
+    private void toDownLoadImg() {
+        /************************* 接收控件 ***********************/
+//        mGADownloadingView.performAnimation();
+        if (isApp) {// 本地图片
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
+            if (bitmap != null) {
+                saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+
+            }
+
+        } else {
+            // 网络图片
+
+            new Thread(() -> {
+
+                // 子线程获得图片路径
+                final String imagePath = getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
+                // 主线程更新
+                MeiZiBigImageActivity.this.runOnUiThread(() -> {
+                    if (imagePath != null) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
+                        if (bitmap != null) {
+                            saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+                            String tempAdd = "已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName;
+//                            xToastUtil.showToast(tempAdd);
+                            Light.success(mTabBtn, "保存成功," + tempAdd, Light.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+            }).start();
+
+            // 显示进度条的下载，但这个下载图片的速度太快了，不适合用
+//            new downImgTask().execute();
+        }
+
+    }
+
+
     //接收控件
     private void getView() {
-        /************************* 接收控件 ***********************/
 
-        to_save_big_image.setOnClickListener(view -> {
-
-            xToastUtil.showToast("开始下载图片");
-            if (isApp) {// 本地图片
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
-                if (bitmap != null) {
-                    saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                    xToastUtil.showToast("保存成功");
-//                        Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                }
-
-            } else {
-                // 网络图片
-                final BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                new Thread(() -> {
-                    // 子线程获得图片路径
-                    final String imagePath = getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
-                    // 主线程更新
-                    MeiZiBigImageActivity.this.runOnUiThread(() -> {
-                        if (imagePath != null) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
-                            if (bitmap != null) {
-                                saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
-                                xToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
-//                                            Toast.makeText(ViewBigImageActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }).start();
-            }
-        });
         /************************* 接收传值 ***********************/
         Bundle bundle = getIntent().getExtras();
         code = bundle.getInt("code");
@@ -284,6 +305,55 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     }
 
 
+    //设置系统壁纸
+    private void setWallpaper() {
+
+        Light.success(mTabBtn, "正在设置壁纸...", Light.LENGTH_SHORT).show();
+
+
+//        final Bitmap bitmap = mView.getCurrentImageViewBitmap();
+//        if (bitmap == null) {
+//            mView.showBasesProgressError("设置失败");
+//            return;
+//        }
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                boolean flag = false;
+//                WallpaperManager manager = WallpaperManager.getInstance(context);
+//                try {
+//                    manager.setBitmap(bitmap);
+//                    flag = true;
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    flag = false;
+//                } finally {
+//                    if(mView != null){
+//                        if (flag) {
+//                            MyApplication.getHandler().post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mView.showBasesProgressSuccess("设置成功");
+//                                }
+//                            });
+//                        } else {
+//                            MyApplication.getHandler().post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mView.showBasesProgressError("设置失败");
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }).start();
+
+    }
+
+
     /**
      * ViewPager的适配器
      * 网络图片
@@ -298,18 +368,43 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
             inflater = getLayoutInflater();
         }
 
+        xBottomMenuDialog dialog = new xBottomMenuDialog.BottomMenuBuilder()
+                .addItem("下载图片", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toDownLoadImg();
+                    }
+                })
+                .addItem("设为壁纸", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .build();
+
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View view = inflater.inflate(R.layout.viewpager_meizi_image, container, false);
             final PhotoView zoom_image_view = (PhotoView) view.findViewById(R.id.zoom_image_view);
             final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
+
+
+            zoom_image_view.setOnLongClickListener(v -> {
+                dialog.show(getSupportFragmentManager());
+                //当return返回值为true的时候，代表这个事件已经消耗完了，返回值为false的时候他还会继续传递，结果再加上一个短按。
+                return true;
+            });
+
+
             // 保存网络图片的路径
             String adapter_image_Entity = (String) getItem(position);
             //TODO
             String imageUrl;
             if (isLocal) {
                 imageUrl = "file://" + adapter_image_Entity;
-                to_save_big_image.setVisibility(View.GONE);
+
             } else {
                 imageUrl = adapter_image_Entity;
             }
@@ -374,5 +469,47 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
         }
     }
 
+
+    //参数1 表示传入的值， Integer  代表进度 ，  参数3 代表返回的值
+    class downImgTask extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //任务执行之前的准备工作。
+//            mGADownloadingView.performAnimation();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            //后台线程下载耗时操作
+
+            // 子线程获得图片路径
+            return getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            //更新进度条
+//            mGADownloadingView.updateProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String imagePath) {
+            super.onPostExecute(imagePath);
+            //下载完成后UI操作
+            if (imagePath != null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
+                if (bitmap != null) {
+                    saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+                    xToastUtil.showToast("已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName);
+                }
+            }
+
+//            mGADownloadingView.releaseAnimation();
+
+        }
+    }
 
 }

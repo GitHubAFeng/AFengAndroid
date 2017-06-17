@@ -1,35 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    tools:context=".ui.demo.meizi.MeiZiBigImageActivity">
 
-    <com.youth.xf.utils.CustomView.HackyViewPager
-        android:id="@+id/meizi_image_viewpager"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
 
-    <TextView
-        android:id="@+id/meizi_image_viewpager_text"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/meizi_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:titleTextColor="@android:color/white"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/cha"
+            app:theme="@style/ToolbarStyle"
+            app:titleTextColor="@android:color/white">
+
+        <TextView
+            android:id="@+id/meizi_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:text="长按图片打开菜单"
+            android:textSize="14sp" />
+    </android.support.v7.widget.Toolbar>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <com.youth.xf.utils.CustomView.HackyViewPager
+            android:id="@+id/meizi_image_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.youth.xf.widget.downloadingview.GADownloadingView
+            android:id="@+id/ga_downloading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/meizi_image_viewpager_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/meizi_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:textColor="#fff"
-        android:textSize="14sp" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/home_icon_day" />
 
-    <TextView
-        android:id="@+id/to_save_big_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="17dp"
-        android:layout_marginRight="13dp"
-        android:background="@drawable/bg_save_big_image"
-        android:text="保存"
-        android:textColor="#fff"
-        android:textSize="13sp" />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

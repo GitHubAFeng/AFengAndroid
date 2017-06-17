@@ -24,6 +24,10 @@ android {
             targetCompatibility JavaVersion.VERSION_1_8
         }
 
+//        禁止图片规格检查
+//        aaptOptions.cruncherEnabled = false
+//        aaptOptions.useNewCruncher = false
+
     }
 
 
@@ -91,7 +95,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
-    //图片查看器
+    //图片手势缩放
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
 
     //数据传递

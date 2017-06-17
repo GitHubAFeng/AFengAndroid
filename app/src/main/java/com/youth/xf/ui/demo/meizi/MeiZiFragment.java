@@ -43,7 +43,7 @@ public class MeiZiFragment extends AFengFragment {
 
     private String id = "福利";
     private int page = 1;  //当前页数
-    private int per_page = 50; //每页图片数量
+    private int per_page = 10; //每页图片数量
     ArrayList<String> imgUrlList = new ArrayList<>();
 
     MeiZiFragment.oneAdapter mAdapter = null;
@@ -86,6 +86,7 @@ public class MeiZiFragment extends AFengFragment {
     @Override
     protected void setListener() {
 
+        //加载更多
         mAdapter.setOnLoadMoreListener(() -> {
             page++;
             loadNetData(true);
