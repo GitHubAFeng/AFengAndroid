@@ -101,6 +101,12 @@
     <color name="accent_color_warning">#2196F3</color>
     <color name="accent_color_success">#03A9F4</color>
 
+    <!--HiPermission 使用-->
+    <color name="permissionColorGreen">#41c236</color>
+    <color name="permissionColorWhite">#ffffff</color>
+    <color name="permissionBgColorGreenLight">#44A49C</color>
+    <color name="permissionBgColorBlue">#ee447AA4</color>
+
 
     <!--颜色配置大全-->
     <color name="colorPrimary">#3F51B5</color><!--首要颜色-->

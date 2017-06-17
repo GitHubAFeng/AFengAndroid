@@ -21,4 +21,12 @@
         <item>XToast 自定义Toast用法</item>
         <item>XLoadingView 页面多状态布局</item>
     </array>
+
+    <!--HiPermission 使用-->
+    <array name="permissionNames">
+        <item>@string/permission_storage</item>
+        <item>@string/permission_location</item>
+        <item>@string/permission_camera</item>
+    </array>
+
 </resources>

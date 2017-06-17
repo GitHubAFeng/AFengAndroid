@@ -1,6 +1,9 @@
 package com.youth.xf.base;
 
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Handler;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -11,6 +14,8 @@ import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
 
 public class App extends Application {
+
+    private static Handler mHandler;
 
     private static App instance;
 
@@ -52,4 +57,38 @@ public class App extends Application {
                 .install();
 
     }
+
+    //全局线程
+    public static Handler getHandler() {
+        if (mHandler == null) {
+            mHandler = new Handler();
+        }
+        return mHandler;
+    }
+
+
+    //版本名
+    public static String getVersionName() {
+        return getPackageInfo().versionName;
+    }
+
+    //版本号
+    public static int getVersionCode() {
+        return getPackageInfo().versionCode;
+    }
+
+    private static PackageInfo getPackageInfo() {
+        PackageInfo pi = null;
+        try {
+            PackageManager pm = instance.getPackageManager();
+            pi = pm.getPackageInfo(instance.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+            return pi;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pi;
+    }
+
+
 }

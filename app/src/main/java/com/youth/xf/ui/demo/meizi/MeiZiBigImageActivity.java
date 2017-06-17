@@ -30,6 +30,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
+import com.youth.xf.base.App;
 import com.youth.xf.utils.xToastUtil;
 import com.youth.xf.widget.bottomsheetdialog.xBottomMenuDialog;
 import com.youth.xf.widget.downloadingview.GADownloadingView;
@@ -306,50 +307,35 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
 
     //设置系统壁纸
-    private void setWallpaper() {
+    public void setWallpaper(Bitmap bitmap) {
 
-        Light.success(mTabBtn, "正在设置壁纸...", Light.LENGTH_SHORT).show();
+        Light.info(mTabBtn, "正在设置壁纸...", Light.LENGTH_SHORT).show();
 
+        if (bitmap == null) {
+            Light.error(mTabBtn, "设置失败!", Light.LENGTH_SHORT).show();
+            return;
+        }
 
-//        final Bitmap bitmap = mView.getCurrentImageViewBitmap();
-//        if (bitmap == null) {
-//            mView.showBasesProgressError("设置失败");
-//            return;
-//        }
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                boolean flag = false;
-//                WallpaperManager manager = WallpaperManager.getInstance(context);
-//                try {
-//                    manager.setBitmap(bitmap);
-//                    flag = true;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    flag = false;
-//                } finally {
-//                    if(mView != null){
-//                        if (flag) {
-//                            MyApplication.getHandler().post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mView.showBasesProgressSuccess("设置成功");
-//                                }
-//                            });
-//                        } else {
-//                            MyApplication.getHandler().post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mView.showBasesProgressError("设置失败");
-//                                }
-//                            });
-//                        }
-//                    }
-//
-//                }
-//            }
-//        }).start();
+        new Thread(() -> {
+            boolean flag = false;
+            WallpaperManager manager = WallpaperManager.getInstance(App.getInstance());
+            try {
+                manager.setBitmap(bitmap);
+                flag = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                flag = false;
+            } finally {
+                if (bitmap != null) {
+                    if (flag) {
+                        App.getHandler().post(() -> Light.success(mTabBtn, "设置成功!", Light.LENGTH_SHORT).show());
+                    } else {
+                        App.getHandler().post(() -> Light.error(mTabBtn, "设置失败!", Light.LENGTH_SHORT).show());
+                    }
+                }
+
+            }
+        }).start();
 
     }
 
@@ -369,17 +355,9 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
         }
 
         xBottomMenuDialog dialog = new xBottomMenuDialog.BottomMenuBuilder()
-                .addItem("下载图片", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toDownLoadImg();
-                    }
-                })
-                .addItem("设为壁纸", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                .addItem("下载图片", v -> toDownLoadImg())
+                .addItem("设为壁纸", v -> {
 
-                    }
                 })
                 .build();
 
@@ -424,7 +402,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
                         //这个用于监听图片是否加载完成
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                            Toast.makeText(getApplicationContext(), "图片加载完成", Toast.LENGTH_SHORT).show();
+
                             spinner.setVisibility(View.GONE);
 
                             /**这里应该是加载成功后图片的高*/

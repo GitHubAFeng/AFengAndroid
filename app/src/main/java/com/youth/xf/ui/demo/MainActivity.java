@@ -1,5 +1,6 @@
 package com.youth.xf.ui.demo;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -36,7 +37,13 @@ import com.youth.xf.ui.demo.news.NewsFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.xToastUtil;
+import com.youth.xf.widget.hipermission.HiPermission;
+import com.youth.xf.widget.hipermission.PermissionCallback;
+import com.youth.xf.widget.hipermission.PermissionItem;
 import com.youth.xf.widget.searchbox.SearchFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -185,6 +192,46 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         initBar();
         initNav();
         initContent();
+        //申请权限
+        requestSomePermission();
+    }
+
+
+    // 申请权限
+    private void requestSomePermission() {
+
+        List<PermissionItem> permissionItems = new ArrayList<>();
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "SD卡操作权限", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "访问电话状态", R.drawable.permission_ic_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "GPS定位", R.drawable.permission_ic_location));
+        HiPermission.create(MainActivity.this)
+                .title("权限申请")
+                .permissions(permissionItems)
+                .msg("此APP运行需要此项权限！")
+                .animStyle(R.style.PermissionAnimFade)
+                .style(R.style.PermissionDefaultNormalStyle)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
+
     }
 
 
