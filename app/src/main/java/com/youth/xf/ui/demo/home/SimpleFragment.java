@@ -14,9 +14,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
-import com.youth.xf.ui.demo.mv.BiliActivity;
 import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
-import com.youth.xf.utils.xToastUtil;
+import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;

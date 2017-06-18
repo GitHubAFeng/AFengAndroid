@@ -10,7 +10,7 @@ import com.youth.xf.R;
 
 import com.youth.xf.base.BaseActivity;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
-import com.youth.xf.utils.xToastUtil;
+import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

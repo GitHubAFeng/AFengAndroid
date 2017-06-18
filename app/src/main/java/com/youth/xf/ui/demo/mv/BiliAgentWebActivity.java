@@ -9,7 +9,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import com.just.library.AgentWeb;
 import com.just.library.ChromeClientCallbackManager;
 import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
-import com.youth.xf.utils.xToastUtil;
 
 
 import butterknife.BindView;

@@ -1,4 +1,4 @@
-package com.youth.xf.utils;
+package com.youth.xf.utils.AFengUtils;
 
 import android.support.annotation.StringRes;
 import android.widget.Toast;

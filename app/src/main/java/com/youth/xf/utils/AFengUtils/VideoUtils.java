@@ -1,4 +1,4 @@
-package com.youth.xf.utils;
+package com.youth.xf.utils.AFengUtils;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;

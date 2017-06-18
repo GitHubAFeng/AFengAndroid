@@ -19,8 +19,7 @@ import com.bumptech.glide.request.target.Target;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
-import com.youth.xf.ui.demo.meizi.MeiZiBigImageActivity;
-import com.youth.xf.utils.xutils.XDensityUtils;
+import com.youth.xf.utils.AFengUtils.XDensityUtils;
 
 
 import java.io.File;

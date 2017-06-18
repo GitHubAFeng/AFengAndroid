@@ -1,24 +1,19 @@
 package com.youth.xf.ui.demo.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.orhanobut.logger.Logger;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
-import com.youth.xf.utils.xutils.XOutdatedUtils;
+import com.youth.xf.utils.AFengUtils.XOutdatedUtils;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +24,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
