@@ -82,6 +82,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     public SupportFragment[] mFragments = new SupportFragment[6];
 
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.afeng_main;

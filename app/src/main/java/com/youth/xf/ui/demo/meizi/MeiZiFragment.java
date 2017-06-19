@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -53,6 +56,8 @@ public class MeiZiFragment extends AFengFragment {
     private int per_page = 10; //每页图片数量
     ArrayList<String> imgUrlList = new ArrayList<>();
 
+    private List<GankIoDataBean.ResultBean> mMeizhiList = new ArrayList<>();
+
     MeiZiFragment.oneAdapter mAdapter = null;
 
     private GankIoDataBean meiziBean;  //本地数据
@@ -83,7 +88,7 @@ public class MeiZiFragment extends AFengFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
-        mAdapter = new MeiZiFragment.oneAdapter(R.layout.item_meizi, null);
+        mAdapter = new MeiZiFragment.oneAdapter(R.layout.item_meizi, mMeizhiList);
         mAdapter.setEnableLoadMore(true);  //开启上拉加载
         //第一个参数表示列数或者行数，第二个参数表示滑动方向,瀑布流
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -92,6 +97,17 @@ public class MeiZiFragment extends AFengFragment {
 
     @Override
     protected void setListener() {
+
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            //点击进入详情页
+            Bundle bundle = new Bundle();
+            bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
+            bundle.putInt("code", position);//第几张
+            bundle.putStringArrayList("imageuri", imgUrlList);
+            Intent intent = new Intent(getContext(), MeiZiBigImageActivity.class);
+            intent.putExtras(bundle);
+            getContext().startActivity(intent);
+        });
 
         //加载更多
         mAdapter.setOnLoadMoreListener(() -> {
@@ -130,6 +146,9 @@ public class MeiZiFragment extends AFengFragment {
     protected void onInvisibleToUser() {
 
     }
+
+
+
 
 
     protected void loadData() {
@@ -181,42 +200,38 @@ public class MeiZiFragment extends AFengFragment {
                                 for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
                                     imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
                                 }
-                                mAdapter.setNewData(gankIoDataBean.getResults());
+
+                                mMeizhiList.addAll(gankIoDataBean.getResults());
+
+//                                mAdapter.setNewData(mMeizhiList);
+
+
+                                //成功获取更多数据
+                                mAdapter.addData(mMeizhiList);
+//                                mCurrentCounter = mQuickAdapter.getData().size();
+                                mAdapter.loadMoreComplete();
 
                                 //TODO  进行本地缓存
 
-                                mAdapter.notifyDataSetChanged();
 
-                                mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-                                    @Override
-                                    public void onSimpleItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                                        //点击进入详情页
-
-                                        Bundle bundle = new Bundle();
-                                        bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
-                                        bundle.putInt("code", i);//第几张
-                                        bundle.putStringArrayList("imageuri", imgUrlList);
-                                        Intent intent = new Intent(getContext(), MeiZiBigImageActivity.class);
-                                        intent.putExtras(bundle);
-                                        getContext().startActivity(intent);
-
-                                    }
-                                });
                                 // 显示成功后就不是第一次了，不再刷新
                                 isFirst = false;
                             }
 
                         } else {
                             if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
-                                mAdapter.loadMoreComplete();  //加载完成
-                                mAdapter.setNewData(gankIoDataBean.getResults());
-                                mAdapter.notifyDataSetChanged();
 
-                                imgUrlList.clear();
+                                mMeizhiList.addAll(gankIoDataBean.getResults());
+//                                mAdapter.setNewData(gankIoDataBean.getResults());
+                                mAdapter.addData(mMeizhiList);
+//                                imgUrlList.clear();
                                 for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
                                     imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
                                 }
                                 Logger.d("加载");
+
+                                mAdapter.loadMoreComplete();  //加载完成
+
                             } else {
                                 mAdapter.loadMoreEnd();  //没有更多的内容加载
                                 Logger.d("没有更多的内容加载");
@@ -258,9 +273,27 @@ public class MeiZiFragment extends AFengFragment {
 
         private int screenWidth;
 
-
-        public oneAdapter(int layoutResId, List<GankIoDataBean.ResultBean> data) {
+        /**
+         * Same as QuickAdapter#QuickAdapter(Context,int) but with
+         * some initialization data.
+         *
+         * @param layoutResId The layout resource id of each item.
+         * @param data        A new list is created out of this one to avoid mutable list
+         */
+        public oneAdapter(int layoutResId, @Nullable List<GankIoDataBean.ResultBean> data) {
             super(layoutResId, data);
+        }
+
+
+        /**
+         * Implement this method and use the helper to adapt the view to the given item.
+         *
+         * @param helper A fully initialized helper.
+         * @param item   The item that needs to be displayed.
+         */
+        @Override
+        protected void convert(BaseViewHolder helper, GankIoDataBean.ResultBean item) {
+            setData(helper, item);
         }
 
 
@@ -292,10 +325,6 @@ public class MeiZiFragment extends AFengFragment {
 
         }
 
-        @Override
-        protected void convert(BaseViewHolder helper, GankIoDataBean.ResultBean item) {
-            setData(helper, item);
-        }
     }
 
 

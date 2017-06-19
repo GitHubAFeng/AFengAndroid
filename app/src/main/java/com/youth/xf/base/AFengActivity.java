@@ -123,6 +123,7 @@ public abstract class AFengActivity extends SupportActivity {
 
 
 
+
     @Override
     public void finish() {
         super.finish();

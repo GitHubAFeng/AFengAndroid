@@ -84,8 +84,8 @@ dependencies {
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.2@aar'
 
-    //下拉
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.6'
+    //RecyclerView下拉上拉 适配器
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.20'
 
     compile 'com.orhanobut:logger:1.15'  //日志
     compile 'com.afollestad.material-dialogs:core:0.9.4.1'  //弹窗

@@ -231,7 +231,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     //接收控件
     private void getView() {
 
-        /************************* 接收传值 ***********************/
+        /*************************从 MeiZiFragment 接收传值 ***********************/
         Bundle bundle = getIntent().getExtras();
         code = bundle.getInt("code");
         selet = bundle.getInt("selet");
