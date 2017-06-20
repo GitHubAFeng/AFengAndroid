@@ -19,6 +19,7 @@ import com.bumptech.glide.request.target.Target;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
+import com.youth.xf.base.App;
 import com.youth.xf.utils.AFengUtils.XDensityUtils;
 
 
@@ -488,16 +489,39 @@ public abstract class GlideUtils {
 
 
     /**
-     * 下载并且获得图片缓存路径
-     * @param context 上下文
-     * @param imgUrl  图片下载路径
+     * 下载并且获得图片缓存路径，必须在子线程中调用
+     *
+     * @param width  指定下载宽度
+     * @param height 指定下载高度
+     * @param imgUrl 图片下载路径
      * @return 图片缓存位置
      */
-    public static String getImagePath(Context context, String imgUrl) {
+    public static String getImagePath(String imgUrl, int width, int height) {
         String path = null;
-        FutureTarget<File> future = Glide.with(context)
+        FutureTarget<File> future = Glide.with(App.getInstance().getApplicationContext())
                 .load(imgUrl)
-                .downloadOnly(500, 500);
+                .downloadOnly(width, height);
+        try {
+            File cacheFile = future.get();
+            path = cacheFile.getAbsolutePath();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return path;
+    }
+
+
+    /**
+     * 下载图片原大小并且获得图片缓存路径，必须在子线程中调用
+     *
+     * @param imgUrl 图片下载路径
+     * @return 图片缓存位置
+     */
+    public static String getImagePath(String imgUrl) {
+        String path = null;
+        FutureTarget<File> future = Glide.with(App.getInstance().getApplicationContext())
+                .load(imgUrl)
+                .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
         try {
             File cacheFile = future.get();
             path = cacheFile.getAbsolutePath();

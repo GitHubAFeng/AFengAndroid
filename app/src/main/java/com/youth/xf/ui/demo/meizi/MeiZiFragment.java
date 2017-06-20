@@ -30,6 +30,8 @@ import com.youth.xf.ui.demo.bean.GankIoDataBean;
 import com.youth.xf.utils.AFengUtils.XDensityUtils;
 
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,16 +56,10 @@ public class MeiZiFragment extends AFengFragment {
     private String id = "福利";
     private int page = 1;  //当前页数
     private int per_page = 10; //每页图片数量
-    ArrayList<String> imgUrlList = new ArrayList<>();
 
     private List<GankIoDataBean.ResultBean> mMeizhiList = new ArrayList<>();
 
     MeiZiFragment.oneAdapter mAdapter = null;
-
-    private GankIoDataBean meiziBean;  //本地数据
-
-    private boolean isFirst = true;
-    private boolean isPrepared = false;
 
 
     private static MeiZiFragment instance;
@@ -100,13 +96,16 @@ public class MeiZiFragment extends AFengFragment {
 
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             //点击进入详情页
-            Bundle bundle = new Bundle();
-            bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
-            bundle.putInt("code", position);//第几张
-            bundle.putStringArrayList("imageuri", imgUrlList);
-            Intent intent = new Intent(getContext(), MeiZiBigImageActivity.class);
-            intent.putExtras(bundle);
-            getContext().startActivity(intent);
+
+            ArrayList<String> imgUrlList = new ArrayList<>();
+            for (int i = 0; i < mMeizhiList.size(); i++) {
+                imgUrlList.add(mMeizhiList.get(i).getUrl());
+            }
+
+            EventBus.getDefault().postSticky(new MeiziEvent(position, imgUrlList));
+
+            startActivity(new Intent(getContext(), MeiZiBigImageActivity.class));
+
         });
 
         //加载更多
@@ -115,7 +114,6 @@ public class MeiZiFragment extends AFengFragment {
             loadNetData(true);
         });
 
-        isPrepared = true;
     }
 
     @Override
@@ -128,7 +126,7 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-        loadData();
+        loadNetData(false);
     }
 
     /**
@@ -136,6 +134,7 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onVisibleToUser() {
+
 
     }
 
@@ -145,30 +144,6 @@ public class MeiZiFragment extends AFengFragment {
     @Override
     protected void onInvisibleToUser() {
 
-    }
-
-
-
-
-
-    protected void loadData() {
-
-        if (!isPrepared || !isFirst) {
-            return;
-        }
-
-        if (meiziBean != null && meiziBean.getResults() != null && meiziBean.getResults().size() > 0) {
-
-            imgUrlList.clear();
-            for (int i = 0; i < meiziBean.getResults().size(); i++) {
-                imgUrlList.add(meiziBean.getResults().get(i).getUrl());
-            }
-
-            //获取缓存
-
-        } else {
-            loadNetData(false);
-        }
     }
 
 
@@ -192,50 +167,12 @@ public class MeiZiFragment extends AFengFragment {
                     @Override
                     public void onNext(GankIoDataBean gankIoDataBean) {
 
-                        meiziBean = gankIoDataBean;
-                        Logger.d("onNext" + page);
-                        if (page == 1) {
-                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
-                                imgUrlList.clear();
-                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
-                                }
+                        if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
 
-                                mMeizhiList.addAll(gankIoDataBean.getResults());
+                            mMeizhiList.addAll(gankIoDataBean.getResults());
 
-//                                mAdapter.setNewData(mMeizhiList);
+                            mAdapter.loadMoreComplete();
 
-
-                                //成功获取更多数据
-                                mAdapter.addData(mMeizhiList);
-//                                mCurrentCounter = mQuickAdapter.getData().size();
-                                mAdapter.loadMoreComplete();
-
-                                //TODO  进行本地缓存
-
-
-                                // 显示成功后就不是第一次了，不再刷新
-                                isFirst = false;
-                            }
-
-                        } else {
-                            if (gankIoDataBean != null && gankIoDataBean.getResults() != null && gankIoDataBean.getResults().size() > 0) {
-
-                                mMeizhiList.addAll(gankIoDataBean.getResults());
-//                                mAdapter.setNewData(gankIoDataBean.getResults());
-                                mAdapter.addData(mMeizhiList);
-//                                imgUrlList.clear();
-                                for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
-                                    imgUrlList.add(gankIoDataBean.getResults().get(i).getUrl());
-                                }
-                                Logger.d("加载");
-
-                                mAdapter.loadMoreComplete();  //加载完成
-
-                            } else {
-                                mAdapter.loadMoreEnd();  //没有更多的内容加载
-                                Logger.d("没有更多的内容加载");
-                            }
                         }
 
                     }
@@ -301,7 +238,7 @@ public class MeiZiFragment extends AFengFragment {
 
             screenWidth = XDensityUtils.getScreenWidth();
 
-            CardView  cardView = helper.getView(R.id.item_meizi_root);
+            CardView cardView = helper.getView(R.id.item_meizi_root);
             ImageView image = helper.getView(R.id.meizi_photo);
 
             Glide.with(helper.getConvertView().getContext())

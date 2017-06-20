@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.youth.xf.R;
+import com.youth.xf.base.App;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,13 +58,14 @@ public class ImgLoadUtil {
     /**
      * 保存图片至相册
      *
-     * @param context   上下文
-     * @param bmp       图片
-     * @param albumName 保存的专辑名字，没有则新建
+     * @param bmp
+     * @param imgDirName 目录名字
+     * @return
      */
-    public static void saveImageToGallery(Context context, Bitmap bmp, String albumName) {
+    public static boolean saveImageToGallery(Bitmap bmp, String imgDirName) {
         // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), albumName);
+        String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + imgDirName;
+        File appDir = new File(storePath);
         if (!appDir.exists()) {
             appDir.mkdir();
         }
@@ -71,22 +73,68 @@ public class ImgLoadUtil {
         File file = new File(appDir, fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            //通过io流的方式来压缩保存图片
+            boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 60, fos);
             fos.flush();
             fos.close();
+
+            //把文件插入到系统图库
+            //MediaStore.Images.Media.insertImage(App.getInstance().getContentResolver(), file.getAbsolutePath(), fileName, null);
+
+            //保存图片后发送广播通知更新数据库
+            Uri uri = Uri.fromFile(file);
+            App.getInstance().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+            if (isSuccess) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
+    }
 
-        // 其次把文件插入到系统图库
+
+    /**
+     * 保存图片至相册
+     *
+     * @param context
+     * @param bmp
+     * @param imgDirName 目录名字
+     * @return
+     */
+    public static boolean saveImageToGallery(Context context, Bitmap bmp, String imgDirName) {
+        // 首先保存图片
+        String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + imgDirName;
+        File appDir = new File(storePath);
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
         try {
-            MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e) {
+            FileOutputStream fos = new FileOutputStream(file);
+            //通过io流的方式来压缩保存图片
+            boolean isSuccess = bmp.compress(Bitmap.CompressFormat.JPEG, 60, fos);
+            fos.flush();
+            fos.close();
+
+            //把文件插入到系统图库
+            //MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+
+            //保存图片后发送广播通知更新数据库
+            Uri uri = Uri.fromFile(file);
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+            if (isSuccess) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        // 最后通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsoluteFile())));
+        return false;
     }
 
 

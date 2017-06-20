@@ -77,8 +77,11 @@ public class MovieDetailActivity extends AFengActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        //移除所有的粘性事件
+        EventBus.getDefault().removeAllStickyEvents();
         EventBus.getDefault().unregister(this);
+
+        super.onDestroy();
     }
 
 

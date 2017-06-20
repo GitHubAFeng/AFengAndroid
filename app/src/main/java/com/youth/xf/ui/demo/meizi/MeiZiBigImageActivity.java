@@ -21,16 +21,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.base.App;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
+import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.widget.bottomsheetdialog.xBottomMenuDialog;
 import com.youth.xf.widget.downloadingview.GADownloadingView;
 import com.youth.xf.widget.snackbarlight.Light;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +62,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     @BindView(R.id.meizi_toolbar_title)
     TextView mToolbartitle;
     // 接收传过来的uri地址
-    List<String> imageuri;
+    List<String> imageuriList;
 
     @BindView(R.id.meizi_fab)
     FloatingActionButton mTabBtn;
@@ -64,6 +71,8 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     Toolbar mToolbar;
 
     private int mProgress;  //下载进度
+
+    int currentPageIndex;  //当前ViewPage的下标
 
     /**
      * 显示当前图片的页数
@@ -79,32 +88,9 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     ViewPager image_viewpager;
 
     //保存到该相册专辑
-    String albumName = "AFeng相册";
-
-
-    /**
-     * 用于判断是否是加载本地图片
-     */
-    private boolean isLocal;
+    final String albumName = "AFeng相册";
 
     ViewPagerAdapter adapter;
-
-    // 当前页数
-    private int page;
-
-    // 接收穿过来当前选择的图片的数量
-    int code;
-    // 用于判断是头像还是文章图片 1:头像 2：文章大图
-    int selet;
-
-    /**
-     * 本应用图片的id
-     */
-    private int imageId;
-    /**
-     * 是否是本应用中的图片
-     */
-    private boolean isApp;
 
 
     /**
@@ -123,6 +109,10 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     @Override
     protected void initView(Bundle savedInstanceState) {
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+
         // 设置标题栏
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setTitle("");
@@ -135,7 +125,6 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(v -> finish());
 
-        getView();
     }
 
     /**
@@ -163,11 +152,12 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     }
 
 
+    // position 为当前单元的下标
     @Override
     public void onPageSelected(int position) {
         // 每当页数发生改变时重新设定一遍当前的页数和总页数
-        image_viewpager_text.setText((position + 1) + " / " + imageuri.size());
-        page = position;
+        image_viewpager_text.setText((position + 1) + " / " + imageuriList.size());
+        currentPageIndex = position;
 
     }
 
@@ -189,147 +179,92 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
     }
 
 
+    @Override
+    public void onDestroy() {
+        MeiziEvent stickyEvent = EventBus.getDefault().getStickyEvent(MeiziEvent.class);
+        if (stickyEvent != null) {
+            EventBus.getDefault().removeStickyEvent(stickyEvent);
+        }
+
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void ReceviceMessage(MeiziEvent event) {
+        if (adapter == null) {
+            adapter = new ViewPagerAdapter();
+        }
+
+        if (imageuriList == null) {
+            imageuriList = event.getImgData();
+        }
+
+        image_viewpager.setAdapter(adapter);
+        image_viewpager.setCurrentItem(event.getIndex());
+        image_viewpager.addOnPageChangeListener(this);
+        image_viewpager.setEnabled(false);
+
+        // 设定当前的页数和总页数
+        image_viewpager_text.setText((event.getIndex() + 1) + " / " + imageuriList.size());
+        currentPageIndex = event.getIndex();
+    }
+
+    //保存图片
     private void toDownLoadImg() {
-        /************************* 接收控件 ***********************/
-//        mGADownloadingView.performAnimation();
-        if (isApp) {// 本地图片
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId);
-            if (bitmap != null) {
-                saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
 
-            }
+        new Thread(() -> {
 
-        } else {
-            // 网络图片
+            //TODO  通过缓存获取
 
-            new Thread(() -> {
 
-                // 子线程获得图片路径
-                final String imagePath = getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
-                // 主线程更新
-                MeiZiBigImageActivity.this.runOnUiThread(() -> {
-                    if (imagePath != null) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
-                        if (bitmap != null) {
-                            saveImageToGallery(MeiZiBigImageActivity.this, bitmap, albumName);
+            // 子线程获得图片路径
+            final String imagePath = getImagePath(imageuriList.get(currentPageIndex));
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
+            boolean saveBitmapToSD = ImgLoadUtil.saveImageToGallery(bitmap, albumName);  //存入手机
+
+            // 主线程更新
+            MeiZiBigImageActivity.this.runOnUiThread(() -> {
+                if (imagePath != null) {
+                    if (bitmap != null) {
+                        if (saveBitmapToSD) {
                             String tempAdd = "已保存至" + Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + albumName;
-//                            xToastUtil.showToast(tempAdd);
                             Light.success(mTabBtn, "保存成功," + tempAdd, Light.LENGTH_SHORT).show();
-
+                        } else {
+                            Light.success(mTabBtn, "保存失败!", Light.LENGTH_SHORT).show();
                         }
                     }
-                });
-            }).start();
+                }
+            });
+        }).start();
 
-            // 显示进度条的下载，但这个下载图片的速度太快了，不适合用
+        // 显示进度条的下载，但这个下载图片的速度太快了，不适合用
 //            new downImgTask().execute();
-        }
 
-    }
-
-
-    //接收控件
-    private void getView() {
-
-        /*************************从 MeiZiFragment 接收传值 ***********************/
-        Bundle bundle = getIntent().getExtras();
-        code = bundle.getInt("code");
-        selet = bundle.getInt("selet");
-        isLocal = bundle.getBoolean("isLocal", false);
-        imageuri = bundle.getStringArrayList("imageuri");
-        /**是否是本应用中的图片*/
-        isApp = bundle.getBoolean("isApp", false);
-        /**本应用图片的id*/
-        imageId = bundle.getInt("id", 0);
-
-        /**
-         * 给viewpager设置适配器
-         */
-        if (isApp) {
-            MyPageAdapter myPageAdapter = new MyPageAdapter();
-            image_viewpager.setAdapter(myPageAdapter);
-            image_viewpager.setEnabled(false);
-        } else {
-            adapter = new ViewPagerAdapter();
-            image_viewpager.setAdapter(adapter);
-            image_viewpager.setCurrentItem(code);
-            page = code;
-            image_viewpager.setOnPageChangeListener(this);
-            image_viewpager.setEnabled(false);
-            // 设定当前的页数和总页数
-            if (selet == 2) {
-                image_viewpager_text.setText((code + 1) + " / " + imageuri.size());
-            }
-        }
-    }
-
-
-    /**
-     * 本地应用图片适配器
-     */
-
-    class MyPageAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view = getLayoutInflater().inflate(R.layout.viewpager_meizi_image, container, false);
-            PhotoView zoom_image_view = (PhotoView) view.findViewById(R.id.zoom_image_view);
-            ProgressBar spinner = (ProgressBar) view.findViewById(R.id.loading);
-            spinner.setVisibility(View.GONE);
-            if (imageId != 0) {
-                zoom_image_view.setImageResource(imageId);
-            }
-            zoom_image_view.setOnPhotoTapListener(MeiZiBigImageActivity.this);
-            container.addView(view, 0);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
     }
 
 
     //设置系统壁纸
-    public void setWallpaper(Bitmap bitmap) {
+    public void setWallpaper() {
 
         Light.info(mTabBtn, "正在设置壁纸...", Light.LENGTH_SHORT).show();
 
-        if (bitmap == null) {
-            Light.error(mTabBtn, "设置失败!", Light.LENGTH_SHORT).show();
-            return;
-        }
-
         new Thread(() -> {
-            boolean flag = false;
-            WallpaperManager manager = WallpaperManager.getInstance(App.getInstance());
+
             try {
-                manager.setBitmap(bitmap);
-                flag = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                flag = false;
-            } finally {
+                // 子线程获得图片路径
+                final String imagePath = getImagePath(imageuriList.get(currentPageIndex));
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, new BitmapFactory.Options());
+
                 if (bitmap != null) {
-                    if (flag) {
-                        App.getHandler().post(() -> Light.success(mTabBtn, "设置成功!", Light.LENGTH_SHORT).show());
-                    } else {
-                        App.getHandler().post(() -> Light.error(mTabBtn, "设置失败!", Light.LENGTH_SHORT).show());
-                    }
+                    WallpaperManager manager = WallpaperManager.getInstance(App.getInstance());
+                    manager.setBitmap(bitmap);
                 }
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                Logger.e(e.getMessage());
             }
         }).start();
 
@@ -352,9 +287,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
         xBottomMenuDialog dialog = new xBottomMenuDialog.BottomMenuBuilder()
                 .addItem("下载图片", v -> toDownLoadImg())
-                .addItem("设为壁纸", v -> {
-
-                })
+                .addItem("设为壁纸", v -> setWallpaper())
                 .build();
 
 
@@ -373,19 +306,12 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
 
             // 保存网络图片的路径
-            String adapter_image_Entity = (String) getItem(position);
-            //TODO
-            String imageUrl;
-            if (isLocal) {
-                imageUrl = "file://" + adapter_image_Entity;
-
-            } else {
-                imageUrl = adapter_image_Entity;
-            }
+            String imageUrl = (String) getItem(position);
 
             spinner.setVisibility(View.VISIBLE);
             spinner.setClickable(false);
             Glide.with(MeiZiBigImageActivity.this).load(imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .crossFade(700)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
@@ -421,10 +347,10 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
 
         @Override
         public int getCount() {
-            if (imageuri == null || imageuri.size() == 0) {
+            if (imageuriList == null || imageuriList.size() == 0) {
                 return 0;
             }
-            return imageuri.size();
+            return imageuriList.size();
         }
 
         @Override
@@ -439,7 +365,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
         }
 
         Object getItem(int position) {
-            return imageuri.get(position);
+            return imageuriList.get(position);
         }
     }
 
@@ -459,7 +385,7 @@ public class MeiZiBigImageActivity extends AFengActivity implements ViewPager.On
             //后台线程下载耗时操作
 
             // 子线程获得图片路径
-            return getImagePath(MeiZiBigImageActivity.this, imageuri.get(page));
+            return getImagePath(imageuriList.get(currentPageIndex));
         }
 
         @Override
