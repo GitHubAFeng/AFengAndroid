@@ -1,4 +1,4 @@
-package com.youth.xf.ui.demo.mv;
+package com.youth.xf.ui.demo.live;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,34 +19,32 @@ import com.just.library.ChromeClientCallbackManager;
 import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
 
-
 import butterknife.BindView;
 
 /**
- * Created by Administrator on 2017/6/15.
+ * Created by Administrator on 2017/6/21.
  */
 
-public class BiliAgentWebActivity extends BaseActivity {
+public class LiveWebActivity extends BaseActivity{
 
-    final String mUrl = "http://m.acfun.cn/";
+    final String mUrl = "https://m.douyu.com/";
 
     AgentWeb mAgentWeb = null;
 
-    @BindView(R.id.bili_swipe_container)
+    @BindView(R.id.web_swipe_container)
     SwipeRefreshLayout mSwipeLayout;
-    @BindView(R.id.bili_toolbar)
+    @BindView(R.id.web_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.bili_toolbar_title)
+    @BindView(R.id.web_toolbar_title)
     TextView mTitleTextView;
 
-    @BindView(R.id.bili_web_container)
+    @BindView(R.id.web_container)
     NestedScrollView mwebContainer;
 
-    @BindView(R.id.bili_appbar_layout)
+    @BindView(R.id.web_appbar_layout)
     AppBarLayout mAppbarlayout;
 
     WebView mWebView = null;
-
 
 
     /**
@@ -54,7 +52,7 @@ public class BiliAgentWebActivity extends BaseActivity {
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_bili;
+        return R.layout.activity_web;
     }
 
     /**
@@ -105,7 +103,7 @@ public class BiliAgentWebActivity extends BaseActivity {
             mWebView = mAgentWeb.getWebCreator().get();
         }
 
-
+        mWebView.getSettings().setJavaScriptEnabled(true);
     }
 
 
@@ -131,7 +129,11 @@ public class BiliAgentWebActivity extends BaseActivity {
                     mSwipeLayout.setRefreshing(false);
                 }
         );
+
     }
+
+
+
 
     /**
      * 处理业务逻辑，状态恢复等操作
@@ -156,7 +158,7 @@ public class BiliAgentWebActivity extends BaseActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
-                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出A站~", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出本站~", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -207,12 +209,13 @@ public class BiliAgentWebActivity extends BaseActivity {
     };
 
 
+
+
     //插入JS代码
     private void injectJS(WebView webview) {
         webview.loadUrl("javascript:(function() " +
                 "{ " +
-                "document.getElementById('prompt-box').style.display='none'; " +
-                "document.getElementById('btn-app').style.display='none'; " +
+                "document.getElementsByClassName('fix-download')[0].style.display='none'; " +
 //                "document.getElementsByClassName('m-footer')[0].style.display='none';" +
 //                "document.getElementsByClassName('m-page')[0].style.display='none';" +
                 "})()");
@@ -229,5 +232,4 @@ public class BiliAgentWebActivity extends BaseActivity {
             super.onProgressChanged(view, newProgress);
         }
     }
-
 }

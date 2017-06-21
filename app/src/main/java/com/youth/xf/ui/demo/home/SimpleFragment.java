@@ -14,6 +14,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.ui.demo.comic.ComicWebActivity;
+import com.youth.xf.ui.demo.live.LiveWebActivity;
 import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
@@ -69,6 +71,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     @Override
     protected void setListener() {
         mHomeMvBtn.setOnClickListener(this);
+        headerView.findViewById(R.id.comic_btn).setOnClickListener(this);
+        headerView.findViewById(R.id.home_live).setOnClickListener(this);
     }
 
     @Override
@@ -129,7 +133,6 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                xToastUtil.showToast(Integer.toString(position));
 
                 if (position == 0 || position == 1 || position == 3) {
                     xToastUtil.showToast("正在施工中……");
@@ -150,10 +153,15 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_mv_btn:
-
-//                startActivity(new Intent(this.getContext(), BiliActivity.class));
                 startActivity(new Intent(this.getContext(), BiliAgentWebActivity.class));
+                break;
 
+            case R.id.comic_btn:
+                startActivity(new Intent(this.getContext(), ComicWebActivity.class));
+                break;
+
+            case R.id.home_live:
+                startActivity(new Intent(this.getContext(), LiveWebActivity.class));
                 break;
         }
     }
