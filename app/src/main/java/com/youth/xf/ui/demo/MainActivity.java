@@ -28,6 +28,7 @@ import com.youth.xf.R;
 
 import com.youth.xf.ui.constants.ConstantsImageUrls;
 import com.youth.xf.ui.demo.book.BookFragment;
+import com.youth.xf.ui.demo.fiction.FictionFragment;
 import com.youth.xf.ui.demo.home.SimpleFragment;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 import com.youth.xf.ui.demo.more.MoreFragment;
@@ -71,12 +72,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     public String[] mTitles = {"首页", "头条", "妹纸", "更多", "读书", "电影"};
 
-    public static final int MAIN = 0;
-    public static final int NEW = 1;
-    public static final int MEIZI = 2;
-    public static final int MORE = 3;
-    public static final int BOOK = 4;
-    public static final int MOVIEW = 5;
 
 
     public SupportFragment[] mFragments = new SupportFragment[6];
@@ -103,12 +98,14 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         //装载Fragments
         if (savedInstanceState == null) {
-            mFragments[MAIN] = SimpleFragment.getInstance();
-            mFragments[NEW] = NewsFragment.getInstance();
-            mFragments[MEIZI] = MeiZiFragment.getInstance();
-            mFragments[MORE] = MoreFragment.getInstance();
-            mFragments[BOOK] = BookFragment.newInstance();
-            mFragments[MOVIEW] = MovieFragment.newInstance();
+            mFragments[0] = SimpleFragment.getInstance();
+//            mFragments[1] = NewsFragment.getInstance();
+            mFragments[1] = FictionFragment.newInstance();
+            mFragments[2] = MeiZiFragment.getInstance();
+            mFragments[3] = MoreFragment.getInstance();
+            mFragments[4] = BookFragment.newInstance();
+            mFragments[5] = MovieFragment.newInstance();
+
 
 //            loadMultipleRootFragment(R.id.main_tab_container, MAIN
 //                    , mFragments[MAIN]
@@ -123,12 +120,13 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         } else {
             // 这里库已经做了Fragment恢复工作，不需要额外的处理
             // 这里我们需要拿到mFragments的引用，用下面的方法查找更方便些，也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些)
-            mFragments[MAIN] = findFragment(SimpleFragment.class);
-            mFragments[NEW] = findFragment(NewsFragment.class);
-            mFragments[MEIZI] = findFragment(MeiZiFragment.class);
-            mFragments[MORE] = findFragment(MoreFragment.class);
-            mFragments[BOOK] = findFragment(BookFragment.class);
-            mFragments[MOVIEW] = findFragment(MovieFragment.class);
+            mFragments[0] = findFragment(SimpleFragment.class);
+//            mFragments[1] = findFragment(NewsFragment.class);
+            mFragments[1] = findFragment(FictionFragment.class);
+            mFragments[2] = findFragment(MeiZiFragment.class);
+            mFragments[3] = findFragment(MoreFragment.class);
+            mFragments[4] = findFragment(BookFragment.class);
+            mFragments[5] = findFragment(MovieFragment.class);
 
         }
 

@@ -8,6 +8,7 @@ import android.os.Handler;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.BuildConfig;
+import com.youth.xf.utils.cache.ACache;
 
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
@@ -16,6 +17,8 @@ import me.yokeyword.fragmentation.helper.ExceptionHandler;
 public class App extends Application {
 
     private static Handler mHandler;
+
+    private static ACache aCache;
 
     private static App instance;
 
@@ -28,6 +31,10 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         AFengConfig.init(this);
+
+        //初始化ACache类
+        aCache = ACache.get(this);
+
 
         if (BuildConfig.DEBUG) {
             Logger
@@ -64,6 +71,11 @@ public class App extends Application {
             mHandler = new Handler();
         }
         return mHandler;
+    }
+
+    //取缓存实例
+    public static ACache getACache() {
+        return aCache;
     }
 
 

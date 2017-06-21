@@ -1,0 +1,93 @@
+package com.youth.xf.ui.demo.fiction;
+
+import java.io.Serializable;
+
+/**
+ * Created by Administrator on 2017/6/21.
+ */
+
+public class FictionModel implements Serializable{
+
+    private static final long serialVersionUID = -3675582199741762973L;
+    private String url;
+    private String detailUrl;
+    private String title;
+    private String desc;
+    private String time;
+    private String nextPageUrl;
+    private String coverImg;
+    private String currentPage;
+    private int type = -1;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDetailUrl() {
+        return detailUrl;
+    }
+
+    public void setDetailUrl(String detailUrl) {
+        this.detailUrl = detailUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getNextPageUrl() {
+        return nextPageUrl;
+    }
+
+    public void setNextPageUrl(String nextPageUrl) {
+        this.nextPageUrl = nextPageUrl;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public String getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(String currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+}
