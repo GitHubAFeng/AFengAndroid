@@ -9,6 +9,8 @@ import java.io.Serializable;
 public class FictionModel implements Serializable{
 
     private static final long serialVersionUID = -3675582199741762973L;
+
+    private String author;
     private String url;
     private String detailUrl;
     private String title;
@@ -18,6 +20,14 @@ public class FictionModel implements Serializable{
     private String coverImg;
     private String currentPage;
     private int type = -1;
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public String getUrl() {
         return url;

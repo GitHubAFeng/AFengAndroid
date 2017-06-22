@@ -4,23 +4,31 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/6/21.
- *
+ * <p>
  * 小说
  */
 
@@ -29,10 +37,12 @@ public class FictionFragment extends AFengFragment {
     @BindView(R.id.fiction_recyclerView)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.fiction_progressBar)
+    ProgressBar mProgressBar;
+
     myAdapter adapter = null;
 
     List<FictionModel> fictionDatas = new ArrayList<>();
-
 
 
     public static FictionFragment newInstance() {
@@ -69,6 +79,12 @@ public class FictionFragment extends AFengFragment {
     @Override
     protected void setListener() {
 
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+//            xToastUtil.showToast(position);
+        });
+
+        adapter.setOnLoadMoreListener(() -> loadMoreData());
+
     }
 
     /**
@@ -86,6 +102,7 @@ public class FictionFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
+        initData();
     }
 
     /**
@@ -106,46 +123,77 @@ public class FictionFragment extends AFengFragment {
     }
 
 
+    void initData() {
 
-    void initData(){
-        new Thread(()->fictionDatas = JsoupFictionHomeManager.get().getKswHome()).start();
+        mProgressBar.setVisibility(View.VISIBLE);
+        //Consumer是简易版的Observer
+        Observable.create((ObservableOnSubscribe<List<FictionModel>>) e -> {
+
+            List<FictionModel> alldata = JsoupFictionManager.get().getData();
+
+            e.onNext(alldata);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fictionModels -> {
+                    fictionDatas.addAll(fictionModels);
+                    adapter.notifyDataSetChanged();
+                    adapter.openLoadAnimation();
+                    mProgressBar.setVisibility(View.GONE);
+                });
+
 
     }
 
+
+    void loadMoreData() {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        //Consumer是简易版的Observer
+        Observable.create((ObservableOnSubscribe<List<FictionModel>>) e -> {
+
+            List<FictionModel> alldata = JsoupFantasyManager.get().getData();
+
+            e.onNext(alldata);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fictionModels -> {
+                    fictionDatas.addAll(fictionModels);
+                    adapter.notifyDataSetChanged();
+                    adapter.openLoadAnimation();
+                    mProgressBar.setVisibility(View.GONE);
+//                    adapter.loadMoreComplete();
+                    adapter.loadMoreEnd();
+                });
+
+
+    }
 
 
     class myAdapter extends BaseQuickAdapter<FictionModel, BaseViewHolder> {
 
 
-        /**
-         * Same as QuickAdapter#QuickAdapter(Context,int) but with
-         * some initialization data.
-         *
-         * @param layoutResId The layout resource id of each item.
-         * @param data        A new list is created out of this one to avoid mutable list
-         */
         public myAdapter(int layoutResId, @Nullable List<FictionModel> data) {
             super(layoutResId, data);
         }
 
-        public myAdapter(@Nullable List<FictionModel> data) {
-            super(data);
-        }
-
-        public myAdapter(int layoutResId) {
-            super(layoutResId);
-        }
-
-        /**
-         * Implement this method and use the helper to adapt the view to the given item.
-         *
-         * @param helper A fully initialized helper.
-         * @param item   The item that needs to be displayed.
-         */
         @Override
         protected void convert(BaseViewHolder helper, FictionModel item) {
-            helper.setText(R.id.fic_title, item.getTitle());
 
+            String title = TextUtils.isEmpty(item.getTitle()) ? "" : item.getTitle().trim();
+            String desc = TextUtils.isEmpty(item.getDesc()) ? "" : item.getDesc().trim();
+            String author = TextUtils.isEmpty(item.getAuthor()) ? "" : item.getAuthor().trim();
+            String cover = TextUtils.isEmpty(item.getCoverImg()) ? "" : item.getCoverImg().trim();
+
+            helper.setText(R.id.fiction_title, title)
+                    .setText(R.id.fiction_desc, desc)
+                    .setText(R.id.fiction_author, author);
+
+            Glide.with(helper.getConvertView().getContext())
+                    .load(cover)
+                    .fitCenter()
+                    .into((ImageView) helper.getView(R.id.fiction_image));
         }
     }
 

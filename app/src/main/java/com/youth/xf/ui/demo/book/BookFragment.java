@@ -88,6 +88,15 @@ public class BookFragment extends AFengFragment {
     @Override
     protected void setListener() {
 
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            BooksBean book = (BooksBean) adapter.getData().get(position);
+            //先发送后注册的要使用postSticky粘性事件
+            EventBus.getDefault().postSticky(new BookEvent(book));
+            Intent intent = new Intent(getActivity(), BookDetailActivity.class);
+            startActivity(intent);
+            hideSoftInput();
+        });
+
     }
 
     @Override
@@ -175,19 +184,6 @@ public class BookFragment extends AFengFragment {
                                 adapter.setNewData(bookBean.getBooks());
                                 adapter.notifyDataSetChanged();
                                 adapter.openLoadAnimation();
-                                mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-                                    @Override
-                                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-                                        BooksBean book = bookBean.getBooks().get(position);
-                                        //先发送后注册的要使用postSticky粘性事件
-                                        EventBus.getDefault().postSticky(new BookEvent(book));
-                                        Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                                        startActivity(intent);
-                                        hideSoftInput();
-                                    }
-                                });
-
                             }
                             mIsFirst = false;
                         }

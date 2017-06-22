@@ -90,10 +90,10 @@ public class JsoupFictionHomeManager {
         Elements select = document.select("div.item");
         for (Element element : select) {
             kswModel = new FictionModel();
-            kswModel.setTitle(element.select("img[src]").attr("alt"));
-            kswModel.setUrl(element.select("img[src]").attr("src"));
-            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href"));
-            kswModel.setDesc(element.select("dd").text());
+            kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
+            kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
+            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
+            kswModel.setDesc(element.select("dd").text());  //描述
             kswModel.setType(TYPE_HEADER);
             list.add(kswModel);
         }

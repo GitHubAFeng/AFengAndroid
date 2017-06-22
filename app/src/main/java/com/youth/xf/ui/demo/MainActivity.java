@@ -70,7 +70,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
     private Context mContext;
 
-    public String[] mTitles = {"首页", "头条", "妹纸", "更多", "读书", "电影"};
+    public String[] mTitles = {"首页", "小说", "妹纸", "更多", "读书", "电影"};
 
 
 
