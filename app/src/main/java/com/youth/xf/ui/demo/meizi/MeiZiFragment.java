@@ -124,6 +124,7 @@ public class MeiZiFragment extends AFengFragment {
             }
         });
 
+
     }
 
     @Override

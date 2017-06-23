@@ -6,7 +6,7 @@
     <string name="book_description_1">作者: [美] 凯文·凯利 \n副标题: 全人类的最终命运和结局 \n出版年: 2010-12 \n页数: 707 \n定价: 88.00元 </string>
 
 
-    <!--HiPermission 使用-->
+    <!--HiPermission 使用-->    <!-- %1$s  %2$s 为占位符-->
     <string name="permission_storage">存储空间</string>
     <string name="permission_location">位置信息</string>
     <string name="permission_camera">拍照权限</string>
@@ -21,6 +21,11 @@
     <string name="permission_btn_next">下一步</string>
     <string name="permission_go_to_setting">去设置</string>
 
-    <!-- %1$s  %2$s 为占位符-->
+
+
+    <!--ByeBurger控件需要使用到的属性-->
+    <string name="bye_burger_float_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
+    <string name="bye_burger_bottom_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerBottomBehavior</string>
+    <string name="bye_burger_title_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerTitleBehavior</string>
 
 </resources>

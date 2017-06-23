@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/read_fiction"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.demo.fiction.FictionReadActivity">
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/read_bye_burger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:alpha="0.5"
+        android:background="@color/grey"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="#fff"
+        app:layout_behavior="@string/bye_burger_bottom_behavior"
+        app:menu="@menu/menu_fiction_read_bottom">
+
+    </android.support.design.widget.BottomNavigationView>
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/read_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:alpha="0.5"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@android:color/white"
+        app:layout_behavior="@string/bye_burger_title_behavior"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:navigationIcon="@drawable/cha"
+        app:theme="@style/ToolbarStyle"
+        app:titleTextColor="@android:color/white">
+
+        <TextView
+            android:id="@+id/read_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.5"
+            android:singleLine="true"
+            android:text="点击内容区域可隐藏或者显示工具栏"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:id="@+id/read_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/read_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/read_floatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_behavior="@string/bye_burger_float_behavior" />
+</android.support.design.widget.CoordinatorLayout>

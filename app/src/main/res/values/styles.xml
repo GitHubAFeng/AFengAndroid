@@ -20,7 +20,7 @@
         <!--<item name="android:textColorPrimary">@color/colorTheme</item>-->
     </style>
 
-    <!--titleBar样式-->
+    <!--ToolBar样式-->
     <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="actionBarItemBackground">@drawable/abc_item_background_holo_light</item>
         <item name="selectableItemBackground">@drawable/abc_item_background_holo_light</item>

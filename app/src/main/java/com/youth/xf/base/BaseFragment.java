@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -63,6 +64,9 @@ public abstract class BaseFragment extends Fragment {
         return mContentView;
     }
 
+    public void xToastShow(String s) {
+        xToastUtil.showToast(s);
+    }
 
 
     /**

@@ -10,7 +10,15 @@ public class FictionModel implements Serializable{
 
     private static final long serialVersionUID = -3675582199741762973L;
 
+    public String getFictionContent() {
+        return fictionContent;
+    }
 
+    public void setFictionContent(String fictionContent) {
+        this.fictionContent = fictionContent;
+    }
+
+    private String fictionContent;
     private String lastChapter;
     private String chapterName;
 
@@ -39,6 +47,16 @@ public class FictionModel implements Serializable{
     private String desc;
     private String time;
     private String nextPageUrl;
+
+    public String getPrePageUrl() {
+        return prePageUrl;
+    }
+
+    public void setPrePageUrl(String prePageUrl) {
+        this.prePageUrl = prePageUrl;
+    }
+
+    private String prePageUrl;
     private String coverImg;
     private String currentPage;
     private int type = -1;

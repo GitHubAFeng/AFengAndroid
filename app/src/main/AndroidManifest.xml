@@ -134,6 +134,16 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".ui.demo.home.WebActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.demo.fiction.FictionReadActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
 
         <!--权限申请窗口-->
         <activity

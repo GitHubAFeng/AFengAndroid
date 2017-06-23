@@ -1,5 +1,7 @@
 package com.youth.xf.ui.demo.fiction;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.AndroidCharacter;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +34,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -80,6 +84,8 @@ public class FictionChapterActivity extends AFengActivity {
 
     List<FictionModel> fictionDatas = new ArrayList<>();
 
+    Activity activity;
+
     /**
      * 初始化布局,返回layout
      */
@@ -95,6 +101,8 @@ public class FictionChapterActivity extends AFengActivity {
      */
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        activity = this;
 
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -126,6 +134,37 @@ public class FictionChapterActivity extends AFengActivity {
      */
     @Override
     protected void setListener() {
+        // Toolbar 单击，Recyclerview 跳到顶部
+        mToolbar.setOnClickListener(v -> {
+            RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+            if (layoutManager instanceof GridLayoutManager) {
+                GridLayoutManager Manager = (GridLayoutManager) layoutManager;
+                Manager.scrollToPositionWithOffset(0, 0);
+                Manager.setStackFromEnd(true);
+            }
+        });
+
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            FictionModel model = (FictionModel) adapter.getData().get(position);
+            String url = model.getChapterUrl();
+
+            Observable.create(new ObservableOnSubscribe<FictionModel>() {
+                @Override
+                public void subscribe(ObservableEmitter<FictionModel> e) throws Exception {
+                    FictionModel data = JsoupFictionContentManager.get().getData(url);
+                    e.onNext(data);
+                }
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<FictionModel>() {
+                        @Override
+                        public void accept(FictionModel s) throws Exception {
+                            EventBus.getDefault().postSticky(s);
+                            startActivity(new Intent(activity, FictionReadActivity.class));
+                        }
+                    });
+
+        });
 
     }
 

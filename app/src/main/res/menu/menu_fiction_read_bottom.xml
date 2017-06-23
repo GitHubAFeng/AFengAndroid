@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--阅读页底下菜单-->
+    <item
+        android:id="@+id/menu_read_pre_page"
+        android:enabled="true"
+        android:icon="@drawable/read_pre_page"
+        android:title="上一章"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_read_page"
+        android:icon="@drawable/read_page"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="回到目录"
+        />
+
+    <item
+        android:id="@+id/menu_read_nest_page"
+        android:enabled="true"
+        android:icon="@drawable/read_nest_page"
+        android:title="下一章"
+        app:showAsAction="ifRoom" />
+
+    <!--<item-->
+    <!--android:icon="@drawable/ic_settings_black_24dp"-->
+    <!--android:enabled="true"-->
+    <!--app:showAsAction="ifRoom"-->
+    <!--android:title="setting"-->
+    />
+</menu>

@@ -19,6 +19,8 @@ import com.youth.xf.ui.demo.live.LiveWebActivity;
 import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +116,22 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
         mBGABanner.setData(R.drawable.test_baner01, R.drawable.test_baner02, R.drawable.test_banner03);
 
-        mBGABanner.setDelegate((banner, itemView, model, position) -> xToastUtil.showToast("点击了" + position));
+        mBGABanner.setDelegate((banner, itemView, model, position) -> {
+            xToastUtil.showToast("点击了" + position);
+            switch (position) {
+                case 0:
+
+                    String jscode = "javascript:(function() {" +
+                            "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
+                            "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
+                            "})()";
+                    String url = "http://m.bilibili.com/ranking.html";
+                    EventBus.getDefault().postSticky(new WebEvent(jscode, url));
+                    startActivity(new Intent(getContext(), WebActivity.class));
+
+                    break;
+            }
+        });
 
 
     }

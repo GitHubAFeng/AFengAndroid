@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
 
 import butterknife.ButterKnife;
@@ -29,6 +30,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     Unbinder mbinder;
+
+
+    public void xToastShow(String s) {
+        xToastUtil.showToast(s);
+    }
 
 
     @Override
@@ -125,16 +131,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void finish() {
         super.finish();
         GlideUtils.clearMemory(this);
         System.gc();
     }
-
-
-
 
 
 }
