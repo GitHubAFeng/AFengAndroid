@@ -1,5 +1,6 @@
 package com.youth.xf.ui.demo.fiction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +83,8 @@ public class FictionFragment extends AFengFragment {
     protected void setListener() {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-//            xToastUtil.showToast(position);
+            startActivity(new Intent(this.getContext(), FictionChapterActivity.class));
+            EventBus.getDefault().postSticky(adapter.getData().get(position));
         });
 
         adapter.setOnLoadMoreListener(() -> loadMoreData());

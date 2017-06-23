@@ -20,7 +20,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.App;
-import com.youth.xf.utils.AFengUtils.XDensityUtils;
+import com.youth.xf.utils.AFengUtils.DensityUtil;
 
 
 import java.io.File;
@@ -314,7 +314,7 @@ public abstract class GlideUtils {
      */
     public static void loadImageFormVideo(String url, ImageView imageView) {
         Glide.with(imageView.getContext()).load(url)
-                .override(XDensityUtils.dip2px(150), XDensityUtils.dip2px(150))
+                .override(DensityUtil.dip2px(150), DensityUtil.dip2px(150))
                 .placeholder(R.drawable.load_err)
                 .dontAnimate()
                 .into(imageView);

@@ -1,6 +1,5 @@
 package com.youth.xf.ui.demo.meizi;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,9 +23,8 @@ import com.orhanobut.logger.Logger;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 
-import com.youth.xf.base.App;
 import com.youth.xf.ui.demo.bean.GankIoDataBean;
-import com.youth.xf.utils.AFengUtils.XDensityUtils;
+import com.youth.xf.utils.AFengUtils.DensityUtil;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 
@@ -266,7 +264,7 @@ public class MeiZiFragment extends AFengFragment {
 
         private void setData(BaseViewHolder helper, GankIoDataBean.ResultBean item) {
 
-            screenWidth = XDensityUtils.getScreenWidth();
+            screenWidth = DensityUtil.getScreenWidth();
 
             CardView cardView = helper.getView(R.id.item_meizi_root);
             ImageView image = helper.getView(R.id.meizi_photo);

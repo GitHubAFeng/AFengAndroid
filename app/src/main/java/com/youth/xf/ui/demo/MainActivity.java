@@ -70,12 +70,10 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
     private Context mContext;
 
-    public String[] mTitles = {"首页", "小说", "妹纸", "更多", "读书", "电影"};
-
+    public String[] mTitles = {"首页", "小说", "妹纸", "读书", "电影", "更多"};
 
 
     public SupportFragment[] mFragments = new SupportFragment[6];
-
 
 
     @Override
@@ -99,12 +97,11 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         //装载Fragments
         if (savedInstanceState == null) {
             mFragments[0] = SimpleFragment.getInstance();
-//            mFragments[1] = NewsFragment.getInstance();
             mFragments[1] = FictionFragment.newInstance();
             mFragments[2] = MeiZiFragment.getInstance();
-            mFragments[3] = MoreFragment.getInstance();
-            mFragments[4] = BookFragment.newInstance();
-            mFragments[5] = MovieFragment.newInstance();
+            mFragments[3] = BookFragment.newInstance();
+            mFragments[4] = MovieFragment.newInstance();
+            mFragments[5] = MoreFragment.getInstance();
 
 
 //            loadMultipleRootFragment(R.id.main_tab_container, MAIN
@@ -121,12 +118,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             // 这里库已经做了Fragment恢复工作，不需要额外的处理
             // 这里我们需要拿到mFragments的引用，用下面的方法查找更方便些，也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些)
             mFragments[0] = findFragment(SimpleFragment.class);
-//            mFragments[1] = findFragment(NewsFragment.class);
             mFragments[1] = findFragment(FictionFragment.class);
             mFragments[2] = findFragment(MeiZiFragment.class);
-            mFragments[3] = findFragment(MoreFragment.class);
-            mFragments[4] = findFragment(BookFragment.class);
-            mFragments[5] = findFragment(MovieFragment.class);
+            mFragments[3] = findFragment(BookFragment.class);
+            mFragments[4] = findFragment(MovieFragment.class);
+            mFragments[5] = findFragment(MoreFragment.class);
+
 
         }
 
@@ -367,7 +364,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else if ((System.currentTimeMillis() - exitTime) > 2000) {
-                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出本应用！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "再按一次返回键退出", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
 

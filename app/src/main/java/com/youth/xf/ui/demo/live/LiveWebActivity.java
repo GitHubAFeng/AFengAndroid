@@ -9,8 +9,8 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +18,7 @@ import com.just.library.AgentWeb;
 import com.just.library.ChromeClientCallbackManager;
 import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
+
 
 import butterknife.BindView;
 
@@ -89,7 +90,6 @@ public class LiveWebActivity extends BaseActivity{
                     .useDefaultIndicator()// 使用默认进度条
                     .defaultProgressBarColor() // 使用默认进度条颜色
                     .setReceivedTitleCallback(mCallback) //设置 Web 页面的 title 回调
-                    .setWebChromeClient(new MyWebChromeClient())
                     .setSecutityType(AgentWeb.SecurityType.strict)
                     .createAgentWeb()//
                     .ready()
@@ -104,6 +104,8 @@ public class LiveWebActivity extends BaseActivity{
         }
 
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new MyWebClient());
+
     }
 
 
@@ -221,15 +223,16 @@ public class LiveWebActivity extends BaseActivity{
                 "})()");
     }
 
-    private class MyWebChromeClient extends WebChromeClient {
+    private class MyWebClient extends WebViewClient {
 
         @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress > 25) {
-                injectJS(view);
-            }
-
-            super.onProgressChanged(view, newProgress);
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            injectJS(view);
         }
+
+
     }
+
+
 }

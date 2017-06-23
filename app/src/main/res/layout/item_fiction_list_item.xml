@@ -43,7 +43,7 @@
             tools:ignore="RtlHardcoded"
             tools:text="作者" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <com.youth.xf.widget.extextview.ExpandTextView
             android:id="@+id/fiction_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,7 +54,24 @@
             android:textSize="10dp"
             tools:ignore="RtlHardcoded"
             android:paddingBottom="5dp"
-            tools:text="描述" />
+            tools:text="描述"
+            app:arrowAlign="center"
+            app:arrowPadding="8dp"
+            app:arrowPosition="below"
+            app:maxCollapsedLines="4" />
+
+        <!--<android.support.v7.widget.AppCompatTextView-->
+            <!--android:id="@+id/fiction_desc"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/fiction_title"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_toRightOf="@+id/fiction_image"-->
+            <!--android:textSize="10dp"-->
+            <!--tools:ignore="RtlHardcoded"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--tools:text="描述" />-->
 
 
     </RelativeLayout>

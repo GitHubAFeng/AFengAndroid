@@ -9,8 +9,8 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +28,10 @@ import butterknife.BindView;
 
 public class BiliAgentWebActivity extends BaseActivity {
 
-    final String mUrl = "http://m.acfun.cn/";
+//    final String mUrl = "http://m.acfun.cn/";
+    final String mUrl = "http://m.bilibili.com/index.html";
+
+
 
     AgentWeb mAgentWeb = null;
 
@@ -91,7 +94,6 @@ public class BiliAgentWebActivity extends BaseActivity {
                     .useDefaultIndicator()// 使用默认进度条
                     .defaultProgressBarColor() // 使用默认进度条颜色
                     .setReceivedTitleCallback(mCallback) //设置 Web 页面的 title 回调
-                    .setWebChromeClient(new MyWebChromeClient())
                     .setSecutityType(AgentWeb.SecurityType.strict)
                     .createAgentWeb()//
                     .ready()
@@ -105,6 +107,7 @@ public class BiliAgentWebActivity extends BaseActivity {
             mWebView = mAgentWeb.getWebCreator().get();
         }
 
+        mWebView.setWebViewClient(new MyWebClient());
 
     }
 
@@ -156,7 +159,7 @@ public class BiliAgentWebActivity extends BaseActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
-                Toast.makeText(getApplicationContext(), "2秒内再按一次返回键将退出A站~", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "2秒内再按一次将返回主页~", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -209,25 +212,25 @@ public class BiliAgentWebActivity extends BaseActivity {
 
     //插入JS代码
     private void injectJS(WebView webview) {
-        webview.loadUrl("javascript:(function() " +
-                "{ " +
-                "document.getElementById('prompt-box').style.display='none'; " +
-                "document.getElementById('btn-app').style.display='none'; " +
-//                "document.getElementsByClassName('m-footer')[0].style.display='none';" +
-//                "document.getElementsByClassName('m-page')[0].style.display='none';" +
+        webview.loadUrl("javascript:(function() {" +
+//                "document.getElementById('prompt-box').style.display='none'; " +
+//                "document.getElementById('btn-app').style.display='none'; " +
+                "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
+                "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
                 "})()");
     }
 
-    private class MyWebChromeClient extends WebChromeClient {
+
+
+    private class MyWebClient extends WebViewClient {
 
         @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress > 25) {
-                injectJS(view);
-            }
-
-            super.onProgressChanged(view, newProgress);
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            injectJS(view);
         }
+
+
     }
 
 }

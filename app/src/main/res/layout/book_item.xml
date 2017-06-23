@@ -42,13 +42,27 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorContent" />
 
-            <TextView
+            <com.youth.xf.widget.extextview.ExpandTextView
                 android:id="@+id/tvDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="@string/book_description_1"
-                android:textColor="@color/colorTitle" />
+                android:textColor="@color/colorTitle"
+                android:textSize="16sp"
+                app:arrowAlign="center"
+                app:arrowPadding="8dp"
+                app:arrowPosition="below"
+                app:maxCollapsedLines="4" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvDesc"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:text="@string/book_description_1"-->
+                <!--android:textColor="@color/colorTitle" />-->
+
         </LinearLayout>
 
     </LinearLayout>

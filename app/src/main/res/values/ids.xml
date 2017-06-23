@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="statusbarutil_fake_status_bar_view" type="id"/>
-    <item name="statusbarutil_translucent_view" type="id"/>
-</resources>
 
     <!--StatusBarUtil工具类所需要的资源文件-->
+    <item name="statusbarutil_fake_status_bar_view" type="id"/>
+    <item name="statusbarutil_translucent_view" type="id"/>
+
+
+
+</resources>
+
+    <!--定义资源文件ids， 进入<android sdk安装目录>\platforms\android-1.5\data\res\values目录，找到ids.xml文件，打开后，若在ids.xml中定义了ID，则在layout中可如下定义@id/price_edit，-->
+    <!--否则@+id/price_edit。-->
+    <!--例如，在ids.xml中我们可以如下定义：-->
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<resources>-->
+    <!--<item type="id" name="edit01">false</item>-->
+    <!--</resources>-->
+    <!--在布局文件中使用：-->
+    <!--<TextView android:id="@id/edit01" />-->
+    <!--&lt;!&ndash;这样有利于统一管理资源文件。-->

@@ -10,6 +10,28 @@ public class FictionModel implements Serializable{
 
     private static final long serialVersionUID = -3675582199741762973L;
 
+
+    private String lastChapter;
+    private String chapterName;
+
+    public String getChapterName() {
+        return chapterName;
+    }
+
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
+    }
+
+    public String getChapterUrl() {
+        return chapterUrl;
+    }
+
+    public void setChapterUrl(String chapterUrl) {
+        this.chapterUrl = chapterUrl;
+    }
+
+    private String chapterUrl;
+    private String state;
     private String author;
     private String url;
     private String detailUrl;
@@ -20,6 +42,23 @@ public class FictionModel implements Serializable{
     private String coverImg;
     private String currentPage;
     private int type = -1;
+
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getLastChapter() {
+        return lastChapter;
+    }
+
+    public void setLastChapter(String lastChapter) {
+        this.lastChapter = lastChapter;
+    }
 
     public String getAuthor() {
         return author;

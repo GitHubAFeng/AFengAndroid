@@ -129,6 +129,12 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".ui.demo.fiction.FictionChapterActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
+
         <!--权限申请窗口-->
         <activity
             android:name=".widget.hipermission.PermissionActivity"
