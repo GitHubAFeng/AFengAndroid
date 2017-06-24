@@ -31,6 +31,7 @@
         <!--<item name="android:textSize">18sp</item> &lt;!&ndash;  搞掂字体大小&ndash;&gt;-->
     </style>
 
+
     <!--titlebar 标题-->
     <style name="ToolBar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18.0sp</item>

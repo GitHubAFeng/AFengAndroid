@@ -79,8 +79,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        TextView card_title_tv = (TextView) headerView.findViewById(R.id.card_title_tv);
-        card_title_tv.setText("首页");
+
         initBanner();
         initRecyclerView();
 
@@ -114,10 +113,11 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     private void initBanner() {
 
         mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
-        mBGABanner.setData(R.drawable.test_baner01, R.drawable.test_baner02, R.drawable.test_banner03);
+        //绑定轮播图片
+        mBGABanner.setData(R.drawable.home_bili, R.drawable.home_ban_1, R.drawable.home_ban_2);
 
         mBGABanner.setDelegate((banner, itemView, model, position) -> {
-            xToastUtil.showToast("点击了" + position);
+
             switch (position) {
                 case 0:
 
@@ -127,6 +127,30 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
                             "})()";
                     String url = "http://m.bilibili.com/ranking.html";
                     EventBus.getDefault().postSticky(new WebEvent(jscode, url));
+                    startActivity(new Intent(getContext(), WebActivity.class));
+
+                    break;
+
+                case 1:
+
+                    String jscode1 = "javascript:(function() {" +
+                            "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
+                            "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
+                            "})()";
+                    String url1 = "http://m.bilibili.com/video/av4597268.html";
+                    EventBus.getDefault().postSticky(new WebEvent(jscode1, url1));
+                    startActivity(new Intent(getContext(), WebActivity.class));
+
+                    break;
+
+                case 2:
+
+                    String jscode2 = "javascript:(function() {" +
+                            "document.getElementsByClassName('m-hometop')[0].style.display='none';" +
+                            "document.getElementsByClassName('ftwrap')[0].style.display='none';" +
+                            "})()";
+                    String url2 = "http://music.163.com/m";
+                    EventBus.getDefault().postSticky(new WebEvent(jscode2, url2));
                     startActivity(new Intent(getContext(), WebActivity.class));
 
                     break;
@@ -192,18 +216,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
         @Override
         protected void convert(BaseViewHolder helper, testStatus item) {
-            switch (helper.getLayoutPosition() %
-                    3) {
-                case 0:
-                    helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
-                    break;
-                case 1:
-                    helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
-                    break;
-                case 2:
-                    helper.setImageResource(R.id.iv, R.mipmap.animation_img3);
-                    break;
-            }
+
         }
     }
 

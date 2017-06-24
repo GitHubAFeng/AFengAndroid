@@ -1,5 +1,7 @@
 package com.youth.xf.ui.demo.fiction;
 
+import android.text.TextUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,11 +34,16 @@ public class JsoupFictionChapterManager {
     // 取章节
     private void initHeader(List<FictionModel> list, String pageurl) {
 
+        if (TextUtils.isEmpty(pageurl)) {
+            throw new NullPointerException("URL为空！");
+        }
+
         Document document = null;
         try {
-            document = Jsoup.connect(pageurl)
-                    .timeout(10000)
-                    .get();
+
+                document = Jsoup.connect(pageurl)
+                        .timeout(10000)
+                        .get();
         } catch (IOException e) {
             e.printStackTrace();
         }

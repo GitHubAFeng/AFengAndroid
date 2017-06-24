@@ -104,7 +104,7 @@ public class WebActivity extends BaseActivity {
                     .ready()
                     .go(mUrl);
 
-//            mAgentWeb.getLoader().loadUrl(mUrl);
+            mAgentWeb.getLoader().loadUrl(mUrl);
 
         }
 
@@ -113,6 +113,14 @@ public class WebActivity extends BaseActivity {
         }
 
 //        mWebView.setWebViewClient(new MyWebClient());
+
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                view.loadUrl(mInjectJS);
+            }
+        });
 
     }
 
@@ -217,16 +225,6 @@ public class WebActivity extends BaseActivity {
         if (event != null) {
             mInjectJS = event.getInjectJS();
             mUrl = event.getWebUrl();
-
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    view.loadUrl(mInjectJS);
-                }
-            });
-
-            mAgentWeb.getLoader().loadUrl(mUrl);
 
         }
     }

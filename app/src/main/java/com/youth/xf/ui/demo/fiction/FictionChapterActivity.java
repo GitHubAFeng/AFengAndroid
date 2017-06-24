@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.AndroidCharacter;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -80,6 +81,9 @@ public class FictionChapterActivity extends AFengActivity {
     @BindView(R.id.chapter_detail_list)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.fiction_cheapter_progressBar)
+    ProgressBar mProgressBar;
+
     myAdapter adapter = null;
 
     List<FictionModel> fictionDatas = new ArrayList<>();
@@ -146,24 +150,20 @@ public class FictionChapterActivity extends AFengActivity {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
             FictionModel model = (FictionModel) adapter.getData().get(position);
-            String url = model.getChapterUrl();
+            String url = model.getChapterUrl().trim();
 
-            Observable.create(new ObservableOnSubscribe<FictionModel>() {
-                @Override
-                public void subscribe(ObservableEmitter<FictionModel> e) throws Exception {
-                    FictionModel data = JsoupFictionContentManager.get().getData(url);
-                    e.onNext(data);
-                }
+
+            Observable.create((ObservableOnSubscribe<FictionContentEvent>) e -> {
+
+                FictionContentEvent data = JsoupFictionContentManager.get().getData(url);
+                e.onNext(data);
+
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<FictionModel>() {
-                        @Override
-                        public void accept(FictionModel s) throws Exception {
-                            EventBus.getDefault().postSticky(s);
-                            startActivity(new Intent(activity, FictionReadActivity.class));
-                        }
+                    .subscribe(s -> {
+                        EventBus.getDefault().postSticky(s);
+                        startActivity(new Intent(activity, FictionReadActivity.class));
                     });
-
         });
 
     }
@@ -195,9 +195,12 @@ public class FictionChapterActivity extends AFengActivity {
     public void ReceviceMessage(FictionModel event) {
         if (event != null) {
 
-            String url = event.getDetailUrl();
+            mProgressBar.setVisibility(View.VISIBLE);
 
             Observable.create((ObservableOnSubscribe<List<FictionModel>>) e -> {
+
+                String url = event.getDetailUrl();
+
                 List<FictionModel> data = JsoupFictionChapterManager.get().getData(url);
                 e.onNext(data);
             })
@@ -227,10 +230,8 @@ public class FictionChapterActivity extends AFengActivity {
 
 
                         adapter.notifyDataSetChanged();
-
+                        mProgressBar.setVisibility(View.GONE);
                     });
-
-
         }
 
     }

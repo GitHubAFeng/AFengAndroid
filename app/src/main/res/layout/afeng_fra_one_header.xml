@@ -12,8 +12,7 @@
         android:id="@+id/banner_main"
         style="@style/BannerDefaultStyle"
         android:layout_width="match_parent"
-        android:layout_height="133dp"
-        app:banner_transitionEffect="accordion" />
+        android:layout_height="133dp" />
 
     <!--导航按钮-->
     <RelativeLayout
@@ -46,7 +45,7 @@
                             android:id="@+id/home_mv_btn"
                             android:layout_width="53dp"
                             android:layout_height="53dp"
-                            android:background="@drawable/home_middle_fm" />
+                            android:background="@drawable/home_mv" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -80,16 +79,8 @@
                                 android:id="@+id/comic_btn"
                                 android:layout_width="53dp"
                                 android:layout_height="53dp"
-                                android:background="@drawable/home_middle_day" />
+                                android:background="@drawable/home_com" />
 
-                            <TextView
-                                android:id="@+id/tv_daily_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="xx"
-                                android:textColor="@drawable/select_gank_day"
-                                android:textSize="25sp" />
 
                         </FrameLayout>
 
@@ -123,7 +114,7 @@
                             android:layout_width="53dp"
                             android:layout_height="53dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/home_middle_rank" />
+                            android:background="@drawable/home_live" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -147,11 +138,6 @@
             android:layout_marginTop="13dp"
             android:background="@color/colorHomeLine" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/card_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </com.zhy.autolayout.AutoLinearLayout>

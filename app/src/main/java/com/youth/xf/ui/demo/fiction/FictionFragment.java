@@ -83,8 +83,9 @@ public class FictionFragment extends AFengFragment {
     protected void setListener() {
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            startActivity(new Intent(this.getContext(), FictionChapterActivity.class));
             EventBus.getDefault().postSticky(adapter.getData().get(position));
+
+            startActivity(new Intent(this.getContext(), FictionChapterActivity.class));
         });
 
         adapter.setOnLoadMoreListener(() -> loadMoreData());

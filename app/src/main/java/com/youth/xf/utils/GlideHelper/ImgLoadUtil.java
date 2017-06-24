@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -155,6 +156,13 @@ public class ImgLoadUtil {
                 .into(500, 500)
                 .get();
         return myBitmap;
+    }
+
+
+    // 显示图片
+    public static void display(@NonNull ImageView imageView, String url) {
+        Glide.with(imageView.getContext()).load(url).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher).crossFade().into(imageView);
     }
 
 

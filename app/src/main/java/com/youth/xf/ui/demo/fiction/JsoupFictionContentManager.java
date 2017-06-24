@@ -19,7 +19,7 @@ public class JsoupFictionContentManager {
     }
 
     // 取正文内容
-    public FictionModel getData(String pageurl) {
+    public FictionContentEvent getData(String pageurl) {
 
         Document document = null;
         try {
@@ -32,10 +32,13 @@ public class JsoupFictionContentManager {
 
         Elements selects = document.select("div.bottem1").select("a");
 
-        FictionModel model = new FictionModel();
+        FictionContentEvent model = new FictionContentEvent();
         model.setPrePageUrl(selects.get(0).attr("abs:href"));
         model.setNextPageUrl(selects.get(2).attr("abs:href"));
         model.setFictionContent(document.select("div#content").text());
+
+        model.setTitle(document.select("div.bookname").select("h1").text());
+
         return model;
     }
 

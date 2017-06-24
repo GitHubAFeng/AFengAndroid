@@ -10,12 +10,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
+import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.widget.byeburgernavigationview.ByeBurgerBehavior;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +42,9 @@ import io.reactivex.schedulers.Schedulers;
 public class FictionReadActivity extends BaseActivity {
 
 
+    @BindView(R.id.read_toolbar_title)
+    TextView mread_toolbar_title;
+
     @BindView(R.id.read_scrollview)
     ScrollView mScrollView;
 
@@ -50,7 +58,8 @@ public class FictionReadActivity extends BaseActivity {
     FloatingActionButton mFloatButton;
 
     @BindView(R.id.read_content)
-    AppCompatTextView mTextView;
+    TextView mTextView;
+
 
     ByeBurgerBehavior mBehavior, mBehavior2;
 
@@ -64,7 +73,7 @@ public class FictionReadActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-//        mBehavior = ByeBurgerBehavior.from(mFloatButton);
+//        mBehavior3 = ByeBurgerBehavior.from(mFloatButton);
         mBehavior = ByeBurgerBehavior.from(mBottomView);
         mBehavior2 = ByeBurgerBehavior.from(mToolbar);
 
@@ -84,18 +93,26 @@ public class FictionReadActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(v -> finish());
 
+        mTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
+
     }
+
 
     @Override
     protected void setListener() {
+
         mTextView.setOnClickListener(view -> {
 
             if (mBehavior.isShow()) {
+//                StatusBarUtil.hideSystemUI(this);
+
                 mBehavior.hide();
                 mBehavior2.hide();
             } else {
                 mBehavior.show();
                 mBehavior2.show();
+//                StatusBarUtil.showSystemUI(this);
+
             }
 
         });
@@ -107,18 +124,15 @@ public class FictionReadActivity extends BaseActivity {
                         case R.id.menu_read_pre_page:
                             // 上一章
 
-                            Observable.create((ObservableOnSubscribe<FictionModel>) e -> {
-                                FictionModel data = JsoupFictionContentManager.get().getData(preUrl);
+                            Observable.create((ObservableOnSubscribe<FictionContentEvent>) e -> {
+                                FictionContentEvent data = JsoupFictionContentManager.get().getData(preUrl);
                                 e.onNext(data);
                             }).subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(s -> {
-                                        preUrl = s.getPrePageUrl();
-                                        nestUrl = s.getNextPageUrl();
+                                    .subscribe(s -> loadData(s));
 
-                                        mTextView.setText(Html.fromHtml(s.getFictionContent().replaceAll("\r\n", "<br/>").replaceAll(" ", " ")));
-
-                                    });
+                            //回到顶部
+                            mScrollView.post(() -> mScrollView.fullScroll(ScrollView.FOCUS_UP));
 
                             break;
 
@@ -130,18 +144,15 @@ public class FictionReadActivity extends BaseActivity {
                         case R.id.menu_read_nest_page:
                             // 下一章
 
-                            Observable.create((ObservableOnSubscribe<FictionModel>) e -> {
-                                FictionModel data = JsoupFictionContentManager.get().getData(nestUrl);
+                            Observable.create((ObservableOnSubscribe<FictionContentEvent>) e -> {
+                                FictionContentEvent data = JsoupFictionContentManager.get().getData(nestUrl);
                                 e.onNext(data);
                             }).subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(s -> {
-                                        preUrl = s.getPrePageUrl();
-                                        nestUrl = s.getNextPageUrl();
+                                    .subscribe(s -> loadData(s));
 
-                                        mTextView.setText(Html.fromHtml(s.getFictionContent().replaceAll("\r\n", "<br/>").replaceAll(" ", " ")));
-
-                                    });
+                            //回到顶部
+                            mScrollView.post(() -> mScrollView.fullScroll(ScrollView.FOCUS_UP));
 
                             break;
                     }
@@ -160,7 +171,7 @@ public class FictionReadActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        FictionModel stickyEvent = EventBus.getDefault().getStickyEvent(FictionModel.class);
+        FictionContentEvent stickyEvent = EventBus.getDefault().getStickyEvent(FictionContentEvent.class);
         if (stickyEvent != null) {
             EventBus.getDefault().removeStickyEvent(stickyEvent);
         }
@@ -172,15 +183,24 @@ public class FictionReadActivity extends BaseActivity {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void ReceviceMessage(FictionModel event) {
+    public void ReceviceMessage(FictionContentEvent event) {
         if (event != null) {
 
-            preUrl = event.getPrePageUrl();
-            nestUrl = event.getNextPageUrl();
-
-            mTextView.setText(Html.fromHtml(event.getFictionContent().replaceAll("\r\n", "<br/>").replaceAll(" ", " ")));
+            loadData(event);
 
         }
+    }
+
+
+    private void loadData(FictionContentEvent event) {
+        preUrl = event.getPrePageUrl();
+        nestUrl = event.getNextPageUrl();
+
+        mread_toolbar_title.setText(event.getTitle());
+
+        mTextView.setText(Html.fromHtml(event.getFictionContent()));
+
+
     }
 
 

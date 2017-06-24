@@ -201,6 +201,14 @@
 
     </ScrollView>
 
+    <ProgressBar
+        android:id="@+id/fiction_cheapter_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/chapter_fab"
         android:layout_width="wrap_content"
@@ -209,5 +217,6 @@
         android:layout_margin="16dp"
         android:visibility="gone"
         app:srcCompat="@drawable/home_icon_day" />
+
 
 </android.support.design.widget.CoordinatorLayout>
