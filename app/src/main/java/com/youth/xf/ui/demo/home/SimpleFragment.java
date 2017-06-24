@@ -29,7 +29,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 
 /**
  * 作者： AFeng
- * 时间：2017/3/2
+ * 时间：2017/3/2 , 再次整理时已经是3个多月后了，现在是6月24， 唉 ， 感觉发生了好多事。
  */
 
 //此注解用来忽略检查
