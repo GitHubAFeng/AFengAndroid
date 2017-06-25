@@ -20,8 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/blanchedalmond"
+        android:background="@color/white"
         android:clickable="true"
-        android:fitsSystemWindows="true"/>
+        android:fitsSystemWindows="true"
+        app:menu="@menu/menu_navigation"
+        />
 
 </android.support.v4.widget.DrawerLayout>

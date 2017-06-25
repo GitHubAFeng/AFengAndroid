@@ -144,6 +144,11 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".ui.demo.home.AboutMeActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
 
         <!--权限申请窗口-->
         <activity
@@ -151,6 +156,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/CustomTheme_Dialog"/>
+
+        <!--leanCloud 用户反馈组件所需-->
+        <activity
+            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        </activity>
 
 
         <meta-data android:name="design_width" android:value="768">

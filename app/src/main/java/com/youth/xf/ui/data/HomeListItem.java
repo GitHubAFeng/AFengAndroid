@@ -1,17 +1,19 @@
 package com.youth.xf.ui.data;
 
-import cn.bmob.v3.BmobObject;
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
 
 /**
  * Created by Administrator on 2017/6/25.
  * 首页推荐列表
  */
 
-public class HomeListItem extends BmobObject {
+@AVClassName("HomeListItem")
+public class HomeListItem extends AVObject {
 
     private String title;   //题目
     private String img;   //图片地址
-    private Integer watchCount;  //点击次数
+    private int watchCount;  //点击次数
     private String desc;  //描述
     private String url;  //播放链接
 
@@ -41,11 +43,11 @@ public class HomeListItem extends BmobObject {
         this.img = img;
     }
 
-    public Integer getWatchCount() {
+    public int getWatchCount() {
         return watchCount;
     }
 
-    public void setWatchCount(Integer watchCount) {
+    public void setWatchCount(int watchCount) {
         this.watchCount = watchCount;
     }
 

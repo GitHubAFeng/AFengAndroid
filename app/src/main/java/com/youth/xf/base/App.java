@@ -5,12 +5,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 
+import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.BuildConfig;
+import com.youth.xf.ui.data.HomeListItem;
 import com.youth.xf.utils.cache.ACache;
-
-import cn.bmob.v3.Bmob;
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
@@ -36,8 +37,20 @@ public class App extends Application {
         //初始化ACache类
         aCache = ACache.get(this);
 
-        // 初始化云后端
-//        Bmob.initialize(this, "51cad7c40bfb0117579627b5825127ca");
+
+        ///////////////////后端云设置开始
+
+        // 注册此表
+        AVObject.registerSubclass(HomeListItem.class);
+
+        // 节省流量
+        AVOSCloud.setLastModifyEnabled(true);
+
+        // 初始化参数依次为 this, AppId, AppKey
+        AVOSCloud.initialize(this,"DsBf5jxiorz90M0wIsJTYjAo-gzGzoHsz","9iLSxbsh1tJ3L4wMRx1MhX2M");
+
+        ///////////////////后端云设置结束
+
 
 
         if (BuildConfig.DEBUG) {

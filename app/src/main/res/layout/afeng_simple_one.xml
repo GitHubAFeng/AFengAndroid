@@ -6,6 +6,14 @@
               android:orientation="vertical"
               tools:context=".ui.demo.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/home_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
     <!--首页内容下拉-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/one_rv_list"

@@ -2,7 +2,9 @@ package com.youth.xf.ui.demo;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,12 +17,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.base.AFengActivity;
@@ -29,6 +34,7 @@ import com.youth.xf.R;
 import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
+import com.youth.xf.ui.demo.home.AboutMeActivity;
 import com.youth.xf.ui.demo.home.SimpleFragment;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 import com.youth.xf.ui.demo.more.MoreFragment;
@@ -75,6 +81,9 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     public SupportFragment[] mFragments = new SupportFragment[6];
 
 
+    FeedbackAgent agent = null;
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.afeng_main;
@@ -82,6 +91,9 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        mContext = this;
+
         mTitleOne = getViewById(R.id.iv_title_one);
         mTitleTwo = getViewById(R.id.iv_title_two);
         mTitleThr = getViewById(R.id.iv_title_thr);
@@ -91,6 +103,15 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         drawerLayout = getViewById(R.id.drawer_layout);
         drawerLayout = getViewById(R.id.drawer_layout);
         mNavigationView = getViewById(R.id.nav_view);
+
+        // 设置菜单图标显示图片本身颜色
+        mNavigationView.setItemIconTintList(null);
+
+        if (agent == null) {
+            agent = new FeedbackAgent(this);
+        }
+
+        agent.sync();  //通知用户新的反馈回复
 
 
         //装载Fragments
@@ -181,7 +202,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        mContext = this;
 
         initBar();
         initNav();
@@ -238,16 +258,44 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         //使用Glide来加载网络图片
         ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, Constants.AVATAR);
 
-        LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
-        LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);
-        LinearLayout mNavDeedback = (LinearLayout) view.findViewById(R.id.ll_nav_deedback);
-        LinearLayout mNavAbout = (LinearLayout) view.findViewById(R.id.ll_nav_about);
-        LinearLayout mNavExit = (LinearLayout) view.findViewById(R.id.ll_nav_exit);
-        mNavHomepage.setOnClickListener(this);
-        mNavScanDownload.setOnClickListener(this);
-        mNavDeedback.setOnClickListener(this);
-        mNavAbout.setOnClickListener(this);
-        mNavExit.setOnClickListener(this);
+//        LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
+//        LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);
+
+//        LinearLayout mNavDeedback = (LinearLayout) view.findViewById(R.id.ll_nav_deedback);
+//        LinearLayout mNavAbout = (LinearLayout) view.findViewById(R.id.ll_nav_about);
+//        LinearLayout mNavExit = (LinearLayout) view.findViewById(R.id.ll_nav_exit);
+//        mNavHomepage.setOnClickListener(this);
+//        mNavScanDownload.setOnClickListener(this);
+//        mNavDeedback.setOnClickListener(this);
+//        mNavAbout.setOnClickListener(this);
+//        mNavExit.setOnClickListener(this);
+
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+
+                    case R.id.ll_nav_deedback:// 问题反馈
+
+                        agent.startDefaultThreadActivity();
+
+                        break;
+                    case R.id.ll_nav_about:// 关于
+
+                        startActivity(new Intent(mContext, AboutMeActivity.class));
+
+                        break;
+                    case R.id.ll_nav_exit:// 退出应用
+                        finish();
+                        break;
+
+                }
+
+                return true;
+            }
+        });
+
     }
 
 
@@ -315,29 +363,19 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 break;
             case R.id.ll_title_menu:
                 drawerLayout.openDrawer(GravityCompat.START);
-                xToastUtil.showToast("打开侧滑菜单");
+//                xToastUtil.showToast("打开侧滑菜单");
                 break;
 
-            case R.id.ll_nav_homepage:// 主页
-//                drawerLayout.closeDrawer(GravityCompat.START);
-                xToastUtil.showToast("打开主页");
-                break;
+//            case R.id.ll_nav_homepage:// 主页
+////                drawerLayout.closeDrawer(GravityCompat.START);
+//                xToastUtil.showToast("打开主页");
+//                break;
 
-            case R.id.ll_nav_scan_download://扫码下载
-//                drawerLayout.closeDrawer(GravityCompat.START);
-                xToastUtil.showToast("扫码下载");
-                break;
-            case R.id.ll_nav_deedback:// 问题反馈
-//                drawerLayout.closeDrawer(GravityCompat.START);
-                xToastUtil.showToast("问题反馈");
-                break;
-            case R.id.ll_nav_about:// 关于
-//                drawerLayout.closeDrawer(GravityCompat.START);
-                xToastUtil.showToast("打开关于");
-                break;
-            case R.id.ll_nav_exit:// 退出应用
-                finish();
-                break;
+//            case R.id.ll_nav_scan_download://扫码下载
+////                drawerLayout.closeDrawer(GravityCompat.START);
+//                xToastUtil.showToast("扫码下载");
+//                break;
+
         }
     }
 

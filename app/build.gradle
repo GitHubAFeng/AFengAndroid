@@ -19,6 +19,7 @@ android {
         }
     }
 
+    //把so库统一放在libs目录
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -29,6 +30,17 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    //为了解决部分第三方库重复打包了META-INF的问题
+    packagingOptions{
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
 
@@ -119,8 +131,11 @@ dependencies {
     compile 'com.just.agentweb:agentweb:1.2.1'
 
     //云后端
-    implementation files('libs/BmobSDK_3.5.5_20170420.jar')
-    implementation files('libs/org.apache.http.legacy.jar')  //兼容android6.0
+    // LeanCloud 基础包
+    compile ('cn.leancloud.android:avoscloud-sdk:v4.1.0')
+    // LeanCloud 用户反馈包
+    compile ('cn.leancloud.android:avoscloud-feedback:v4.1.0@aar')
+
 
 
 }

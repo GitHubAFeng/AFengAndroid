@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--侧滑菜单-->
+
+    <group android:id="@+id/g1">
+        <item
+            android:id="@+id/ll_nav_deedback"
+            android:icon="@drawable/ic_nav_deedback"
+            android:title="问题反馈" />
+        <!--<item-->
+        <!--android:id="@+id/wallet"-->
+        <!--android:icon="@mipmap/ic_launcher"-->
+        <!--android:title="钱包"/>-->
+    </group>
+    <group android:id="@+id/g2">
+        <item
+            android:id="@+id/ll_nav_about"
+            android:icon="@drawable/ic_nav_about"
+            android:title="关于我" />
+    </group>
+    <item
+        android:id="@+id/ll_nav_exit"
+        android:icon="@drawable/ic_nav_exit"
+        android:title="退出应用" />
+
+</menu>

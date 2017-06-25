@@ -22,10 +22,25 @@
     <string name="permission_go_to_setting">去设置</string>
 
 
-
     <!--ByeBurger控件需要使用到的属性-->
     <string name="bye_burger_float_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
     <string name="bye_burger_bottom_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerBottomBehavior</string>
     <string name="bye_burger_title_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerTitleBehavior</string>
+
+
+    <string name="about_me">
+&#12288;&#12288;此DEMO是我在业余时间编写的阅读类APP，其实内容也涉及到很多，如果有我觉得好玩的东西，我会把它分享给大家~
+\n
+主要数据来源如下：\n
+1、leancloud ：云后端，储存我想要分享的数据。 \n
+2、jsoup ：爬虫，例如APP中的小说内容。 \n
+3、开源API ：来自豆瓣、干货集中营的开源数据。 \n
+\n
+籍贯： 广东\n
+性别： 男孩\n
+Q Q： 283215159\n
+E-mail： 283215159@qq.com\n
+    </string>
+
 
 </resources>
