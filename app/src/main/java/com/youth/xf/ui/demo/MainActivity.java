@@ -160,7 +160,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
             @Override
             public void onTabSelect(int position) {
-//                mMainViewPager.setCurrentItem(position);
+
                 showHideFragment(mFragments[position]);  //使用这个 在点击选项卡时不会出现滑动
             }
 
@@ -258,42 +258,28 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         //使用Glide来加载网络图片
         ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, Constants.AVATAR);
 
-//        LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
-//        LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);
 
-//        LinearLayout mNavDeedback = (LinearLayout) view.findViewById(R.id.ll_nav_deedback);
-//        LinearLayout mNavAbout = (LinearLayout) view.findViewById(R.id.ll_nav_about);
-//        LinearLayout mNavExit = (LinearLayout) view.findViewById(R.id.ll_nav_exit);
-//        mNavHomepage.setOnClickListener(this);
-//        mNavScanDownload.setOnClickListener(this);
-//        mNavDeedback.setOnClickListener(this);
-//        mNavAbout.setOnClickListener(this);
-//        mNavExit.setOnClickListener(this);
+        mNavigationView.setNavigationItemSelectedListener(menuItem -> {
 
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
 
-                switch (menuItem.getItemId()) {
+                case R.id.ll_nav_deedback:// 问题反馈
 
-                    case R.id.ll_nav_deedback:// 问题反馈
+                    agent.startDefaultThreadActivity();
 
-                        agent.startDefaultThreadActivity();
+                    break;
+                case R.id.ll_nav_about:// 关于
 
-                        break;
-                    case R.id.ll_nav_about:// 关于
+                    startActivity(new Intent(mContext, AboutMeActivity.class));
 
-                        startActivity(new Intent(mContext, AboutMeActivity.class));
+                    break;
+                case R.id.ll_nav_exit:// 退出应用
+                    finish();
+                    break;
 
-                        break;
-                    case R.id.ll_nav_exit:// 退出应用
-                        finish();
-                        break;
-
-                }
-
-                return true;
             }
+
+            return true;
         });
 
     }
@@ -341,7 +327,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleThr.setSelected(true);
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(false);
-//                showHideFragment(mFragments[MOVIEW]);
+
                 xToastUtil.showToast("3频道建设中……");
 
                 break;
@@ -349,7 +335,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleThr.setSelected(false);
                 mTitleTwo.setSelected(true);
                 mTitleOne.setSelected(false);
-//                showHideFragment(mFragments[BOOK]);
+
                 xToastUtil.showToast("2频道建设中……");
 
                 break;
@@ -357,24 +343,13 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleThr.setSelected(false);
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(true);
-//                showHideFragment(mFragments[MAIN]);
+
                 xToastUtil.showToast("1频道建设中……");
 
                 break;
             case R.id.ll_title_menu:
                 drawerLayout.openDrawer(GravityCompat.START);
-//                xToastUtil.showToast("打开侧滑菜单");
                 break;
-
-//            case R.id.ll_nav_homepage:// 主页
-////                drawerLayout.closeDrawer(GravityCompat.START);
-//                xToastUtil.showToast("打开主页");
-//                break;
-
-//            case R.id.ll_nav_scan_download://扫码下载
-////                drawerLayout.closeDrawer(GravityCompat.START);
-//                xToastUtil.showToast("扫码下载");
-//                break;
 
         }
     }
