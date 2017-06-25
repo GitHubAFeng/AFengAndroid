@@ -10,6 +10,7 @@ import com.orhanobut.logger.Logger;
 import com.youth.xf.BuildConfig;
 import com.youth.xf.utils.cache.ACache;
 
+import cn.bmob.v3.Bmob;
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
@@ -34,6 +35,9 @@ public class App extends Application {
 
         //初始化ACache类
         aCache = ACache.get(this);
+
+        // 初始化云后端
+//        Bmob.initialize(this, "51cad7c40bfb0117579627b5825127ca");
 
 
         if (BuildConfig.DEBUG) {

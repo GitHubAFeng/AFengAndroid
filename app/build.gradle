@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
@@ -18,16 +19,16 @@ android {
         }
     }
 
-    android {
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
+    }
 
-//        禁止图片规格检查
-//        aaptOptions.cruncherEnabled = false
-//        aaptOptions.useNewCruncher = false
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 
@@ -57,6 +58,7 @@ dependencies {
 
     // 基类 appcompat v7包是必须的,fragment管理器
     compile 'me.yokeyword:fragmentation:0.10.5'
+
     // 如果想使用SwipeBack 滑动边缘退出Fragment/Activity功能，请再添加下面的库
     compile 'me.yokeyword:fragmentation-swipeback:0.10.4'
 
@@ -68,6 +70,7 @@ dependencies {
 
     // 详情页面布局
     compile 'com.github.florent37:arclayout:1.0.2'
+
     // 详情页面幻灯片
     compile 'com.flaviofaria:kenburnsview:1.0.7'
 
@@ -77,18 +80,26 @@ dependencies {
     //选项卡库
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.5'
-    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'  //轮播图
+    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
+
+    //轮播图
 
     // 动画库
-    compile 'com.android.support:support-compat:25.3.1'  //兼容包
+    compile 'com.android.support:support-compat:25.3.1'
+
+    //兼容包
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.2@aar'
 
     //RecyclerView下拉上拉 适配器
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.20'
+    compile 'com.orhanobut:logger:1.15'
 
-    compile 'com.orhanobut:logger:1.15'  //日志
-    compile 'com.afollestad.material-dialogs:core:0.9.4.1'  //弹窗
+    //日志
+    compile 'com.afollestad.material-dialogs:core:0.9.4.1'
+
+    //弹窗
+
     //compile 'com.afollestad.material-dialogs:commons:0.9.4.1' //提示颜色选择器、文件选择弹窗
 
     //牛油刀
@@ -107,6 +118,9 @@ dependencies {
     //WEBVIEW库
     compile 'com.just.agentweb:agentweb:1.2.1'
 
+    //云后端
+    implementation files('libs/BmobSDK_3.5.5_20170420.jar')
+    implementation files('libs/org.apache.http.legacy.jar')  //兼容android6.0
 
 
 }

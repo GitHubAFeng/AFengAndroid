@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
-import com.youth.xf.ui.constants.ConstantsImageUrls;
+import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
@@ -93,7 +93,7 @@ public class WelcomeActivity extends AFengActivity {
 
 
     private void requestImage() {
-        Glide.with(this).load(ConstantsImageUrls.WELCOME_PIC).into(mImageViewPic);
+        Glide.with(this).load(Constants.WELCOME_PIC).into(mImageViewPic);
         AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
         AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
     }

@@ -26,14 +26,13 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
-import com.youth.xf.ui.constants.ConstantsImageUrls;
+import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
 import com.youth.xf.ui.demo.home.SimpleFragment;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 import com.youth.xf.ui.demo.more.MoreFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
-import com.youth.xf.ui.demo.news.NewsFragment;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
@@ -237,7 +236,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         ImageView mAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
         //使用Glide来加载网络图片
-        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, ConstantsImageUrls.AVATAR);
+        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, Constants.AVATAR);
 
         LinearLayout mNavHomepage = (LinearLayout) view.findViewById(R.id.ll_nav_homepage);
         LinearLayout mNavScanDownload = (LinearLayout) view.findViewById(R.id.ll_nav_scan_download);

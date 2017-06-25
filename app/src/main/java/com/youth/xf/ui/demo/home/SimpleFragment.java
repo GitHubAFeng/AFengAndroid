@@ -3,17 +3,23 @@ package com.youth.xf.ui.demo.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
+import com.youth.xf.ui.constants.Constants;
+import com.youth.xf.ui.data.HomeListItem;
 import com.youth.xf.ui.demo.comic.ComicWebActivity;
 import com.youth.xf.ui.demo.live.LiveWebActivity;
 import com.youth.xf.ui.demo.mv.BiliAgentWebActivity;
@@ -37,6 +43,8 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 public class SimpleFragment extends AFengFragment implements View.OnClickListener {
     private static final String TYPE = "mType";
     private String mType = "Android";
+
+    private List<HomeListItem> listDatas = new ArrayList<>();
 
     private BGABanner mBGABanner;
     @BindView(R.id.one_rv_list)
@@ -75,14 +83,15 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         mHomeMvBtn.setOnClickListener(this);
         headerView.findViewById(R.id.comic_btn).setOnClickListener(this);
         headerView.findViewById(R.id.home_live).setOnClickListener(this);
+
+
+
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-
         initBanner();
         initRecyclerView();
-
     }
 
     /**
@@ -121,36 +130,24 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
             switch (position) {
                 case 0:
 
-                    String jscode = "javascript:(function() {" +
-                            "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
-                            "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
-                            "})()";
                     String url = "http://m.bilibili.com/ranking.html";
-                    EventBus.getDefault().postSticky(new WebEvent(jscode, url));
+                    EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url));
                     startActivity(new Intent(getContext(), WebActivity.class));
 
                     break;
 
                 case 1:
 
-                    String jscode1 = "javascript:(function() {" +
-                            "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
-                            "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
-                            "})()";
                     String url1 = "http://m.bilibili.com/video/av4597268.html";
-                    EventBus.getDefault().postSticky(new WebEvent(jscode1, url1));
+                    EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url1));
                     startActivity(new Intent(getContext(), WebActivity.class));
 
                     break;
 
                 case 2:
 
-                    String jscode2 = "javascript:(function() {" +
-                            "document.getElementsByClassName('m-hometop')[0].style.display='none';" +
-                            "document.getElementsByClassName('ftwrap')[0].style.display='none';" +
-                            "})()";
                     String url2 = "http://music.163.com/m";
-                    EventBus.getDefault().postSticky(new WebEvent(jscode2, url2));
+                    EventBus.getDefault().postSticky(new WebEvent(Constants.WANGYI163_JS_CODE, url2));
                     startActivity(new Intent(getContext(), WebActivity.class));
 
                     break;
@@ -160,29 +157,47 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
     }
 
+    private void initItemData() {
+
+        HomeListItem data = new HomeListItem();
+        data.setDesc("改编自日暮里漫画家岸本♂齐湿的同名漫画，于2069年6月9日在东茎电视台放送首勃♂");
+        data.setTitle("蕉忍♂疾风传");
+        data.setWatchCount(10);
+        data.setUrl("http://m.bilibili.com/video/av11009508.html");
+        data.setImg("http://oki2v8p4s.bkt.clouddn.com/home_list_01.png");
+        listDatas.add(data);
+
+        HomeListItem data2 = new HomeListItem();
+        data2.setDesc("讲述原作的故事完结后漩涡鸣人之子漩涡博人的冒险故事。");
+        data2.setTitle("博人传 火影忍者新时代");
+        data2.setWatchCount(100);
+        data2.setUrl("http://bangumi.bilibili.com/mobile/anime/5978/play/103308");
+        data2.setImg("http://oki2v8p4s.bkt.clouddn.com/home_list_2.jpg");
+        listDatas.add(data2);
+
+    }
+
 
     private void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<testStatus> statuses = new ArrayList<>();
-        statuses.add(new testStatus(true, "11", "22", "33", "44"));
-        statuses.add(new testStatus(true, "11", "22", "33", "44"));
-        statuses.add(new testStatus(true, "11", "22", "33", "44"));
 
-        oneAdapter adapter = new oneAdapter(R.layout.afeng_one_item, statuses);
-        adapter.openLoadAnimation();
+        initItemData();
+
+        oneAdapter adapter = new oneAdapter(R.layout.afeng_one_item, listDatas);
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-                if (position == 0 || position == 1 || position == 3) {
-                    xToastUtil.showToast("正在施工中……");
-
-                }
-            }
-        });
 
         adapter.addHeaderView(headerView);
+
+
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            HomeListItem data = adapter.getData().get(position);
+            String url2 = data.getUrl();
+            EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url2));
+            startActivity(new Intent(getContext(), WebActivity.class));
+        });
+
     }
 
     /**
@@ -208,14 +223,26 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     }
 
 
-    class oneAdapter extends BaseQuickAdapter<testStatus, BaseViewHolder> {
+    class oneAdapter extends BaseQuickAdapter<HomeListItem, BaseViewHolder> {
 
-        public oneAdapter(int layoutResId, List<testStatus> data) {
+        public oneAdapter(int layoutResId, List<HomeListItem> data) {
             super(layoutResId, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, testStatus item) {
+        protected void convert(BaseViewHolder helper, HomeListItem item) {
+
+            ImageView img = helper.getView(R.id.home_item_img);
+            String watch = item.getWatchCount() + "";
+
+            helper.setText(R.id.home_item_title, item.getTitle())
+                    .setText(R.id.home_item_desc, item.getDesc())
+                    .setText(R.id.home_item_watch, watch);
+
+            Glide.with(img.getContext())
+                    .load(item.getImg())
+                    .fitCenter()
+                    .into(img);
 
         }
     }
