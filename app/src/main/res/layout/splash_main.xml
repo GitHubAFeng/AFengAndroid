@@ -43,7 +43,7 @@
         android:padding="4dp"
         android:text="跳过 >"
         android:textColor="@android:color/white"
-        android:textSize="16sp"/>
+        android:textSize="15sp"/>
 
     <Button
         android:id="@+id/btn_guide_enter"
@@ -52,11 +52,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/selector_btn_test"
+        android:background="@drawable/shape_start_btn"
         android:padding="8dp"
-        android:text="进入主界面"
+        android:text="Start"
+        android:alpha="0.5"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:visibility="gone"
         tools:visibility="visible"/>
 

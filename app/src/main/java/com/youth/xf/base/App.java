@@ -10,8 +10,10 @@ import com.avos.avoscloud.AVObject;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.BuildConfig;
+import com.youth.xf.ui.data.AdvertisingItem;
 import com.youth.xf.ui.data.HomeBannerItem;
 import com.youth.xf.ui.data.HomeListItem;
+import com.youth.xf.ui.data.SplashBannerItem;
 import com.youth.xf.utils.cache.ACache;
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
@@ -44,6 +46,8 @@ public class App extends Application {
         // 注册此类为数据表
         AVObject.registerSubclass(HomeListItem.class);
         AVObject.registerSubclass(HomeBannerItem.class);
+        AVObject.registerSubclass(AdvertisingItem.class);
+        AVObject.registerSubclass(SplashBannerItem.class);  //引导图
 
         // 节省流量
         AVOSCloud.setLastModifyEnabled(true);

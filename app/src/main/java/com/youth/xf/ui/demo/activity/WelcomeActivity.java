@@ -1,11 +1,16 @@
 package com.youth.xf.ui.demo.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.bumptech.glide.Glide;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
@@ -15,6 +20,7 @@ import com.youth.xf.utils.AFengUtils.AnimHelper;
 import com.youth.xf.utils.AFengUtils.SPDataUtils;
 import com.youth.xf.utils.AFengUtils.XOutdatedUtils;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +42,8 @@ public class WelcomeActivity extends AFengActivity {
     private boolean isInMain;
     private boolean isInSplash;
 
+    Activity mActivity;
+
     @BindView(R.id.iv_pic)
     ImageView mImageViewPic;
     @BindView(R.id.iv_defult_pic)
@@ -48,27 +56,31 @@ public class WelcomeActivity extends AFengActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        mActivity = this;
+
         mImageViewPic.setAlpha(0f);
         //默认启动图
         mImageViewDefPic.setImageDrawable(XOutdatedUtils.getDrawable(R.drawable.welcome_def));
         requestImage();
 
-        Disposable dis = getObservable().observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<Long>() {
-            @Override
-            public void onNext(Long aLong) {
+        Disposable dis = getObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Long>() {
+                    @Override
+                    public void onNext(Long aLong) {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
-                enterApp();
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        enterApp();
+                    }
+                });
         addDisposable(dis);
     }
 
@@ -82,20 +94,57 @@ public class WelcomeActivity extends AFengActivity {
 
     }
 
-
+    // 延时启动
     private Observable<Long> getObservable() {
         return Observable.defer(new Callable<ObservableSource<? extends Long>>() {
-            @Override public ObservableSource<? extends Long> call() throws Exception {
+            @Override
+            public ObservableSource<? extends Long> call() throws Exception {
                 return Observable.timer(2, TimeUnit.SECONDS);
             }
         });
     }
 
-
+    //启动图
     private void requestImage() {
-        Glide.with(this).load(Constants.WELCOME_PIC).into(mImageViewPic);
-        AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
-        AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+
+//        AVObject todoFolder = new AVObject("AdvertisingItem");// 构建对象
+//        todoFolder.put("img", "http://oki2v8p4s.bkt.clouddn.com/wec_1.jpg");
+//        todoFolder.put("isAdv", 0);
+//        todoFolder.put("isShow", 1);
+//        todoFolder.put("advType", 0);
+//        todoFolder.put("desc", "APP启动图");
+//        todoFolder.put("url", "");
+//
+//        todoFolder.saveInBackground();// 保存到服务端
+
+
+        AVQuery<AVObject> avQuery = new AVQuery<>("AdvertisingItem");
+        // 按时间，降序排列
+        avQuery.orderByDescending("createdAt");
+        avQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
+        avQuery.whereEqualTo("advType", 0);  //确认为启动图
+        avQuery.limit(1);// 最多返回 1 条结果
+        avQuery.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+
+                if (list.size() > 0) {
+                    for (AVObject avObject : list) {
+
+//                        String desc = avObject.getString("desc");
+                        String img = avObject.getString("img");
+
+                        Glide.with(mActivity).load(img).into(mImageViewPic);
+                        AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
+                        AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+                    }
+                } else {
+
+                }
+
+            }
+        });
+
     }
 
 
@@ -119,15 +168,15 @@ public class WelcomeActivity extends AFengActivity {
 
     private void enterApp() {
 
-        if (SPDataUtils.getBoolean(WELCOME_KEY, true)) {
-            toSplashActivity();
-            SPDataUtils.putBoolean(WELCOME_KEY, false);
-        } else {
-            toMainActivity();
-//            startActivity(new Intent(this, UserLoginActivity.class));
+//        if (SPDataUtils.getBoolean(WELCOME_KEY, true)) {
+//            toSplashActivity();
+//            SPDataUtils.putBoolean(WELCOME_KEY, false);
+//        } else {
+//            toMainActivity();
+//        }
 
-        }
-//        toSplashActivity();
+        toSplashActivity();
+
         finish();
     }
 

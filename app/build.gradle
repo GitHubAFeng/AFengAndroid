@@ -92,9 +92,9 @@ dependencies {
     //选项卡库
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.5'
-    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
 
     //轮播图
+    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
 
     // 动画库
     compile 'com.android.support:support-compat:25.3.1'

@@ -7,7 +7,7 @@ package com.youth.xf.ui.constants;
 
 public class Constants {
 
-    public static final String WELCOME_PIC = "http://oki2v8p4s.bkt.clouddn.com/wec_1.jpg";
+    public static final String WELCOME_PIC = "http://oki2v8p4s.bkt.clouddn.com/wec_1.jpg";   //启动图
     public static final String AVATAR = "http://oki2v8p4s.bkt.clouddn.com/avetar.jpg";
 
 
