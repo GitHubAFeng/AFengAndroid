@@ -12,7 +12,10 @@
         android:id="@+id/banner_main"
         style="@style/BannerDefaultStyle"
         android:layout_width="match_parent"
-        android:layout_height="133dp" />
+        android:layout_height="133dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+        />
 
     <!--导航按钮-->
     <RelativeLayout

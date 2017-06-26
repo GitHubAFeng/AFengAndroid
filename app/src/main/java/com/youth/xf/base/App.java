@@ -10,6 +10,7 @@ import com.avos.avoscloud.AVObject;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.BuildConfig;
+import com.youth.xf.ui.data.HomeBannerItem;
 import com.youth.xf.ui.data.HomeListItem;
 import com.youth.xf.utils.cache.ACache;
 import me.yokeyword.fragmentation.Fragmentation;
@@ -40,8 +41,9 @@ public class App extends Application {
 
         ///////////////////后端云设置开始
 
-        // 注册此表
+        // 注册此类为数据表
         AVObject.registerSubclass(HomeListItem.class);
+        AVObject.registerSubclass(HomeBannerItem.class);
 
         // 节省流量
         AVOSCloud.setLastModifyEnabled(true);

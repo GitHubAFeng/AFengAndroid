@@ -24,6 +24,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.youth.xf.R;
 import com.youth.xf.base.AFengFragment;
 import com.youth.xf.ui.constants.Constants;
+import com.youth.xf.ui.data.HomeBannerItem;
 import com.youth.xf.ui.data.HomeListItem;
 import com.youth.xf.ui.demo.comic.ComicWebActivity;
 import com.youth.xf.ui.demo.live.LiveWebActivity;
@@ -51,11 +52,16 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     private static final String TYPE = "mType";
     private String mType = "Android";
 
-    private List<HomeListItem> listDatas = new ArrayList<>();
+    private List<HomeListItem> listDatas = new ArrayList<>();   //下拉列表里面的数据
+
+    private List<HomeBannerItem> BannerDatas = new ArrayList<>();   //轮播图里面数据
+    private List<String> BannerTips = new ArrayList<>();   //轮播图里面文字提示
 
     private BGABanner mBGABanner;
+
     @BindView(R.id.one_rv_list)
     RecyclerView mRecyclerView;
+
     View headerView;
     ImageButton mHomeMvBtn;
 
@@ -95,6 +101,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
         mHomeMvBtn = (ImageButton) headerView.findViewById(R.id.home_mv_btn);
 
+        initBanner();
+
     }
 
     @Override
@@ -108,7 +116,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        initBanner();
+
         initRecyclerView();
     }
 
@@ -130,6 +138,10 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
             initItemData();
         }
 
+        if (BannerDatas.size() == 0) {
+            initBannerData();
+        }
+
     }
 
     /**
@@ -141,41 +153,90 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
     }
 
 
-    private void initBanner() {
+    private void initBannerData() {
 
-        mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
-        //绑定轮播图片
-        mBGABanner.setData(R.drawable.home_bili, R.drawable.home_ban_1, R.drawable.home_ban_2);
+//        AVObject todoFolder = new AVObject("HomeBannerItem");// 构建对象
+//        todoFolder.put("img", "http://oki2v8p4s.bkt.clouddn.com/home_ban_4.png");
+//        todoFolder.put("isAdv", 0);
+//        todoFolder.put("isShow", 1);
+//        todoFolder.put("desc", "花儿与少年 第三季 2017-06-25期");
+//        todoFolder.put("url", "http://m.mgtv.com/#/b/312692/3989477?ref=");
+//        todoFolder.put("jsCode", Constants.MGTV_JS_CODE);
+//
+//        todoFolder.saveInBackground();// 保存到服务端
 
-        mBGABanner.setDelegate((banner, itemView, model, position) -> {
 
-            switch (position) {
-                case 0:
+        AVQuery<AVObject> avQuery = new AVQuery<>("HomeBannerItem");
+        // 按时间，降序排列
+        avQuery.orderByDescending("createdAt");
+        avQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
+        avQuery.limit(5);// 最多返回 5 条结果
+        avQuery.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
 
-                    String url = "http://m.bilibili.com/ranking.html";
-                    EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url));
-                    startActivity(new Intent(getContext(), WebActivity.class));
+                if (list.size() > 0) {
+                    for (AVObject avObject : list) {
 
-                    break;
+                        String desc = avObject.getString("desc");
+                        String img = avObject.getString("img");
+                        String url = avObject.getString("url");
+                        String jsCode = avObject.getString("jsCode");
 
-                case 1:
+                        HomeBannerItem data = new HomeBannerItem();
+                        data.setDesc(desc);
+                        data.setJsCode(jsCode);
+                        data.setUrl(url);
+                        data.setImg(img);
+                        BannerDatas.add(data);
+                        BannerTips.add(desc);
+                    }
+                } else {
 
-                    String url1 = "http://m.bilibili.com/video/av4597268.html";
-                    EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url1));
-                    startActivity(new Intent(getContext(), WebActivity.class));
+                }
 
-                    break;
-
-                case 2:
-
-                    String url2 = "http://music.163.com/m";
-                    EventBus.getDefault().postSticky(new WebEvent(Constants.WANGYI163_JS_CODE, url2));
-                    startActivity(new Intent(getContext(), WebActivity.class));
-
-                    break;
+                //绑定轮播图片与提示
+                mBGABanner.setData(BannerDatas, BannerTips);
             }
         });
 
+
+    }
+
+
+    private void initBanner() {
+
+        mBGABanner = (BGABanner) headerView.findViewById(R.id.banner_main);
+
+        // 设置图片加载方法
+        mBGABanner.setAdapter(new BGABanner.Adapter<ImageView, HomeBannerItem>() {
+
+            @Override
+            public void fillBannerItem(BGABanner bgaBanner, ImageView imageView, HomeBannerItem homeBannerItems, int i) {
+                Glide.with(getActivity())
+                        .load(homeBannerItems.getImg())
+                        .placeholder(R.drawable.img_loading_git)  //临时占位图
+                        .error(R.drawable.load_err)  //加载错误时显示图
+                        .centerCrop()
+                        .dontAnimate()
+                        .into(imageView);
+            }
+        });
+
+        // 设置点击事件
+        mBGABanner.setDelegate(new BGABanner.Delegate<ImageView, HomeBannerItem>() {
+
+            @Override
+            public void onBannerItemClick(BGABanner bgaBanner, ImageView imageView, HomeBannerItem homeBannerItems, int i) {
+
+                String url = homeBannerItems.getUrl();
+                String jscode = homeBannerItems.getJsCode();
+
+                EventBus.getDefault().postSticky(new WebEvent(jscode, url));
+                SimpleFragment.this.startActivity(new Intent(SimpleFragment.this.getContext(), WebActivity.class));
+
+            }
+        });
 
     }
 
@@ -309,6 +370,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
             Glide.with(img.getContext())
                     .load(item.getImg())
+                    .placeholder(R.drawable.loading_list_item)  //临时占位图
+                    .error(R.drawable.load_err)  //加载错误时显示图
                     .fitCenter()
                     .into(img);
 

@@ -46,9 +46,6 @@
 
 
     <style name="BannerDefaultStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">100dp</item>
-        <item name="android:layout_marginTop">10dp</item>
         <!-- 自定义属性在styles.xml中不需要命名空间,直接用属性名就可以了 -->
         <!-- 开启自动轮播 -->
         <item name="banner_pointAutoPlayAble">true</item>
@@ -65,7 +62,7 @@
         <!-- 指示点左右外间距 -->
         <item name="banner_pointLeftRightMargin">3dp</item>
         <!-- 指示器的位置 -->
-        <item name="banner_indicatorGravity">bottom|center_horizontal</item>
+        <item name="banner_indicatorGravity">bottom|right</item>
         <!-- 页码切换过程的时间长度 -->
         <item name="banner_pageChangeDuration">800</item>
         <!-- 提示文案的文字大小 -->
@@ -73,7 +70,7 @@
         <!-- 提示文案的文字颜色 -->
         <item name="banner_tipTextColor">@android:color/white</item>
         <!-- 加载网络数据时覆盖在BGABanner最上层的占位图 -->
-        <item name="banner_placeholderDrawable">@drawable/holder</item>
+        <item name="banner_placeholderDrawable">@drawable/img_loading_git</item>
     </style>
 
     <!--book书子单元CardView样式-->
