@@ -21,6 +21,7 @@ public class Constants {
             "javascript:(function() {" +
                     "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
                     "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
+                    "document.getElementsByClassName('index__downloadBtn__src-videoPage-topArea-')[0].style.display='none';" +
                     "})()";
 
 

@@ -13,7 +13,6 @@ public class HomeBannerItem extends AVObject {
 
     private String img;   //图片地址
     private int isAdv;  //是否广告   0 否  , 1 是
-
     private int isShow;  //是否显示   0 否  , 1 是
     private String desc;  //描述
     private String url;  //播放链接

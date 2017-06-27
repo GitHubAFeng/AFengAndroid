@@ -193,6 +193,7 @@ public class WelcomeActivity extends AFengActivity {
         }
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
         isInSplash = true;
     }
 

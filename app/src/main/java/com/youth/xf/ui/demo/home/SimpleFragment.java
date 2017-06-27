@@ -125,15 +125,6 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
      */
     @Override
     protected void onLazyLoadOnce() {
-
-    }
-
-    /**
-     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
-     */
-    @Override
-    protected void onVisibleToUser() {
-
         if (listDatas.size() == 0) {
             initItemData();
         }
@@ -141,6 +132,13 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         if (BannerDatas.size() == 0) {
             initBannerData();
         }
+    }
+
+    /**
+     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
+     */
+    @Override
+    protected void onVisibleToUser() {
 
     }
 
@@ -242,22 +240,19 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
 
     private void initItemData() {
 
-//        HomeListItem data = new HomeListItem();
-//        data.setDesc("改编自日暮里漫画家岸本♂齐湿的同名漫画，于2069年6月9日在东茎电视台放送首勃♂");
-//        data.setTitle("蕉忍♂疾风传");
-//        data.setWatchCount(10);
-//        data.setUrl("http://m.bilibili.com/video/av11009508.html");
-//        data.setImg("http://oki2v8p4s.bkt.clouddn.com/home_list_01.png");
-//        listDatas.add(data);
+        //插入一条
+//        AVObject todoFolder = new AVObject("HomeListItem");// 构建对象
+//        todoFolder.put("img", "http://oki2v8p4s.bkt.clouddn.com/home_list_062702.jpg");
+//        todoFolder.put("title", "大鱼海棠印象曲");
+//        todoFolder.put("isShow", 1);
+//        todoFolder.put("desc", "徐佳莹《湫兮如风》 陈奕迅《在这个世界相遇》");
+//        todoFolder.put("url", "https://m.bilibili.com/video/av4692764.html");
+//        todoFolder.put("watchCount", 0);
+//        todoFolder.put("jsCode", Constants.BILI_JS_CODE);
 //
-//        HomeListItem data2 = new HomeListItem();
-//        data2.setDesc("讲述原作的故事完结后漩涡鸣人之子漩涡博人的冒险故事。");
-//        data2.setTitle("博人传 火影忍者新时代");
-//        data2.setWatchCount(100);
-//        data2.setUrl("http://bangumi.bilibili.com/mobile/anime/5978/play/103308");
-//        data2.setImg("http://oki2v8p4s.bkt.clouddn.com/home_list_2.jpg");
-//        listDatas.add(data2);
-//
+//        todoFolder.saveInBackground();// 保存到服务端
+
+//        //修改一条
 //        // 第一参数是 className,第二个参数是 objectId
 //        AVObject todoFolder = createWithoutData("HomeListItem","594fcdd4ac502e006c80d24d");// 构建对象
 //        todoFolder.put("title", "博人传 火影忍者新时代");// 设置名称
@@ -272,6 +267,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         AVQuery<AVObject> avQuery = new AVQuery<>("HomeListItem");
         // 按时间，降序排列
         avQuery.orderByDescending("createdAt");
+        avQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
         avQuery.limit(limitCount);// 最多返回 10 条结果
         avQuery.skip(skipCount);// 跳过
         avQuery.findInBackground(new FindCallback<AVObject>() {
@@ -284,6 +280,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
                         String img = avObject.getString("img");
                         String desc = avObject.getString("desc");
                         String url = avObject.getString("url");
+                        String jsCode = avObject.getString("jsCode");
 
                         String temp = avObject.getString("watchCount");
                         String watchCount = TextUtils.isEmpty(temp) ? "0" : temp;
@@ -294,6 +291,7 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
                         data.setWatchCount(Integer.parseInt(watchCount));
                         data.setUrl(url);
                         data.setImg(img);
+                        data.setJsCode(jsCode);
                         listDatas.add(data);
                     }
                     adapter.notifyDataSetChanged();
@@ -323,7 +321,8 @@ public class SimpleFragment extends AFengFragment implements View.OnClickListene
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             HomeListItem data = adapter.getData().get(position);
             String url2 = data.getUrl();
-            EventBus.getDefault().postSticky(new WebEvent(Constants.BILI_JS_CODE, url2));
+            String jsCode = data.getJsCode();
+            EventBus.getDefault().postSticky(new WebEvent(jsCode, url2));
             startActivity(new Intent(getContext(), WebActivity.class));
         });
 

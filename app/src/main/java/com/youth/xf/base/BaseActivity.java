@@ -1,5 +1,6 @@
 package com.youth.xf.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
+import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,6 +28,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected String TAG;
     protected App mApp;
+    protected Context mContext;
+
     protected boolean mIsLoadedData = false;
     private CompositeDisposable mdisposables;
 
@@ -41,6 +45,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         SnackbarUtils.showSnackBar(this, s);
     }
 
+    public void xLogger(String s) {
+        Logger.e(s);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mbinder = ButterKnife.bind(this);
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
+        mContext = this;
         initView(savedInstanceState);
         setListener();
         processLogic(savedInstanceState);
@@ -141,6 +150,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.finish();
         GlideUtils.clearMemory(this);
         System.gc();
+    }
+
+
+    /**
+     * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
+     *
+     * @param key
+     * @param object
+     */
+    public void xPut(String key, Object object) {
+        AppSharePreferenceMgr.put(mContext, key, object);
+    }
+
+
+    /**
+     * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
+     *
+     * @param key
+     * @param defaultObject 默认值
+     * @return
+     */
+    public Object xGet(String key, Object defaultObject) {
+
+        return AppSharePreferenceMgr.get(mContext, key, defaultObject);
     }
 
 

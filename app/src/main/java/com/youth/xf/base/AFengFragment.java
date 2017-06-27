@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
+import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -74,6 +75,10 @@ public abstract class AFengFragment extends SwipeBackFragment {
 
     public void xSnackBarShow(String s) {
         SnackbarUtils.showSnackBar(getActivity(), s);
+    }
+
+    public void xLogger(String s){
+        Logger.e(s);
     }
 
     /**
@@ -201,4 +206,30 @@ public abstract class AFengFragment extends SwipeBackFragment {
 //        如果onCreateView里面view是全局的或者你在其它地方调用了，那么onDestroyView调用unbind函数，那么就会出现空指针异常
 //        mbinder.unbind();
     }
+
+
+    /**
+     * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
+     *
+     * @param key
+     * @param object
+     */
+    public void xPut(String key, Object object) {
+        AppSharePreferenceMgr.put(mActivity, key, object);
+    }
+
+
+    /**
+     * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
+     *
+     * @param key
+     * @param defaultObject 默认值
+     * @return
+     */
+    public Object xGet(String key, Object defaultObject) {
+
+        return AppSharePreferenceMgr.get(mActivity, key, defaultObject);
+    }
+
+
 }

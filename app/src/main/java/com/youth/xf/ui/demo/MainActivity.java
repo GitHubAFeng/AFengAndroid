@@ -29,6 +29,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -36,6 +41,7 @@ import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
 import com.youth.xf.ui.constants.Constants;
+import com.youth.xf.ui.demo.Login.LoginEvent;
 import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
@@ -51,6 +57,10 @@ import com.youth.xf.widget.hipermission.HiPermission;
 import com.youth.xf.widget.hipermission.PermissionCallback;
 import com.youth.xf.widget.hipermission.PermissionItem;
 import com.youth.xf.widget.searchbox.SearchFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +124,10 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             getWindow().setEnterTransition(explode);   //进入一个Activity的效果
         }
 
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
 
         mTitleOne = getViewById(R.id.iv_title_one);
         mTitleTwo = getViewById(R.id.iv_title_two);
@@ -229,6 +243,9 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         initContent();
         //申请权限
         requestSomePermission();
+
+        initUser();
+
     }
 
 
@@ -495,6 +512,64 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         public CharSequence getPageTitle(int position) {
             return mAdapterTitles[position];
         }
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ReceviceMessage(LoginEvent event) {
+        if (event != null) {
+            xToastShow(event.getUserName());
+
+        }
+
+    }
+
+
+    private void initUser() {
+
+        AVUser currentUser = AVUser.getCurrentUser();
+        if (currentUser != null) {
+            // 联表查询
+            AVObject _User = AVObject.createWithoutData("_User", currentUser.getObjectId());
+            _User.fetchInBackground("UserInfo", new GetCallback<AVObject>() {
+                @Override
+                public void done(AVObject avObject, AVException e) {
+                    if (e == null) {
+                        if (avObject != null) {
+
+                            AVObject info = avObject.getAVObject("UserInfo");
+
+                            if (info != null) {
+                                String desc = info.getString("desc");
+                                String avatar = info.getString("avatar");
+                                ImgLoadUtil.displayCircle(mContext, mUserAva, avatar);
+
+
+                            } else {
+                                xToastShow("info为空");
+                            }
+
+                        } else {
+                            xToastShow("avObject为空");
+                        }
+                    }
+                }
+            });
+
+
+        } else {
+            xToastShow("当前未登录");
+        }
+
+
     }
 
 

@@ -37,7 +37,7 @@ public class SnackbarUtils {
     public static int blue = 0xff2195f3;
     public static int orange = 0xffffc107;
 
-
+// 需要配合 CoordinatorLayout 使用
 
 
     /**
