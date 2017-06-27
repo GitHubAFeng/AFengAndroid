@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
 
@@ -34,6 +35,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void xToastShow(String s) {
         xToastUtil.showToast(s);
+    }
+
+    public void xSnackBarShow(String s) {
+        SnackbarUtils.showSnackBar(this, s);
     }
 
 

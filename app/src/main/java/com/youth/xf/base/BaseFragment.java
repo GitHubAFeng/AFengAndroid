@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ public abstract class BaseFragment extends Fragment {
     protected String TAG;
     protected App mApp;
     protected View mContentView;
-    protected AFengActivity mActivity;
+    protected BaseActivity mActivity;
 
     protected boolean mIsLoadedData = false;
 
@@ -42,7 +43,7 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(context);
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
-        mActivity = (AFengActivity) getActivity();
+        mActivity = (BaseActivity) getActivity();
     }
 
     @Nullable
@@ -66,6 +67,10 @@ public abstract class BaseFragment extends Fragment {
 
     public void xToastShow(String s) {
         xToastUtil.showToast(s);
+    }
+
+    public void xSnackBarShow(String s) {
+        SnackbarUtils.showSnackBar(getActivity(), s);
     }
 
 

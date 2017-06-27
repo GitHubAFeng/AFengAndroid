@@ -3,9 +3,11 @@ package com.youth.xf.ui.demo;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
@@ -32,6 +36,7 @@ import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
 import com.youth.xf.ui.constants.Constants;
+import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
 import com.youth.xf.ui.demo.home.AboutMeActivity;
@@ -69,11 +74,14 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private SearchFragment searchFragment;
 
     private Toolbar toolbar;
-    private FrameLayout TitleMenuFra;
+    private RelativeLayout TitleMenuFra;
     private DrawerLayout drawerLayout;
     private NavigationView mNavigationView;
-    private ImageView mTitleOne, mTitleTwo, mTitleThr, mTitleMenu;
+    private ImageView mTitleOne, mTitleTwo, mTitleThr;
     private Context mContext;
+
+    @BindView(R.id.main_user_avatar)
+    ImageView mUserAva;
 
     public String[] mTitles = {"首页", "小说", "妹纸", "读书", "电影", "更多"};
 
@@ -94,10 +102,22 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         mContext = this;
 
+//        explode：从场景的中心移入或移出
+//        slide：从场景的边缘移入或移出
+//        fade：调整透明度产生渐变效果
+
+        // 转场动画
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Explode explode = new Explode();
+            explode.setDuration(500);
+            getWindow().setExitTransition(explode);  //退出一个Activity的效果
+            getWindow().setEnterTransition(explode);   //进入一个Activity的效果
+        }
+
+
         mTitleOne = getViewById(R.id.iv_title_one);
         mTitleTwo = getViewById(R.id.iv_title_two);
         mTitleThr = getViewById(R.id.iv_title_thr);
-        mTitleMenu = getViewById(R.id.iv_title_menu);
         toolbar = getViewById(R.id.toolbar);
         TitleMenuFra = getViewById(R.id.ll_title_menu);
         drawerLayout = getViewById(R.id.drawer_layout);
@@ -198,6 +218,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         mTitleTwo.setOnClickListener(this);
         mTitleThr.setOnClickListener(this);
         TitleMenuFra.setOnClickListener(this);
+        mUserAva.setOnClickListener(this);
     }
 
     @Override
@@ -349,6 +370,20 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 break;
             case R.id.ll_title_menu:
                 drawerLayout.openDrawer(GravityCompat.START);
+                break;
+
+            case R.id.main_user_avatar:
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // 启动普通转场动画
+                    ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+                    Intent i2 = new Intent(this, UserLoginActivity.class);
+                    startActivity(i2, oc2.toBundle());
+
+                } else {
+                    startActivity(new Intent(this, UserLoginActivity.class));
+                }
+
                 break;
 
         }

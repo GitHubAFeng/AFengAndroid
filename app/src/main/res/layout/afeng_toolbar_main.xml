@@ -27,66 +27,100 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!--android:layout_height="?attr/actionBarSize"-->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="50dp"
                 android:background="@color/colorAccent"
                 app:contentInsetStart="0.0dp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ToolbarStyle">
 
-                <com.zhy.autolayout.AutoFrameLayout
-                    android:id="@+id/ll_title_menu"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:paddingLeft="30px"
-                    android:paddingRight="30px">
+                    android:background="?attr/selectableItemBackgroundBorderless">
 
-                    <ImageView
-                        android:id="@+id/iv_title_menu"
-                        android:layout_width="40px"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/titlebar_menu" />
-                </com.zhy.autolayout.AutoFrameLayout>
-
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
-
-                    <com.zhy.autolayout.AutoLinearLayout
+                    <RelativeLayout
+                        android:id="@+id/ll_title_menu"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:theme="@style/AppTheme">
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/iv_title_one"
-                            android:layout_width="90px"
-                            android:layout_height="match_parent"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:src="@drawable/titlebar_music" />
-
-                        <ImageView
-                            android:id="@+id/iv_title_two"
-                            android:layout_width="90px"
+                            android:id="@+id/iv_title_menu"
+                            android:layout_width="15dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:src="@drawable/titlebar_disco" />
+                            android:scaleY="1.5"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/titlebar_menu" />
 
                         <ImageView
-                            android:id="@+id/iv_title_thr"
-                            android:layout_width="90px"
+                            android:id="@+id/main_user_avatar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/iv_title_menu"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/avatar" />
+
+                        <TextView
+                            android:id="@+id/main_user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toRightOf="@+id/main_user_avatar"
+                            android:maxLength="20"
+                            android:maxLines="1"
+                            android:text="AFeng"
+                            android:textColor="@color/blanchedalmond"
+                            android:textSize="12dp" />
+                    </RelativeLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <com.zhy.autolayout.AutoLinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:src="@drawable/titlebar_friends" />
-                    </com.zhy.autolayout.AutoLinearLayout>
-                </HorizontalScrollView>
+                            app:theme="@style/AppTheme">
+
+                            <ImageView
+                                android:id="@+id/iv_title_one"
+                                android:layout_width="90px"
+                                android:layout_height="match_parent"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/titlebar_music" />
+
+                            <ImageView
+                                android:id="@+id/iv_title_two"
+                                android:layout_width="90px"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/titlebar_disco" />
+
+                            <ImageView
+                                android:id="@+id/iv_title_thr"
+                                android:layout_width="90px"
+                                android:layout_height="match_parent"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/titlebar_friends" />
+
+                        </com.zhy.autolayout.AutoLinearLayout>
+                    </HorizontalScrollView>
+
+                </RelativeLayout>
+
             </android.support.v7.widget.Toolbar>
 
             <!--首页Tab-->
@@ -98,7 +132,7 @@
                 android:background="@color/colorAccent"
                 tl:tl_textAllCaps="true"
                 tl:tl_textBold="BOTH"
-                tl:tl_textsize="12sp"/>
+                tl:tl_textsize="12sp" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -110,14 +144,14 @@
 
             <!--正文内容导航条-->
             <android.support.v4.view.ViewPager
-            android:id="@+id/main_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+                android:id="@+id/main_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <!--<FrameLayout-->
-                <!--android:id="@+id/main_tab_container"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"/>-->
+            <!--android:id="@+id/main_tab_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
 
         </LinearLayout>
 

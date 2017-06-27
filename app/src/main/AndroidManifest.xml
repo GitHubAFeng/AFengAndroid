@@ -78,6 +78,13 @@
         <activity
             android:name=".ui.demo.Login.UserLoginActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.demo.Login.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:launchMode="singleTop"/>
 
         <activity

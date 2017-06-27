@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
 
@@ -43,6 +44,10 @@ public abstract class AFengActivity extends SupportActivity {
 
     public void xToastShow(String s) {
         xToastUtil.showToast(s);
+    }
+
+    public void xSnackBarShow(String s) {
+        SnackbarUtils.showSnackBar(this, s);
     }
 
     /**

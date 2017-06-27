@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
+import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 
 import butterknife.ButterKnife;
@@ -69,6 +70,10 @@ public abstract class AFengFragment extends SwipeBackFragment {
 
     public void xToastShow(String s) {
         xToastUtil.showToast(s);
+    }
+
+    public void xSnackBarShow(String s) {
+        SnackbarUtils.showSnackBar(getActivity(), s);
     }
 
     /**

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:interpolator="@android:interpolator/linear_out_slow_in"
+    android:duration="300"
+    tools:targetApi="lollipop">
+
+    <changeBounds>
+        <arcMotion
+            android:maximumAngle="0"
+            android:minimumHorizontalAngle="90"
+            android:minimumVerticalAngle="60"/>
+    </changeBounds>
+</transitionSet>
+
+
+    <!--它的作用就是共享两个acitivity种共同的元素，在Android 5.0下支持如下效果：-->
+    <!--changeBounds -  改变目标视图的布局边界-->
+    <!--changeClipBounds - 裁剪目标视图边界-->
+    <!--changeTransform - 改变目标视图的缩放比例和旋转角度-->
+    <!--changeImageTransform - 改变目标图片的大小和缩放比例-->
+

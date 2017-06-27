@@ -96,12 +96,7 @@ public class WelcomeActivity extends AFengActivity {
 
     // 延时启动
     private Observable<Long> getObservable() {
-        return Observable.defer(new Callable<ObservableSource<? extends Long>>() {
-            @Override
-            public ObservableSource<? extends Long> call() throws Exception {
-                return Observable.timer(2, TimeUnit.SECONDS);
-            }
-        });
+        return Observable.defer(() -> Observable.timer(2, TimeUnit.SECONDS));
     }
 
     //启动图
@@ -134,9 +129,11 @@ public class WelcomeActivity extends AFengActivity {
 //                        String desc = avObject.getString("desc");
                         String img = avObject.getString("img");
 
-                        Glide.with(mActivity).load(img).into(mImageViewPic);
-                        AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
-                        AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+                        if (!mActivity.isFinishing()) {
+                            Glide.with(mActivity).load(img).into(mImageViewPic);
+                            AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
+                            AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+                        }
                     }
                 } else {
 
