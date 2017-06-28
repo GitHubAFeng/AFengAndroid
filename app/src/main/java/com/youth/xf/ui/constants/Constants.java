@@ -1,11 +1,16 @@
 package com.youth.xf.ui.constants;
 
 
+import com.avos.avoscloud.AVFile;
+
 /**
  * Created by AFeng on 2017/3/12.
  */
 
 public class Constants {
+
+    public static String USER_INFO_ID = "";
+    public static AVFile USER_INFO_AVATAR = null;
 
     public static final String WELCOME_PIC = "http://oki2v8p4s.bkt.clouddn.com/wec_1.jpg";   //启动图
     public static final String AVATAR = "http://oki2v8p4s.bkt.clouddn.com/avetar.jpg";

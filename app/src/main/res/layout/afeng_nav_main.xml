@@ -10,7 +10,7 @@
         android:id="@+id/nav_header_bg"
         android:layout_width="match_parent"
         android:layout_height="173dp"
-        android:background="@drawable/ic_nav_bg_drawerlayout"
+        android:background="@drawable/ic_nav_bg_drawerlayout_03"
         android:gravity="bottom"
         android:orientation="vertical"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -22,6 +22,7 @@
             android:gravity="bottom"
             android:orientation="vertical"
             android:paddingBottom="16dp"
+            android:scaleType="centerCrop"
             android:paddingLeft="10dp"
             android:paddingRight="64dp"
             android:paddingTop="16dp">

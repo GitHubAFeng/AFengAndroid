@@ -15,4 +15,8 @@
     <dimen name="light_padding_normal">8dp</dimen>
 
 
+    <!--图片选择库要用-->
+    <dimen name="grid_expected_size">120dp</dimen>
+
+
 </resources>

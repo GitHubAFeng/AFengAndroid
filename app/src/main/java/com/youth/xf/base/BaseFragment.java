@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
+import com.youth.xf.utils.cache.ACache;
 import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-
 
 
 /**
@@ -34,7 +34,7 @@ public abstract class BaseFragment extends Fragment {
     protected App mApp;
     protected View mContentView;
     protected BaseActivity mActivity;
-
+    protected ACache mCache;
     protected boolean mIsLoadedData = false;
 
     Unbinder mbinder;
@@ -53,7 +53,8 @@ public abstract class BaseFragment extends Fragment {
         // 避免多次从xml中加载布局文件
         if (mContentView == null) {
             mContentView = inflater.inflate(getLayoutId(), container, false);
-            mbinder = ButterKnife.bind(this,mContentView);
+            mbinder = ButterKnife.bind(this, mContentView);
+            mCache = ACache.get(mActivity);
             initView(savedInstanceState);
             setListener();
             processLogic(savedInstanceState);
@@ -74,7 +75,7 @@ public abstract class BaseFragment extends Fragment {
         SnackbarUtils.showSnackBar(getActivity(), s);
     }
 
-    public void xLogger(String s){
+    public void xLogger(String s) {
         Logger.e(s);
     }
 
@@ -165,7 +166,6 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void onInvisibleToUser();
 
 
-
     @SuppressWarnings("unchecked")
     public final <E extends View> E getViewById(@IdRes int id) {
         try {
@@ -205,7 +205,6 @@ public abstract class BaseFragment extends Fragment {
     }
 
 
-
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
      *
@@ -228,8 +227,6 @@ public abstract class BaseFragment extends Fragment {
 
         return AppSharePreferenceMgr.get(mActivity, key, defaultObject);
     }
-
-
 
 
 }

@@ -136,6 +136,6 @@ dependencies {
     // LeanCloud 用户反馈包
     compile ('cn.leancloud.android:avoscloud-feedback:v4.1.0@aar')
 
-
-
+    //图片选择库
+    compile 'com.zhihu.android:matisse:0.4.3'
 }

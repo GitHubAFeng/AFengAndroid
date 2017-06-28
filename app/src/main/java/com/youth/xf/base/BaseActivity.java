@@ -13,6 +13,7 @@ import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
+import com.youth.xf.utils.cache.ACache;
 import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
@@ -29,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected String TAG;
     protected App mApp;
     protected Context mContext;
-
+    protected ACache mCache;
     protected boolean mIsLoadedData = false;
     private CompositeDisposable mdisposables;
 
@@ -58,6 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
         mContext = this;
+        mCache = ACache.get(this);
         initView(savedInstanceState);
         setListener();
         processLogic(savedInstanceState);

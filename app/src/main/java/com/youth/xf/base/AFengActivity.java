@@ -10,6 +10,7 @@ import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
+import com.youth.xf.utils.cache.ACache;
 import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ public abstract class AFengActivity extends SupportActivity {
     protected Context mContext;
     protected boolean mIsLoadedData = false;
     private CompositeDisposable mdisposables;
+    protected ACache mCache;
 
     Unbinder mbinder;
 
@@ -40,6 +42,7 @@ public abstract class AFengActivity extends SupportActivity {
         TAG = this.getClass().getSimpleName();
         mApp = App.getInstance();
         mContext = this;
+        mCache = ACache.get(this);
         initView(savedInstanceState);
         setListener();
         processLogic(savedInstanceState);
@@ -54,7 +57,7 @@ public abstract class AFengActivity extends SupportActivity {
         SnackbarUtils.showSnackBar(this, s);
     }
 
-    public void xLogger(String s){
+    public void xLogger(String s) {
         Logger.e(s);
     }
 
@@ -137,8 +140,6 @@ public abstract class AFengActivity extends SupportActivity {
      */
     protected void onLazyLoadOnce() {
     }
-
-
 
 
     @Override

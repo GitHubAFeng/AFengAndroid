@@ -30,26 +30,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.GetDataCallback;
+import com.avos.avoscloud.ProgressCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
+import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.Login.LoginEvent;
+import com.youth.xf.ui.demo.Login.UserInfoEvent;
 import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
 import com.youth.xf.ui.demo.home.AboutMeActivity;
 import com.youth.xf.ui.demo.home.SimpleFragment;
+import com.youth.xf.ui.demo.home.UserInfoActivity;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 import com.youth.xf.ui.demo.more.MoreFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
+import com.youth.xf.utils.AFengUtils.AppImageMgr;
 import com.youth.xf.utils.GlideHelper.GlideUtils;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
@@ -314,6 +321,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
                 case R.id.ll_nav_me:// 我的信息
 
+                    if (AVUser.getCurrentUser() != null) {
+                        startActivity(new Intent(this, UserInfoActivity.class));
+
+                    } else {
+                        xToastShow("您还未登录用户！");
+                    }
 
                     break;
 
@@ -568,6 +581,56 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
+    //用户信息修改后更新UI
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ReceviceUserInfo(UserInfoEvent event) {
+        if (event != null) {
+
+            mUserName.post(() -> mUserName.setText(event.getNickname()));
+            mNavDesc.post(() -> mNavDesc.setText(event.getDesc()));
+
+            if (!TextUtils.isEmpty(event.getNickname())) {
+                mNavUserName.post(() -> mNavUserName.setText(event.getNickname()));
+            }
+
+
+            if (event.isAvatarUpdate()) {
+
+                AVQuery<AVObject> avQuery = new AVQuery<>("UserInfo");
+                avQuery.getInBackground(Constants.USER_INFO_ID, new GetCallback<AVObject>() {
+                    @Override
+                    public void done(AVObject avObject, AVException e) {
+                        AVFile avatar = avObject.getAVFile("avatar");
+                        avatar.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] bytes, AVException e) {
+                                // bytes 就是文件的数据流
+                                if (e == null) {
+                                    if (bytes != null) {
+
+                                        Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                        ImgLoadUtil.displayCircle(mContext, mUserAva, img);
+                                        ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
+
+                                    }
+                                }
+                            }
+                        }, new ProgressCallback() {
+                            @Override
+                            public void done(Integer integer) {
+                                // 下载进度数据，integer 介于 0 和 100。
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        }
+
+    }
+
+
     private void initUser() {
 
         AVUser currentUser = AVUser.getCurrentUser();
@@ -584,17 +647,39 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
                             if (info != null) {
                                 String desc = info.getString("desc");
-                                String avatar = info.getString("avatar");
+                                AVFile avatar = info.getAVFile("avatar");
                                 String nickname = info.getString("nickname");  //昵称
                                 String username = TextUtils.isEmpty(nickname) ? currentUser.getUsername() : nickname;
 
-                                ImgLoadUtil.displayCircle(mContext, mUserAva, avatar);
-                                ImgLoadUtil.displayCircle(mContext, mNavAvatar, avatar);
+                                // 把图片下载回来
+                                avatar.getDataInBackground(new GetDataCallback() {
+                                    @Override
+                                    public void done(byte[] bytes, AVException e) {
+                                        // bytes 就是文件的数据流
+                                        if (e == null) {
+                                            if (bytes != null) {
+                                                Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                                ImgLoadUtil.displayCircle(mContext, mUserAva, img);
+                                                ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
+                                            }
+                                        }
+                                    }
+                                }, new ProgressCallback() {
+                                    @Override
+                                    public void done(Integer integer) {
+                                        // 下载进度数据，integer 介于 0 和 100。
+                                    }
+                                });
+
                                 mUserName.post(() -> mUserName.setText(username));
                                 mNavDesc.post(() -> mNavDesc.setText(desc));
                                 mNavUserName.post(() -> mNavUserName.setText(username));
 
                                 mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("登出用户");
+
+
+                                Constants.USER_INFO_ID = info.getObjectId();  //保存用户关联的信息表，方便下次查询
+                                Constants.USER_INFO_AVATAR = avatar;
 
                             } else {
                                 xToastShow("info为空");
@@ -666,7 +751,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
-
 // 判断ImageView的图片是否为默认
 //    ImageView imageView = (ImageView)view.findViewById(R.id.pic);
 //     if(imageView.getDrawable().getCurrent().getConstantState()==getResources().getDrawable(R.drawable.pic).getConstantState()){
@@ -674,7 +758,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 //    }else{
 //        Toast.makeText(view.getContext(), "图片加载完成，跳转", 0).show();
 //    }
-
 
 
 }

@@ -26,6 +26,7 @@ import android.telephony.TelephonyManager;
 import android.util.Xml;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import com.orhanobut.logger.Logger;
 
 import org.xmlpull.v1.XmlSerializer;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * 主要功能:手机管理工具类
  *
@@ -46,6 +48,49 @@ import java.util.Map;
  * @Copyright: 个人版权所有
  * @Company:
  * @version: 1.0.0
+ */
+
+/*
+getInstance          : 单例对象
+getSDKVersionNumber  : 获取手机系统版本号
+getPhoneModel        : 获取手机型号
+getPhoneWidth        : 获取手机宽度
+getPhoneHeight       : 获取手机高度
+getPhoneImei         : 获取手机imei串号 ,GSM手机的 IMEI 和 CDMA手机的 MEID
+getPhoneSim          : 获取手机sim卡号
+getPhoneNum          : 获取手机号
+isSDCardMount        : 判断sd卡是否挂载
+getSDFreeSize        : 获取sd卡剩余空间的大小
+getSDAllSize         : 获取sd卡空间的总大小
+isTablet             : 判断是否是平板
+isApkInstalled       : 判断一个apk是否安装
+getAppPermissions    : 获取应用权限 名称列表
+getInstalledApp      : 获取手机内安装的应用
+getUserInstalledApp  : 获取手机安装非系统应用
+getInstalledAppInfo  : 获取安装应用的信息
+startAppPkg          : 打开指定包名的应用
+unInstallApk         : 卸载指定包名的应用
+callPhone            : 直接呼叫指定的号码
+toCallPhoneActivity  : 跳转至拨号界面
+sendMessage          : 直接调用短信API发送信息(设置监听发送和接收状态)
+toSendMessageActivity: 跳转至发送短信界面(自动设置接收方的号码)
+toChooseContactsList : 跳转至联系人选择界面
+getChoosedPhoneNumber: 获取选择的联系人的手机号码
+toCameraActivity     : 跳转至拍照程序界面
+toImagePickerActivity: 跳转至相册选择界面
+getChoosedImage      : 获得选中相册的图片
+openWebSite          : 调用本地浏览器打开一个网页
+toSettingActivity    : 跳转至系统设置界面
+toWIFISettingActivity: 跳转至WIFI设置界面
+openPDFFile          : 启动本地应用打开PDF
+openWordFile         : 启动本地应用打开PDF
+openOfficeByWPS      : 调用WPS打开office文档
+isInstalledApp       : 判断是否安装指定包名的APP
+isExistActivity      : 判断是否存在指定的Activity
+getPhoneType         : 获取移动终端类型
+isSimCardReady       : 判断sim卡是否准备好
+getPhoneStatus       : 获取手机状态信息
+getAllSMS            : 获取手机短信并保存到xml中
  */
 
 public class AppPhoneMgr {
@@ -91,7 +136,7 @@ public class AppPhoneMgr {
     @SuppressWarnings("deprecation")
     public int getPhoneWidth(Context context) {
         WindowManager wm = (WindowManager) context
-            .getSystemService(Context.WINDOW_SERVICE);
+                .getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getWidth();
     }
 
@@ -103,7 +148,7 @@ public class AppPhoneMgr {
     @SuppressWarnings("deprecation")
     public int getPhoneHeight(Context context) {
         WindowManager wm = (WindowManager) context
-            .getSystemService(Context.WINDOW_SERVICE);
+                .getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getHeight();
     }
 
@@ -114,7 +159,7 @@ public class AppPhoneMgr {
      */
     public String getPhoneImei(Context context) {
         TelephonyManager tm = (TelephonyManager) context
-            .getSystemService(Context.TELEPHONY_SERVICE);
+                .getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null)
             return null;
         return tm.getDeviceId();
@@ -127,7 +172,7 @@ public class AppPhoneMgr {
      */
     public String getPhoneSim(Context context) {
         TelephonyManager tm = (TelephonyManager) context
-            .getSystemService(Context.TELEPHONY_SERVICE);
+                .getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null)
             return null;
         return tm.getSubscriberId();
@@ -140,7 +185,7 @@ public class AppPhoneMgr {
      */
     public String getPhoneNum(Context context) {
         TelephonyManager tm = (TelephonyManager) context
-            .getSystemService(Context.TELEPHONY_SERVICE);
+                .getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null)
             return null;
         return tm.getLine1Number();
@@ -151,7 +196,7 @@ public class AppPhoneMgr {
      */
     public boolean isSDCardMount() {
         if (Environment.getExternalStorageState().equals(
-            Environment.MEDIA_MOUNTED)) {
+                Environment.MEDIA_MOUNTED)) {
             return true;
         } else {
             return false;
@@ -237,15 +282,15 @@ public class AppPhoneMgr {
      * 获取应用权限 名称列表
      */
     public String[] getAppPermissions(Context context)
-        throws NameNotFoundException {
+            throws NameNotFoundException {
         PackageManager pm = context.getPackageManager();
         PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(),
-            PackageManager.GET_PERMISSIONS);
+                PackageManager.GET_PERMISSIONS);
         return getAppPermissions(packageInfo);
     }
 
     public String[] getAppPermissions(PackageInfo packageInfo)
-        throws NameNotFoundException {
+            throws NameNotFoundException {
         return packageInfo.requestedPermissions;
     }
 
@@ -278,7 +323,7 @@ public class AppPhoneMgr {
      * 获取安装应用的信息
      */
     public Map<String, Object> getInstalledAppInfo(Context context,
-        PackageInfo info) {
+                                                   PackageInfo info) {
         Map<String, Object> appInfos = new HashMap<String, Object>();
         PackageManager pm = context.getPackageManager();
         ApplicationInfo aif = info.applicationInfo;
@@ -293,7 +338,7 @@ public class AppPhoneMgr {
      */
     public void startAppPkg(Context context, String pkg) {
         Intent startIntent = context.getPackageManager()
-                                    .getLaunchIntentForPackage(pkg);
+                .getLaunchIntentForPackage(pkg);
         startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(startIntent);
     }
@@ -322,10 +367,8 @@ public class AppPhoneMgr {
      * 直接呼叫指定的号码(需要<uses-permission
      * android:name="android.permission.CALL_PHONE"/>权限)
      *
-     * @param mContext
-     *            上下文Context
-     * @param phoneNumber
-     *            需要呼叫的手机号码
+     * @param mContext    上下文Context
+     * @param phoneNumber 需要呼叫的手机号码
      */
     @SuppressLint("MissingPermission")
     public static void callPhone(Context mContext, String phoneNumber) {
@@ -337,10 +380,8 @@ public class AppPhoneMgr {
     /**
      * 跳转至拨号界面
      *
-     * @param mContext
-     *            上下文Context
-     * @param phoneNumber
-     *            需要呼叫的手机号码
+     * @param mContext    上下文Context
+     * @param phoneNumber 需要呼叫的手机号码
      */
     public static void toCallPhoneActivity(Context mContext, String phoneNumber) {
         Uri uri = Uri.parse("tel:" + phoneNumber);
@@ -351,19 +392,17 @@ public class AppPhoneMgr {
     /**
      * 直接调用短信API发送信息(设置监听发送和接收状态)
      *
-     * @param strPhone
-     *            手机号码
-     * @param strMsgContext
-     *            短信内容
+     * @param strPhone      手机号码
+     * @param strMsgContext 短信内容
      */
     public static void sendMessage(final Context mContext,
-        final String strPhone, final String strMsgContext) {
+                                   final String strPhone, final String strMsgContext) {
 
         // 处理返回的发送状态
         String SENT_SMS_ACTION = "SENT_SMS_ACTION";
         Intent sentIntent = new Intent(SENT_SMS_ACTION);
         PendingIntent sendIntent = PendingIntent.getBroadcast(mContext, 0,
-            sentIntent, 0);
+                sentIntent, 0);
         // register the Broadcast Receivers
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
@@ -371,7 +410,7 @@ public class AppPhoneMgr {
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Toast.makeText(mContext, "短信发送成功", Toast.LENGTH_SHORT)
-                             .show();
+                                .show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         break;
@@ -388,12 +427,12 @@ public class AppPhoneMgr {
         // create the deilverIntent parameter
         Intent deliverIntent = new Intent(DELIVERED_SMS_ACTION);
         PendingIntent backIntent = PendingIntent.getBroadcast(mContext, 0,
-            deliverIntent, 0);
+                deliverIntent, 0);
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context _context, Intent _intent) {
                 Toast.makeText(mContext, strPhone + "已经成功接收",
-                    Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         }, new IntentFilter(DELIVERED_SMS_ACTION));
 
@@ -402,22 +441,19 @@ public class AppPhoneMgr {
         ArrayList<String> msgList = smsManager.divideMessage(strMsgContext);
         for (String text : msgList) {
             smsManager.sendTextMessage(strPhone, null, text, sendIntent,
-                backIntent);
+                    backIntent);
         }
     }
 
     /**
      * 跳转至发送短信界面(自动设置接收方的号码)
      *
-     * @param mContext
-     *            Activity
-     * @param strPhone
-     *            手机号码
-     * @param strMsgContext
-     *            短信内容
+     * @param mContext      Activity
+     * @param strPhone      手机号码
+     * @param strMsgContext 短信内容
      */
     public static void toSendMessageActivity(Context mContext, String strPhone,
-        String strMsgContext) {
+                                             String strMsgContext) {
         if (PhoneNumberUtils.isGlobalPhoneNumber(strPhone)) {
             Uri uri = Uri.parse("smsto:" + strPhone);
             Intent sendIntent = new Intent(Intent.ACTION_VIEW, uri);
@@ -429,31 +465,26 @@ public class AppPhoneMgr {
     /**
      * 跳转至联系人选择界面
      *
-     * @param mContext
-     *            上下文
-     * @param requestCode
-     *            请求返回区分代码
+     * @param mContext    上下文
+     * @param requestCode 请求返回区分代码
      */
     public static void toChooseContactsList(Activity mContext, int requestCode) {
         Intent intent = new Intent(Intent.ACTION_PICK,
-            ContactsContract.Contacts.CONTENT_URI);
+                ContactsContract.Contacts.CONTENT_URI);
         mContext.startActivityForResult(intent, requestCode);
     }
 
     /**
      * 获取选择的联系人的手机号码
      *
-     * @param mContext
-     *            上下文
-     * @param resultCode
-     *            请求返回Result状态区分代码
-     * @param data
-     *            onActivityResult返回的Intent
+     * @param mContext   上下文
+     * @param resultCode 请求返回Result状态区分代码
+     * @param data       onActivityResult返回的Intent
      * @return
      */
     @SuppressWarnings("deprecation")
     public static String getChoosedPhoneNumber(Activity mContext,
-        int resultCode, Intent data) {
+                                               int resultCode, Intent data) {
         // 返回结果
         String phoneResult = "";
         if (Activity.RESULT_OK == resultCode) {
@@ -462,26 +493,26 @@ public class AppPhoneMgr {
             mCursor.moveToFirst();
 
             int phoneColumn = mCursor
-                .getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
+                    .getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
             int phoneNum = mCursor.getInt(phoneColumn);
             if (phoneNum > 0) {
                 // 获得联系人的ID号
                 int idColumn = mCursor
-                    .getColumnIndex(ContactsContract.Contacts._ID);
+                        .getColumnIndex(ContactsContract.Contacts._ID);
                 String contactId = mCursor.getString(idColumn);
                 // 获得联系人的电话号码的cursor;
                 Cursor phones = mContext.getContentResolver().query(
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    null,
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                        + " = " + contactId, null, null);
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                + " = " + contactId, null, null);
                 if (phones.moveToFirst()) {
                     // 遍历所有的电话号码
                     for (; !phones.isAfterLast(); phones.moveToNext()) {
                         int index = phones
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         int typeindex = phones
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
                         int phone_type = phones.getInt(typeindex);
                         String phoneNumber = phones.getString(index);
                         if (phone_type == 2) {
@@ -503,10 +534,8 @@ public class AppPhoneMgr {
     /**
      * 跳转至拍照程序界面
      *
-     * @param mContext
-     *            上下文
-     * @param requestCode
-     *            请求返回Result区分代码
+     * @param mContext    上下文
+     * @param requestCode 请求返回Result区分代码
      */
     public static void toCameraActivity(Activity mContext, int requestCode) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -516,28 +545,25 @@ public class AppPhoneMgr {
     /**
      * 跳转至相册选择界面
      *
-     * @param mContext
-     *            上下文
+     * @param mContext    上下文
      * @param requestCode
      */
     public static void toImagePickerActivity(Activity mContext, int requestCode) {
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            "image/*");
+                "image/*");
         mContext.startActivityForResult(intent, requestCode);
     }
 
     /**
      * 获得选中相册的图片
      *
-     * @param mContext
-     *            上下文
-     * @param data
-     *            onActivityResult返回的Intent
+     * @param mContext 上下文
+     * @param data     onActivityResult返回的Intent
      * @return
      */
 
-    @SuppressWarnings({ "deprecation", "unused" })
+    @SuppressWarnings({"deprecation", "unused"})
     public static Bitmap getChoosedImage(Activity mContext, Intent data) {
         if (data == null) {
             return null;
@@ -553,13 +579,13 @@ public class AppPhoneMgr {
             Uri originalUri = data.getData(); // 获得图片的uri
             bm = MediaStore.Images.Media.getBitmap(resolver, originalUri); // 显得到bitmap图片
             // 这里开始的第二部分，获取图片的路径：
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             // 好像是android多媒体数据库的封装接口，具体的看Android文档
             Cursor cursor = mContext.managedQuery(originalUri, proj, null,
-                null, null);
+                    null, null);
             // 按我个人理解 这个是获得用户选择的图片的索引值
             int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             // 将光标移至开头 ，这个很重要，不小心很容易引起越界
             cursor.moveToFirst();
             // 最后根据索引值获取图片路径
@@ -576,10 +602,8 @@ public class AppPhoneMgr {
     /**
      * 调用本地浏览器打开一个网页
      *
-     * @param mContext
-     *            上下文
-     * @param strSiteUrl
-     *            网页地址
+     * @param mContext   上下文
+     * @param strSiteUrl 网页地址
      */
     public static void openWebSite(Context mContext, String strSiteUrl) {
         Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(strSiteUrl));
@@ -589,8 +613,7 @@ public class AppPhoneMgr {
     /**
      * 跳转至系统设置界面
      *
-     * @param mContext
-     *            上下文
+     * @param mContext 上下文
      */
     public static void toSettingActivity(Context mContext) {
         Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
@@ -600,8 +623,7 @@ public class AppPhoneMgr {
     /**
      * 跳转至WIFI设置界面
      *
-     * @param mContext
-     *            上下文
+     * @param mContext 上下文
      */
     public static void toWIFISettingActivity(Context mContext) {
         Intent wifiSettingsIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
@@ -611,10 +633,8 @@ public class AppPhoneMgr {
     /**
      * 启动本地应用打开PDF
      *
-     * @param mContext
-     *            上下文
-     * @param filePath
-     *            文件路径
+     * @param mContext 上下文
+     * @param filePath 文件路径
      */
     public static void openPDFFile(Context mContext, String filePath) {
         try {
@@ -628,17 +648,15 @@ public class AppPhoneMgr {
             }
         } catch (Exception e) {
             Toast.makeText(mContext, "未检测到可打开PDF相关软件", Toast.LENGTH_SHORT)
-                 .show();
+                    .show();
         }
     }
 
     /**
      * 启动本地应用打开PDF
      *
-     * @param mContext
-     *            上下文
-     * @param filePath
-     *            文件路径
+     * @param mContext 上下文
+     * @param filePath 文件路径
      */
     public static void openWordFile(Context mContext, String filePath) {
         try {
@@ -653,17 +671,15 @@ public class AppPhoneMgr {
             }
         } catch (Exception e) {
             Toast.makeText(mContext, "未检测到可打开Word文档相关软件", Toast.LENGTH_SHORT)
-                 .show();
+                    .show();
         }
     }
 
     /**
      * 调用WPS打开office文档 http://bbs.wps.cn/thread-22349340-1-1.html
      *
-     * @param mContext
-     *            上下文
-     * @param filePath
-     *            文件路径
+     * @param mContext 上下文
+     * @param filePath 文件路径
      */
     public static void openOfficeByWPS(Context mContext, String filePath) {
 
@@ -673,7 +689,7 @@ public class AppPhoneMgr {
             File file = new File(filePath);
             if (!file.exists()) {
                 Toast.makeText(mContext, filePath + "文件路径不存在",
-                    Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -702,10 +718,8 @@ public class AppPhoneMgr {
     /**
      * 判断是否安装指定包名的APP
      *
-     * @param mContext
-     *            上下文
-     * @param packageName
-     *            包路径
+     * @param mContext    上下文
+     * @param packageName 包路径
      * @return
      */
     @SuppressWarnings("unused")
@@ -716,8 +730,8 @@ public class AppPhoneMgr {
 
         try {
             ApplicationInfo info = mContext.getPackageManager()
-                                           .getApplicationInfo(packageName,
-                                               PackageManager.GET_UNINSTALLED_PACKAGES);
+                    .getApplicationInfo(packageName,
+                            PackageManager.GET_UNINSTALLED_PACKAGES);
             return true;
         } catch (NameNotFoundException e) {
             return false;
@@ -727,16 +741,13 @@ public class AppPhoneMgr {
     /**
      * 判断是否存在指定的Activity
      *
-     * @param mContext
-     *            上下文
-     * @param packageName
-     *            包名
-     * @param className
-     *            activity全路径类名
+     * @param mContext    上下文
+     * @param packageName 包名
+     * @param className   activity全路径类名
      * @return
      */
     public static boolean isExistActivity(Context mContext, String packageName,
-        String className) {
+                                          String className) {
 
         Boolean result = true;
         Intent intent = new Intent();
@@ -748,7 +759,7 @@ public class AppPhoneMgr {
             result = false;
         } else {
             List<ResolveInfo> list = mContext.getPackageManager()
-                                             .queryIntentActivities(intent, 0);
+                    .queryIntentActivities(intent, 0);
             if (list.size() == 0) {
                 result = false;
             }
@@ -756,7 +767,6 @@ public class AppPhoneMgr {
 
         return result;
     }
-
 
 
     /**
@@ -810,7 +820,7 @@ public class AppPhoneMgr {
      */
     public static String getPhoneStatus(Context context) {
         TelephonyManager tm = (TelephonyManager) context
-            .getSystemService(Context.TELEPHONY_SERVICE);
+                .getSystemService(Context.TELEPHONY_SERVICE);
         String str = "";
         str += "DeviceId(IMEI) = " + tm.getDeviceId() + "\n";
         str += "DeviceSoftwareVersion = " + tm.getDeviceSoftwareVersion() + "\n";

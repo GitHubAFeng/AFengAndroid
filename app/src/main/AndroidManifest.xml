@@ -88,6 +88,12 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name=".ui.demo.home.UserInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".ui.demo.movie.MovieDetailActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>

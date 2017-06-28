@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login_bg"
+        android:background="@drawable/reg_bg"
         tools:context=".ui.demo.MainActivity">
 
         <android.support.v7.widget.CardView
@@ -18,6 +18,7 @@
             android:layout_height="300dp"
             android:layout_centerInParent="true"
             app:cardCornerRadius="6dp"
+            android:alpha="0.9"
             app:cardElevation="3dp"
             app:cardUseCompatPadding="true">
 
@@ -120,7 +121,7 @@
                         android:background="@drawable/shape_login_btn"
                         android:stateListAnimator="@drawable/selector_register_state_list_animator_z"
                         android:text="GO"
-                        android:textColor="#d3d3d3" />
+                        android:textColor="#FFCC00" />
                 </RelativeLayout>
 
                 <TextView

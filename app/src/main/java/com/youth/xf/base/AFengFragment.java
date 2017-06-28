@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.orhanobut.logger.Logger;
 import com.youth.xf.utils.AFengUtils.SnackbarUtils;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
+import com.youth.xf.utils.cache.ACache;
 import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import butterknife.ButterKnife;
@@ -34,7 +35,7 @@ public abstract class AFengFragment extends SwipeBackFragment {
     protected App mApp;
     protected View mContentView;
     protected AFengActivity mActivity;
-
+    protected ACache mCache;
     protected boolean mIsLoadedData = false;
 
     Unbinder mbinder;
@@ -54,6 +55,7 @@ public abstract class AFengFragment extends SwipeBackFragment {
         if (mContentView == null) {
             mContentView = inflater.inflate(getLayoutId(), container, false);
             mbinder = ButterKnife.bind(this,mContentView);
+            mCache = ACache.get(mActivity);
             initView(savedInstanceState);
             setListener();
             processLogic(savedInstanceState);
