@@ -294,11 +294,11 @@ public class RegisterActivity extends BaseActivity {
         }
 
         //  关联表 一对一
-        AVFile file = new AVFile("avatar_test.png", "http://oki2v8p4s.bkt.clouddn.com/avatar_test.png", new HashMap<String, Object>());
+//        AVFile file = new AVFile("avatar_test.png", "http://oki2v8p4s.bkt.clouddn.com/avatar_test.png", new HashMap<String, Object>());
         AVObject info = new AVObject("UserInfo");// 构建对象
-        info.put("nickname", "昵称");
-        info.put("desc", "签名");
-        info.put("avatar", file);
+//        info.put("nickname", "昵称");
+//        info.put("desc", "签名");
+//        info.put("avatar", file);
 
         AVUser user = new AVUser();// 新建 AVUser 对象实例
         user.setUsername(phoneNum);// 设置用户名

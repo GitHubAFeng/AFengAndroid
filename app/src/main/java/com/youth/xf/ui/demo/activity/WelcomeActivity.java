@@ -165,14 +165,14 @@ public class WelcomeActivity extends AFengActivity {
 
     private void enterApp() {
 
-//        if (SPDataUtils.getBoolean(WELCOME_KEY, true)) {
-//            toSplashActivity();
-//            SPDataUtils.putBoolean(WELCOME_KEY, false);
-//        } else {
-//            toMainActivity();
-//        }
+        if (SPDataUtils.getBoolean(WELCOME_KEY, true)) {
+            toSplashActivity();
+            SPDataUtils.putBoolean(WELCOME_KEY, false);
+        } else {
+            toMainActivity();
+        }
 
-        toSplashActivity();
+//        toSplashActivity();
 
         finish();
     }

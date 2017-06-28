@@ -14,7 +14,7 @@ public class AdvertisingItem extends AVObject {
     private String img;  //图片URL
     private int isShow;  //是否显示   0 否  , 1 是
     private int isAdv;  //是否为广告   0 否  , 1 是
-    private int advType;  //广告性质, 0 APP启动图
+    private int advType;  //广告性质, 0 APP启动图   1 侧边框头部背景图
     private String desc;  //描述
     private String url;  //点击跳转的URL
 

@@ -3,9 +3,10 @@ package com.youth.xf.ui.demo;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -17,22 +18,22 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.transition.Explode;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -40,7 +41,6 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
 
-import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.Login.LoginEvent;
 import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.book.BookFragment;
@@ -50,6 +50,7 @@ import com.youth.xf.ui.demo.home.SimpleFragment;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
 import com.youth.xf.ui.demo.more.MoreFragment;
 import com.youth.xf.ui.demo.movie.MovieFragment;
+import com.youth.xf.utils.GlideHelper.GlideUtils;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.utils.AFengUtils.xToastUtil;
@@ -61,6 +62,7 @@ import com.youth.xf.widget.searchbox.SearchFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +92,16 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private ImageView mTitleOne, mTitleTwo, mTitleThr;
     private Context mContext;
 
+    ImageView mNavAvatar;   //侧边栏头像
+    LinearLayout mNavBg;   //侧边栏头部背景布局
+    TextView mNavDesc;  //侧边栏签名
+    TextView mNavUserName;
+
     @BindView(R.id.main_user_avatar)
     ImageView mUserAva;
+
+    @BindView(R.id.main_user_name)
+    TextView mUserName;
 
     public String[] mTitles = {"首页", "小说", "妹纸", "读书", "电影", "更多"};
 
@@ -245,7 +255,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         requestSomePermission();
 
         initUser();
-
+        initNavHeadBG();
     }
 
 
@@ -292,14 +302,20 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         mNavigationView.inflateHeaderView(R.layout.afeng_nav_main);
         View view = mNavigationView.getHeaderView(0);
 
-        ImageView mAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
-        //使用Glide来加载网络图片
-        ImgLoadUtil.displayCircle(this.getApplication(), mAvatar, Constants.AVATAR);
+        mNavAvatar = (ImageView) view.findViewById(R.id.nav_iv_avatar);
+        mNavBg = (LinearLayout) view.findViewById(R.id.nav_header_bg);
+        mNavDesc = (TextView) view.findViewById(R.id.nav_tv_desc);
+        mNavUserName = (TextView) view.findViewById(R.id.nav_tv_username);
 
 
         mNavigationView.setNavigationItemSelectedListener(menuItem -> {
 
             switch (menuItem.getItemId()) {
+
+                case R.id.ll_nav_me:// 我的信息
+
+
+                    break;
 
                 case R.id.ll_nav_deedback:// 问题反馈
 
@@ -311,10 +327,15 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                     startActivity(new Intent(mContext, AboutMeActivity.class));
 
                     break;
-                case R.id.ll_nav_exit:// 退出应用
-                    finish();
-                    break;
+                case R.id.ll_nav_exit:// 登出
 
+                    if (AVUser.getCurrentUser() != null) {
+                        userlogOut();
+                    } else {
+                        userLoginOrReg();  //登录
+                    }
+
+                    break;
             }
 
             return true;
@@ -391,19 +412,33 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
             case R.id.main_user_avatar:
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    // 启动普通转场动画
-                    ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-                    Intent i2 = new Intent(this, UserLoginActivity.class);
-                    startActivity(i2, oc2.toBundle());
-
-                } else {
-                    startActivity(new Intent(this, UserLoginActivity.class));
-                }
+                // 用户注册登录
+                userLoginOrReg();
 
                 break;
 
         }
+    }
+
+
+    // 用户注册登录
+    private void userLoginOrReg() {
+
+        if (AVUser.getCurrentUser() == null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // 启动普通转场动画
+                ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+                Intent i2 = new Intent(this, UserLoginActivity.class);
+                startActivity(i2, oc2.toBundle());
+
+            } else {
+                startActivity(new Intent(this, UserLoginActivity.class));
+            }
+        } else {
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+
     }
 
 
@@ -460,6 +495,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
     }
 
+    // 头部工具栏按钮状态切换
     @Override
     public void onPageSelected(int i) {
         switch (i) {
@@ -522,12 +558,11 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         super.onDestroy();
     }
 
-
+    //登录或者注册成功后
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ReceviceMessage(LoginEvent event) {
         if (event != null) {
-            xToastShow(event.getUserName());
-
+            initUser();
         }
 
     }
@@ -550,8 +585,16 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                             if (info != null) {
                                 String desc = info.getString("desc");
                                 String avatar = info.getString("avatar");
-                                ImgLoadUtil.displayCircle(mContext, mUserAva, avatar);
+                                String nickname = info.getString("nickname");  //昵称
+                                String username = TextUtils.isEmpty(nickname) ? currentUser.getUsername() : nickname;
 
+                                ImgLoadUtil.displayCircle(mContext, mUserAva, avatar);
+                                ImgLoadUtil.displayCircle(mContext, mNavAvatar, avatar);
+                                mUserName.post(() -> mUserName.setText(username));
+                                mNavDesc.post(() -> mNavDesc.setText(desc));
+                                mNavUserName.post(() -> mNavUserName.setText(username));
+
+                                mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("登出用户");
 
                             } else {
                                 xToastShow("info为空");
@@ -573,4 +616,67 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
+    private void userlogOut() {
+        AVUser.logOut();// 清除缓存用户对象
+
+        mUserName.post(() -> mUserName.setText("未登录"));
+        mNavUserName.post(() -> mNavUserName.setText("未登录"));
+        mNavDesc.post(() -> mNavDesc.setText("心情"));
+        mUserAva.post(() -> mUserAva.setImageResource(R.drawable.user_def_avatar));
+        mNavAvatar.post(() -> mNavAvatar.setImageResource(R.drawable.user_def_avatar));
+        mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("用户登录");
+    }
+
+
+    // 下载侧边头部背景图
+    private void initNavHeadBG() {
+
+//        AVQuery<AVObject> avQuery = new AVQuery<>("AdvertisingItem");
+//        // 按时间，降序排列
+//        avQuery.orderByDescending("createdAt");
+//        avQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
+//        avQuery.whereEqualTo("advType", 1);  //确认为背景图
+//        avQuery.limit(1);// 最多返回 1 条结果
+//        avQuery.findInBackground(new FindCallback<AVObject>() {
+//            @Override
+//            public void done(List<AVObject> list, AVException e) {
+//                if (list.size() > 0) {
+//
+//                    String img = list.get(0).getString("img");
+//
+//                    GlideUtils.loadImageBitmap(mContext, img, new GlideUtils.ImageLoadListener<String, Bitmap>() {
+//                        @Override
+//                        public void onLoadingComplete(String uri, ImageView view, Bitmap resource) {
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                                mNavBg.setBackground(new BitmapDrawable(mContext.getResources(), resource));
+//                            }
+//
+//                        }
+//
+//                        @Override
+//                        public void onLoadingError(String source, Exception e) {
+//
+//                        }
+//                    });
+//                }
+//
+//            }
+//        });
+
+    }
+
+
+
+// 判断ImageView的图片是否为默认
+//    ImageView imageView = (ImageView)view.findViewById(R.id.pic);
+//     if(imageView.getDrawable().getCurrent().getConstantState()==getResources().getDrawable(R.drawable.pic).getConstantState()){
+//        Toast.makeText(view.getContext(), "图片未发生变化", 0).show();
+//    }else{
+//        Toast.makeText(view.getContext(), "图片加载完成，跳转", 0).show();
+//    }
+
+
+
 }
+
+
