@@ -9,6 +9,7 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 import com.youth.xf.BuildConfig;
 import com.youth.xf.ui.data.AdvertisingItem;
 import com.youth.xf.ui.data.HomeBannerItem;
@@ -16,6 +17,7 @@ import com.youth.xf.ui.data.HomeListItem;
 import com.youth.xf.ui.data.SplashBannerItem;
 import com.youth.xf.ui.data.UserInfo;
 import com.youth.xf.utils.cache.ACache;
+
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
@@ -35,6 +37,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initLeakCanary();  //初始化内存泄露检测
         instance = this;
         AFengConfig.init(this);
 
@@ -55,10 +58,9 @@ public class App extends Application {
         AVOSCloud.setLastModifyEnabled(true);
 
         // 初始化参数依次为 this, AppId, AppKey
-        AVOSCloud.initialize(this,"DsBf5jxiorz90M0wIsJTYjAo-gzGzoHsz","9iLSxbsh1tJ3L4wMRx1MhX2M");
+        AVOSCloud.initialize(this, "DsBf5jxiorz90M0wIsJTYjAo-gzGzoHsz", "9iLSxbsh1tJ3L4wMRx1MhX2M");
 
         ///////////////////后端云设置结束
-
 
 
         if (BuildConfig.DEBUG) {
@@ -89,6 +91,18 @@ public class App extends Application {
                 .install();
 
     }
+
+    private void initLeakCanary() {
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+    }
+
 
     //全局线程
     public static Handler getHandler() {

@@ -59,7 +59,11 @@ import java.util.Set;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -88,8 +92,8 @@ public class UserInfoActivity extends BaseActivity {
     ImageView mAvatar;
 
 
-    boolean isAvatarUpdate = false;
-    private byte[] avatarUpdate;
+    UserInfoEvent Eventdata = new UserInfoEvent();
+
 
     private static final int REQUEST_CODE_CHOOSE = 23;
 
@@ -113,8 +117,10 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+
         initData();
-        initCache();
+
+//        initCache();
     }
 
 
@@ -146,33 +152,85 @@ public class UserInfoActivity extends BaseActivity {
             // 保存到云端
             todo.saveInBackground();
 
-            EventBus.getDefault().post(new UserInfoEvent(nick, desc, isAvatarUpdate,avatarUpdate));
+
+            Eventdata.setDesc(desc);
+            Eventdata.setNickname(nick);
+            Eventdata.setUserEmail(email);
+
+//            saveCache(Eventdata);
+
+            EventBus.getDefault().post(Eventdata);
         }
 
     }
 
+    // 进来时先判断有缓存就不要联网了
+    private void initCache() {
 
-    private boolean initCache() {
-        UserInfoEvent data = (UserInfoEvent) mCache.getAsObject(TAG);
+        Observable.create((ObservableOnSubscribe<UserInfoEvent>) e -> {
+            UserInfoEvent data = (UserInfoEvent) mCache.getAsObject(Constants.USER_INFO_KEY);
+            if (data != null) {
+                e.onNext(data);
+            } else {
+                e.onError(new Throwable("没有缓存"));
+            }
 
-        if(data!=null){
-            String username = data.getNickname();
-            xLogger(username);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<UserInfoEvent>() {
 
-            return true;
-        }
+                    Disposable disposable;
 
-        return false;
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(UserInfoEvent userInfoEvent) {
+
+                        if (userInfoEvent.getAvatar() != null) {
+                            Bitmap img = AppImageMgr.getBitmapByteArray(userInfoEvent.getAvatar(), 512, 512);
+                            ImgLoadUtil.displayCircle(mContext, mAvatar, img);
+
+                            mPhone.setText(userInfoEvent.getUserPhone());
+                            mEmail.setText(userInfoEvent.getUserEmail());
+                            mDesc.setText(userInfoEvent.getDesc());
+                            mNickname.setText(userInfoEvent.getNickname());
+                        } else {
+                            initData();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        initData();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!disposable.isDisposed())
+                            disposable.dispose();
+                    }
+                });
+
     }
 
 
     private void saveCache(UserInfoEvent data) {
-        Observable.just(data).subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userInfoEvent -> mCache.put(TAG, data));
 
-        xLogger(TAG);
+        mCache.put(Constants.USER_INFO_KEY, data);
+
+//        Observable.just(data)
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Consumer<UserInfoEvent>() {
+//                    @Override
+//                    public void accept(UserInfoEvent userInfoEvent) throws Exception {
+//                        mCache.put(Constants.USER_INFO_KEY, userInfoEvent);
+//                    }
+//                });
+
     }
 
 
@@ -201,8 +259,6 @@ public class UserInfoActivity extends BaseActivity {
                     mNickname.setText(nick);
                     mUserName.post(() -> mUserName.setText(name));
 
-                    Constants.USER_INFO_AVATAR = avatar;  //保持最新
-
                     // 把图片下载回来
                     avatar.getDataInBackground(new GetDataCallback() {
                         @Override
@@ -214,9 +270,12 @@ public class UserInfoActivity extends BaseActivity {
                                     Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
                                     ImgLoadUtil.displayCircle(mContext, mAvatar, img);
 
-                                    avatarUpdate = bytes;
-                                    UserInfoEvent data = new UserInfoEvent(name, desc, true, bytes);
-                                    saveCache(data);
+//                                    Eventdata.setAvatar(bytes);
+                                    Eventdata.setDesc(desc);
+                                    Eventdata.setNickname(nick);
+                                    Eventdata.setUserName(name);
+                                    Eventdata.setUserEmail(email);
+                                    Eventdata.setUserPhone(phone);
                                 }
                             }
                         }
@@ -268,7 +327,10 @@ public class UserInfoActivity extends BaseActivity {
                                 info.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(AVException e) {
-                                        if (e == null) isAvatarUpdate = true;
+                                        if (e == null) {
+//                                            Eventdata.setAvatar(img);
+                                            Eventdata.setAvatarUpdate(true);
+                                        }
                                     }
                                 });
 

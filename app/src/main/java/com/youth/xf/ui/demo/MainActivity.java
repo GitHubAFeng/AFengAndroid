@@ -596,6 +596,10 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
             if (event.isAvatarUpdate()) {
 
+//                Bitmap img = AppImageMgr.getBitmapByteArray(event.getAvatar(), 512, 512);
+//                ImgLoadUtil.displayCircle(mContext, mUserAva, img);
+//                ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
+
                 AVQuery<AVObject> avQuery = new AVQuery<>("UserInfo");
                 avQuery.getInBackground(Constants.USER_INFO_ID, new GetCallback<AVObject>() {
                     @Override
@@ -679,7 +683,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
 
                                 Constants.USER_INFO_ID = info.getObjectId();  //保存用户关联的信息表，方便下次查询
-                                Constants.USER_INFO_AVATAR = avatar;
+
 
                             } else {
                                 xToastShow("info为空");

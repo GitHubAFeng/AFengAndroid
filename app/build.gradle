@@ -32,9 +32,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     //为了解决部分第三方库重复打包了META-INF的问题
-    packagingOptions{
+    packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
@@ -53,6 +52,11 @@ dependencies {
     //noinspection GradleCompatible
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
+
+    //内存泄露检测
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
     //图片处理
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -132,10 +136,11 @@ dependencies {
 
     //云后端
     // LeanCloud 基础包
-    compile ('cn.leancloud.android:avoscloud-sdk:v4.1.0')
+    compile('cn.leancloud.android:avoscloud-sdk:v4.1.0')
     // LeanCloud 用户反馈包
-    compile ('cn.leancloud.android:avoscloud-feedback:v4.1.0@aar')
+    compile('cn.leancloud.android:avoscloud-feedback:v4.1.0@aar')
 
     //图片选择库
     compile 'com.zhihu.android:matisse:0.4.3'
+
 }
