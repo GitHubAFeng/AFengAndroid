@@ -133,11 +133,10 @@ public class SplashActivity extends AFengActivity {
 
 
         AVQuery<AVObject> avQuery = new AVQuery<>("SplashBannerItem");
-        // 按时间，降序排列
-        avQuery.orderByDescending("createdAt");
         avQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
         avQuery.whereEqualTo("isBack", 1);  //确认为背景
         avQuery.limit(3);// 最多返回 3 条结果
+        avQuery.orderByAscending("order");
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -166,11 +165,10 @@ public class SplashActivity extends AFengActivity {
 
 
         AVQuery<AVObject> foreQuery = new AVQuery<>("SplashBannerItem");
-        // 按时间，降序排列
-        foreQuery.orderByDescending("createdAt");
         foreQuery.whereEqualTo("isShow", 1);  //确认为1时才下载显示
         foreQuery.whereEqualTo("isBack", 0);  //确认为前景
         foreQuery.limit(3);// 最多返回 3 条结果
+        foreQuery.orderByAscending("order");
         foreQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {

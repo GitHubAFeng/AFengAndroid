@@ -15,6 +15,17 @@ public class SplashBannerItem  extends AVObject {
     private int isShow;  //是否显示   0 否  , 1 是
     private int isBack;  //是否为背景   0 否  , 1 是
     private String desc;  //描述
+    private int order;  //顺序
+
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
 
     public String getImg() {
         return img;

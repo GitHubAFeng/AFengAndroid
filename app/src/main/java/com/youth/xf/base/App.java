@@ -14,6 +14,7 @@ import com.youth.xf.BuildConfig;
 import com.youth.xf.ui.data.AdvertisingItem;
 import com.youth.xf.ui.data.HomeBannerItem;
 import com.youth.xf.ui.data.HomeListItem;
+import com.youth.xf.ui.data.NetConfig;
 import com.youth.xf.ui.data.SplashBannerItem;
 import com.youth.xf.ui.data.UserInfo;
 import com.youth.xf.utils.cache.ACache;
@@ -52,6 +53,7 @@ public class App extends Application {
         AVObject.registerSubclass(HomeBannerItem.class);
         AVObject.registerSubclass(AdvertisingItem.class);
         AVObject.registerSubclass(UserInfo.class);
+        AVObject.registerSubclass(NetConfig.class);
         AVObject.registerSubclass(SplashBannerItem.class);  //引导图
 
         // 节省流量

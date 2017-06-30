@@ -11,22 +11,20 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.bumptech.glide.Glide;
 import com.youth.xf.base.AFengActivity;
 import com.youth.xf.R;
-import com.youth.xf.ui.constants.Constants;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AnimHelper;
-import com.youth.xf.utils.AFengUtils.SPDataUtils;
 import com.youth.xf.utils.AFengUtils.XOutdatedUtils;
+import com.youth.xf.utils.cache.AppSharePreferenceMgr;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -165,17 +163,59 @@ public class WelcomeActivity extends AFengActivity {
 
     private void enterApp() {
 
-        if (SPDataUtils.getBoolean(WELCOME_KEY, true)) {
-            toSplashActivity();
-            SPDataUtils.putBoolean(WELCOME_KEY, false);
-        } else {
-            toMainActivity();
+        try {
+            AVQuery<AVObject> avQuery = new AVQuery<>("NetConfig");
+            avQuery.getInBackground("5955b85a128fe100581c51b5", new GetCallback<AVObject>() {
+                @Override
+                public void done(AVObject avObject, AVException e) {
+
+                    if (e == null) {
+                        if (avObject != null) {
+                            boolean isShowSplash = avObject.getBoolean("isShowSplash");
+                            if (isShowSplash) {
+                                toSplashActivity();
+                                // 显示一次就关掉
+                                AVObject todo = AVObject.createWithoutData("NetConfig", "5955b85a128fe100581c51b5");
+                                todo.put("isShowSplash", false);
+                                todo.saveInBackground();
+                            } else {
+                                toShow();
+                            }
+                        } else {
+                            toShow();
+                        }
+                    } else {
+
+                        toShow();
+                    }
+
+                }
+            });
+
+        } catch (Exception e) {
+            toShow();
+        } finally {
+            finish();
+
         }
 
 //        toSplashActivity();
 
-        finish();
     }
+
+
+    private void toShow() {
+
+        boolean isshow = (boolean) AppSharePreferenceMgr.get(WELCOME_KEY, true);
+
+        if (isshow) {
+            toSplashActivity();
+            AppSharePreferenceMgr.put(WELCOME_KEY, false);
+        } else {
+            toMainActivity();
+        }
+    }
+
 
     private void toMainActivity() {
         if (isInMain) {

@@ -50,7 +50,9 @@ import com.youth.xf.ui.demo.Login.UserInfoEvent;
 import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.book.BookFragment;
 import com.youth.xf.ui.demo.fiction.FictionFragment;
+import com.youth.xf.ui.demo.fiction.FictionSearchActivity;
 import com.youth.xf.ui.demo.home.AboutMeActivity;
+import com.youth.xf.ui.demo.home.MySearchEvent;
 import com.youth.xf.ui.demo.home.SimpleFragment;
 import com.youth.xf.ui.demo.home.UserInfoActivity;
 import com.youth.xf.ui.demo.meizi.MeiZiFragment;
@@ -387,7 +389,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         });
 
         searchFragment = SearchFragment.newInstance();
-        searchFragment.setOnSearchClickListener((info) -> xToastUtil.showToast("搜索:" + info));
+        searchFragment.setOnSearchClickListener((info) ->
+        {
+//            xToastUtil.showToast("搜索:" + info);
+            EventBus.getDefault().postSticky(new MySearchEvent(info));
+            startActivity(new Intent(this, FictionSearchActivity.class));
+        });
     }
 
 

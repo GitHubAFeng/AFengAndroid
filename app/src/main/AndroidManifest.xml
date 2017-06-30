@@ -158,6 +158,11 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name=".ui.demo.fiction.FictionSearchActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".ui.demo.home.AboutMeActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>

@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="?android:selectableItemBackground">
 
         <android.support.v7.widget.AppCompatImageView
@@ -30,48 +30,72 @@
             tools:ignore="RtlHardcoded"
             tools:text="书名" />
 
-        <android.support.v7.widget.AppCompatTextView
+
+
+        <TextView
             android:id="@+id/fiction_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="260dp"
+            android:layout_below="@+id/fiction_title"
             android:layout_marginTop="5dp"
-            android:gravity="left"
-            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/fiction_image"
+            android:textColor="@color/grey"
             android:textSize="10dp"
-            tools:ignore="RtlHardcoded"
             tools:text="作者" />
+
+
+        <TextView
+            android:id="@+id/fiction_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fiction_author"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/fiction_image"
+            android:text="时间"
+            android:textColor="@color/grey"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/fiction_last_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fiction_time"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/fiction_image"
+            android:text="最新章节："
+            android:textColor="@color/grey"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/fiction_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fiction_time"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/fiction_last_temp"
+            android:text="章节"
+            android:textColor="@color/grey"
+            android:textSize="10dp" />
+
 
         <com.youth.xf.widget.extextview.ExpandTextView
             android:id="@+id/fiction_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/fiction_title"
+            android:layout_below="@+id/fiction_last_temp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:layout_toRightOf="@+id/fiction_image"
-            android:textSize="10dp"
-            tools:ignore="RtlHardcoded"
             android:paddingBottom="5dp"
-            tools:text="描述"
+            android:textSize="10dp"
             app:arrowAlign="center"
             app:arrowPadding="8dp"
             app:arrowPosition="below"
-            app:maxCollapsedLines="4" />
-
-        <!--<android.support.v7.widget.AppCompatTextView-->
-            <!--android:id="@+id/fiction_desc"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/fiction_title"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_toRightOf="@+id/fiction_image"-->
-            <!--android:textSize="10dp"-->
-            <!--tools:ignore="RtlHardcoded"-->
-            <!--android:paddingBottom="5dp"-->
-            <!--tools:text="描述" />-->
+            app:maxCollapsedLines="4"
+            android:textColor="@color/grey"
+            tools:ignore="RtlHardcoded"
+            tools:text="描述" />
 
 
     </RelativeLayout>
