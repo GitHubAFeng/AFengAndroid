@@ -94,7 +94,8 @@ public class WelcomeActivity extends AFengActivity {
 
     // 延时启动
     private Observable<Long> getObservable() {
-        return Observable.defer(() -> Observable.timer(2, TimeUnit.SECONDS));
+//        return Observable.defer(() -> Observable.timer(2, TimeUnit.SECONDS));
+        return Observable.timer(2, TimeUnit.SECONDS);
     }
 
     //启动图
@@ -194,12 +195,7 @@ public class WelcomeActivity extends AFengActivity {
 
         } catch (Exception e) {
             toShow();
-        } finally {
-            finish();
-
         }
-
-//        toSplashActivity();
 
     }
 
@@ -214,6 +210,9 @@ public class WelcomeActivity extends AFengActivity {
         } else {
             toMainActivity();
         }
+
+        //        toSplashActivity();
+        finish();
     }
 
 

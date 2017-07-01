@@ -407,7 +407,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(false);
 
-                xToastUtil.showToast("3频道建设中……");
+                xToastUtil.showToast("频道3正在内测,敬请期待");
 
                 break;
             case R.id.iv_title_two:
@@ -415,7 +415,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleTwo.setSelected(true);
                 mTitleOne.setSelected(false);
 
-                xToastUtil.showToast("2频道建设中……");
+                xToastUtil.showToast("2频道正在内测,敬请期待");
 
                 break;
             case R.id.iv_title_one:
@@ -423,7 +423,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 mTitleTwo.setSelected(false);
                 mTitleOne.setSelected(true);
 
-                xToastUtil.showToast("1频道建设中……");
+                xToastUtil.showToast("1频道正在内测,敬请期待");
 
                 break;
             case R.id.ll_title_menu:
@@ -705,7 +705,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
 
         } else {
-            xToastShow("当前未登录");
+//            xToastShow("当前未登录");
         }
 
 

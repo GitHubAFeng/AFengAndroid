@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.ProgressCallback;
+import com.avos.avoscloud.RequestEmailVerifyCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -35,6 +37,7 @@ import com.youth.xf.ui.demo.Login.UserInfoEvent;
 import com.youth.xf.ui.demo.Login.UserLoginActivity;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.utils.AFengUtils.AppImageMgr;
+import com.youth.xf.utils.AFengUtils.AppValidationMgr;
 import com.youth.xf.utils.GlideHelper.GlideCircleTransform;
 import com.youth.xf.utils.GlideHelper.ImgLoadUtil;
 import com.youth.xf.widget.hipermission.HiPermission;
@@ -112,6 +115,47 @@ public class UserInfoActivity extends BaseActivity {
     protected void setListener() {
 
         mAvatar.setOnClickListener(v -> getImg());
+//
+//        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    // 此处为得到焦点时的处理内容
+//                } else {
+//                    // 此处为失去焦点时的处理内容
+//
+//                    String email = mEmail.getText().toString();
+//                    if (!TextUtils.isEmpty(email)) {
+//                        if (AppValidationMgr.isEmail(email)) {
+//                            String user_mail = AVUser.getCurrentUser().getEmail();
+//                            if (TextUtils.isEmpty(user_mail)) {
+//
+//
+//                            } else {
+//                                if (!email.equals(user_mail)) {
+//                                    AVUser.getCurrentUser().setEmail(email);
+//                                    AVUser.getCurrentUser().saveInBackground();
+//                                }
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                    // 发送验证邮件
+//                    AVUser.requestEmailVerifyInBackground(email, new RequestEmailVerifyCallback() {
+//                        @Override
+//                        public void done(AVException e) {
+//                            if (e == null) {
+//                                // 求重发验证邮件成功
+//                            }
+//                        }
+//                    });
+//
+//
+//                }
+//            }
+//        });
 
     }
 
@@ -131,6 +175,7 @@ public class UserInfoActivity extends BaseActivity {
         super.finish();
     }
 
+    // 退出时保存
     private void saveData() {
 
         if (AVUser.getCurrentUser() != null) {

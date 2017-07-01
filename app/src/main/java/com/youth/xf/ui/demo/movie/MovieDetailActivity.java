@@ -131,6 +131,8 @@ public class MovieDetailActivity extends AFengActivity {
                                     .fitCenter()
                                     .into(ivImage);
 
+                            collapsingToolbar.setTitle(movieDetailBean.getTitle());
+
                             adapter.addFragment(MovieDetailFragment.newInstance(movieDetailBean.getSummary()), "剧情简介");
                             adapter.addFragment(MovieDetailFragment.newInstance(NameBuilder.toString()), "导演简介");
                             adapter.addFragment(MovieDetailFragment.newInstance(CastBuilder.toString()), "演员列表");

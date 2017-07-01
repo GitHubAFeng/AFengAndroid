@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -112,7 +113,11 @@ public class WebActivity extends BaseActivity {
             mWebView = mAgentWeb.getWebCreator().get();
         }
 
-//        mWebView.setWebViewClient(new MyWebClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        //提高渲染的优先级
+        mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        //把图片加载放在最后来加载渲染
+//        mWebView.getSettings().setBlockNetworkImage(true);
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override

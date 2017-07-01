@@ -119,8 +119,8 @@ public class UserLoginActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        String phoneNum = (String) xGet("phoneNum", "默认值");
-        String possWord = (String) xGet("possWord", "默认值");
+        String phoneNum = (String) xGet("phoneNum", "");
+        String possWord = (String) xGet("possWord", "");
 
         //操作view实例
         //恢复输入框里面的内容（设置） set

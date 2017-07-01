@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -28,9 +29,8 @@ import butterknife.BindView;
 
 public class BiliAgentWebActivity extends BaseActivity {
 
-//    final String mUrl = "http://m.acfun.cn/";
+    //    final String mUrl = "http://m.acfun.cn/";
     final String mUrl = "http://m.bilibili.com/index.html";
-
 
 
     AgentWeb mAgentWeb = null;
@@ -49,7 +49,6 @@ public class BiliAgentWebActivity extends BaseActivity {
     AppBarLayout mAppbarlayout;
 
     WebView mWebView = null;
-
 
 
     /**
@@ -109,6 +108,11 @@ public class BiliAgentWebActivity extends BaseActivity {
 
         mWebView.setWebViewClient(new MyWebClient());
 
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        //提高渲染的优先级
+        mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        //把图片加载放在最后来加载渲染
+//        mWebView.getSettings().setBlockNetworkImage(true);
     }
 
 
@@ -219,7 +223,6 @@ public class BiliAgentWebActivity extends BaseActivity {
                 "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
                 "})()");
     }
-
 
 
     private class MyWebClient extends WebViewClient {

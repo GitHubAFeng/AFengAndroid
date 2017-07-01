@@ -13,8 +13,30 @@ android {
 
     }
     buildTypes {
-        release {
+
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+
+            versionNameSuffix "-debug"
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 是否开启混淆
+            minifyEnabled true
+            //Zipalign资源对字节对齐优化
+            zipAlignEnabled true
+            // 移除无用的resource文件,需要开启混淆
+            shrinkResources true
+
+            //混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -73,10 +95,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
 
     // 基类 appcompat v7包是必须的,fragment管理器
-    compile 'me.yokeyword:fragmentation:0.10.5'
-
-    // 如果想使用SwipeBack 滑动边缘退出Fragment/Activity功能，请再添加下面的库
-    compile 'me.yokeyword:fragmentation-swipeback:0.10.4'
+    compile 'me.yokeyword:fragmentation:1.0.4'
 
     // 爬虫解析库
     compile 'org.jsoup:jsoup:1.10.2'
@@ -132,7 +151,7 @@ dependencies {
     compile 'xiaofei.library:android-data-storage:1.3.0'
 
     //WEBVIEW库
-    compile 'com.just.agentweb:agentweb:1.2.1'
+    compile 'com.just.agentweb:agentweb:1.2.3'
 
     //云后端
     // LeanCloud 基础包

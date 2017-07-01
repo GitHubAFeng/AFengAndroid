@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
+
 
 
 /**
@@ -27,7 +27,7 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
  * 时间：2017/3/2
  */
 
-public abstract class AFengFragment extends SwipeBackFragment {
+public abstract class AFengFragment extends SupportFragment {
 
     private CompositeDisposable mdisposables;
 
@@ -65,9 +65,8 @@ public abstract class AFengFragment extends SwipeBackFragment {
                 parent.removeView(mContentView);
             }
         }
-        // 需要支持SwipeBack则这里必须调用toSwipeBackFragment(view);
-        return attachToSwipeBack(mContentView);
-//        return mContentView;
+
+        return mContentView;
     }
 
 
