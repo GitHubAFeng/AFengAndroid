@@ -14,9 +14,11 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.SearchEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -25,6 +27,7 @@ import com.youth.xf.R;
 import com.youth.xf.base.BaseActivity;
 import com.youth.xf.ui.demo.MainActivity;
 import com.youth.xf.ui.demo.home.MySearchEvent;
+import com.youth.xf.utils.AFengUtils.PerfectClickListener;
 import com.youth.xf.utils.AFengUtils.StatusBarUtil;
 import com.youth.xf.widget.searchbox.SearchFragment;
 
@@ -34,11 +37,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
@@ -48,6 +57,16 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class FictionSearchActivity extends BaseActivity {
+
+
+    @BindView(R.id.search_error_root)
+    LinearLayout mErrorRoot;
+
+    @BindView(R.id.search_error_btn)
+    ImageButton mErrorBtn;
+
+    @BindView(R.id.search_toolbar_title)
+    TextView mToolTitle;
 
 
     @BindView(R.id.fiction_recyclerView)
@@ -99,6 +118,14 @@ public class FictionSearchActivity extends BaseActivity {
         });
 
         adapter.setOnLoadMoreListener(() -> loadMoreData(fictionName));
+
+        mErrorBtn.setOnClickListener(new PerfectClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                initData(fictionName);
+                mErrorRoot.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -187,11 +214,12 @@ public class FictionSearchActivity extends BaseActivity {
                         fictionDatas.addAll(fictionModels);
                         adapter.notifyDataSetChanged();
                         adapter.openLoadAnimation();
+                        mToolTitle.setText("搜索到" + fictionModels.size() + "条结果");
+                        mErrorRoot.setVisibility(View.GONE);
                     } else {
-                        xToastShow("搜索过于频繁，可稍后重试");
-                        adapter.loadMoreEnd();
+//                        xToastShow("搜索过于频繁，可稍后重试");
+                        mErrorRoot.setVisibility(View.VISIBLE);
                     }
-
                     mProgressBar.setVisibility(View.GONE);
                 });
 
@@ -221,6 +249,7 @@ public class FictionSearchActivity extends BaseActivity {
                         mPage++;
 
                         adapter.loadMoreComplete();
+                        mToolTitle.setText("搜索到" + fictionModels.size() + "条结果");
 
                     } else {
 

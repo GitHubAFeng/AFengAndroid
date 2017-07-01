@@ -1,52 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.demo.meizi.MeiZiBigImageActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/search_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="30sp"
-                android:titleTextColor="@android:color/white"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:navigationIcon="@drawable/cha"
-                app:theme="@style/ToolbarStyle"
-                app:titleTextColor="@android:color/white">
-
-                <TextView
-                    android:id="@+id/chapter_toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:singleLine="true"
-                    android:text="搜索结果"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.AppBarLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fiction_recyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:orientation="vertical"
+        tools:context=".ui.demo.meizi.MeiZiBigImageActivity">
 
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/search_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="30sp"
+                    android:titleTextColor="@android:color/white"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@drawable/cha"
+                    app:theme="@style/ToolbarStyle"
+                    app:titleTextColor="@android:color/white">
+
+                    <TextView
+                        android:id="@+id/search_toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text="搜索结果"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:id="@+id/search_error_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/search_error" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="目前可公开的加载失败原因"
+                android:textColor="@color/grey"
+                android:textSize="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="1、没有搜索结果，请换个关键词再搜。"
+                android:textColor="@color/grey"
+                android:textSize="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="2、您的动作太快，服务器根本反应不过来啦！"
+                android:textColor="@color/grey"
+                android:textSize="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="3、我可怜的虫子被源站一掌拍死在屏幕上了…"
+                android:textColor="@color/grey"
+                android:textSize="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="稍安勿躁，请点击下面按钮刷新或者尝试重新搜索"
+                android:textColor="@color/grey"
+                android:textSize="10dp" />
+
+            <ImageButton
+                android:id="@+id/search_error_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/search_iknow_btn" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fiction_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/fiction_progressBar"
@@ -54,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
-</LinearLayout>
+</FrameLayout>
+
