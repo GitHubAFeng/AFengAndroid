@@ -43,7 +43,7 @@
             tools:ignore="RtlHardcoded"
             tools:text="作者" />
 
-        <com.youth.xf.widget.extextview.ExpandTextView
+        <com.afeng.xf.widget.extextview.ExpandTextView
             android:id="@+id/fiction_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

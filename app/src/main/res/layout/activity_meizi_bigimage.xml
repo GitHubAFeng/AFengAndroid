@@ -41,12 +41,12 @@
         android:layout_height="match_parent"
         android:background="#000000">
 
-        <com.youth.xf.utils.CustomView.HackyViewPager
+        <com.afeng.xf.utils.CustomView.HackyViewPager
             android:id="@+id/meizi_image_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.youth.xf.widget.downloadingview.GADownloadingView
+        <com.afeng.xf.widget.downloadingview.GADownloadingView
             android:id="@+id/ga_downloading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

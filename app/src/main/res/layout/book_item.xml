@@ -42,7 +42,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorContent" />
 
-            <com.youth.xf.widget.extextview.ExpandTextView
+            <com.afeng.xf.widget.extextview.ExpandTextView
                 android:id="@+id/tvDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

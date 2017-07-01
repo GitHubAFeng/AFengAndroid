@@ -5,11 +5,16 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.youth.xf"
+        applicationId "com.afeng.xf"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        //识别jniLibs目录下的子目录
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
 
     }
     buildTypes {
@@ -30,23 +35,24 @@ android {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
             // 是否开启混淆
-            minifyEnabled true
+//            minifyEnabled true
             //Zipalign资源对字节对齐优化
             zipAlignEnabled true
             // 移除无用的resource文件,需要开启混淆
-            shrinkResources true
+//            shrinkResources true
 
             //混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+    // 默认是在 src/main/jniLibs
     //把so库统一放在libs目录
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//        }
+//    }
 
 
     compileOptions {
@@ -62,6 +68,16 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    //这一段可心解决有些os库不支持64位CPU，模拟器无法运行APK的问题
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a','x86_64'
+            universalApk true
+        }
     }
 
 
@@ -154,12 +170,16 @@ dependencies {
     compile 'com.just.agentweb:agentweb:1.2.3'
 
     //云后端
+
     // LeanCloud 基础包
-    compile('cn.leancloud.android:avoscloud-sdk:v4.1.0')
+    compile 'cn.leancloud.android:avoscloud-sdk:v4.1.0'
+
     // LeanCloud 用户反馈包
-    compile('cn.leancloud.android:avoscloud-feedback:v4.1.0@aar')
+    compile 'cn.leancloud.android:avoscloud-feedback:v4.1.0@aar'
 
     //图片选择库
     compile 'com.zhihu.android:matisse:0.4.3'
 
+    //腾讯第三方X5内核WedView
+    implementation files('libs/tbs_sdk_thirdapp_v3.2.0.1104_43200_sharewithdownload_withfilereader_withoutGame_obfs_20170609_115346.jar')
 }

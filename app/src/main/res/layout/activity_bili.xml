@@ -51,6 +51,12 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <!--<ProgressBar-->
+        <!--android:id="@+id/bili_progressBar1"-->
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="3dp"/>-->
+
 </android.support.design.widget.CoordinatorLayout>
 
 

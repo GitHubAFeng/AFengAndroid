@@ -42,7 +42,7 @@
     <!--android:orientation="horizontal"-->
     <!--android:showDividers="middle"/>-->
 
-    <com.youth.xf.widget.hipermission.WrapHeightGridView
+    <com.afeng.xf.widget.hipermission.WrapHeightGridView
         android:numColumns="1"
         android:id="@+id/gvPermission"
         android:layout_width="match_parent"

@@ -1,4 +1,6 @@
-使用
+
+
+https://github.com/bingoogolapple/BGABanner-Android
 
 1.添加 Gradle 依赖
 
