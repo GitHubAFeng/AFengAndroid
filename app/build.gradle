@@ -74,7 +74,7 @@ android {
     lintOptions {
         abortOnError false
         // 打包报错可尝试
-//        checkReleaseBuilds false
+        checkReleaseBuilds false
     }
 
     //这一段可心解决有些os库不支持64位CPU，模拟器无法运行APK的问题

@@ -146,18 +146,16 @@ public class UserInfoActivity extends BaseActivity {
 //        initCache();
     }
 
+
+    //复写onBackPressed()的时候，把自己的代码放在super.onBackPressed()上面。 否则 onActivityResult 无法接受到resultCode
     @Override
-    protected void onStop() {
+    public void onBackPressed() {
         saveData();
-        super.onStop();
+
+        super.onBackPressed();
     }
 
-    @Override
-    public void finish() {
-//        saveData();
 
-        super.finish();
-    }
 
     // 退出时保存
     private void saveData() {

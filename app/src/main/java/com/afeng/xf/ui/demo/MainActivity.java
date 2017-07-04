@@ -560,14 +560,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == USERINFO_REQUEST_CODE) {
+
+            // 接收 用户信息修改后的数据并且进行保存
             if (resultCode == UserInfoActivity.RESULT_CODE) {
 
-                UserInfoEvent userinfo = (UserInfoEvent) data.getSerializableExtra(UserInfoActivity.RESULT_KEY);
-                saveUserInfo(userinfo);
+                try {
+                    UserInfoEvent userinfo = (UserInfoEvent) data.getSerializableExtra(UserInfoActivity.RESULT_KEY);
+                    saveUserInfo(userinfo);
+                } catch (Exception e) {
+                    xLogger(e.toString());
+                }
+
             }
         }
 
@@ -582,6 +590,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             String email = data.getUserEmail();
             String desc = data.getDesc();
             String nick = data.getNickname();
+
+            if (!TextUtils.isEmpty(nick)) {
+                mNavUserName.post(() -> mNavUserName.setText(nick));
+                mUserName.post(() -> mUserName.setText(nick));
+            }
+
+            if (!TextUtils.isEmpty(desc)) {
+                mNavDesc.post(() -> mNavDesc.setText(desc));
+            }
 
             AVUser.getCurrentUser().setEmail(email);
             AVUser.getCurrentUser().saveInBackground();
@@ -780,6 +797,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mUserAva.post(() -> mUserAva.setImageResource(R.drawable.user_def_avatar));
         mNavAvatar.post(() -> mNavAvatar.setImageResource(R.drawable.user_def_avatar));
         mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("用户登录");
+
+        xToastShow("当前未登录");
     }
 
 
