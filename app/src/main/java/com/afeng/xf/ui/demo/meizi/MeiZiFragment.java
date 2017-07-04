@@ -1,5 +1,6 @@
 package com.afeng.xf.ui.demo.meizi;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.afeng.xf.base.BaseFragment;
+import com.afeng.xf.widget.hipermission.HiPermission;
+import com.afeng.xf.widget.hipermission.PermissionCallback;
+import com.afeng.xf.widget.hipermission.PermissionItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -47,7 +52,7 @@ import static com.afeng.xf.utils.network.NetworkAvailableUtils.isNetworkAvailabl
  * Created by Administrator on 2017/5/6.
  */
 
-public class MeiZiFragment extends AFengFragment {
+public class MeiZiFragment extends BaseFragment {
 
     @BindView(R.id.meizi_recyclerView)
     RecyclerView mRecyclerView;
@@ -137,11 +142,8 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-        try {
-            loadNetData(false);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        requestSomePermission();
     }
 
     /**
@@ -158,6 +160,51 @@ public class MeiZiFragment extends AFengFragment {
      */
     @Override
     protected void onInvisibleToUser() {
+
+    }
+
+
+    // 申请权限
+    private void requestSomePermission() {
+
+        List<PermissionItem> permissionItems = new ArrayList<>();
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "数据存储", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话状态", R.drawable.permission_ic_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_NETWORK_STATE, "网络状态", R.drawable.permission_ic_network));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_WIFI_STATE, "WIFI状态", R.drawable.permission_ic_wifi));
+        HiPermission.create(getContext())
+                .title("权限申请")
+                .permissions(permissionItems)
+//                .msg("此APP运行需要此项权限！")
+                .animStyle(R.style.PermissionAnimFade)
+                .style(R.style.PermissionDefaultNormalStyle)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+                        //用户关闭权限申请
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        //所有权限申请完成
+                        try {
+                            loadNetData(false);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+                        //用户不同意
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
 
     }
 

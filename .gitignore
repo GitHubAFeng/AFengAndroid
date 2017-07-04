@@ -45,3 +45,6 @@ captures/
 /gradlew.bat
 /app/app.iml
 /xframe/xframe.iml
+
+/app/release
+

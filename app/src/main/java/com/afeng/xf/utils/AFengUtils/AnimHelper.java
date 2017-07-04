@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
  * 作    者：jeasonlzy（廖子尧）Github地址：https://github.com/jeasonlzy
  * 版    本：1.0
  * 创建日期：16/8/17
- * 描    述：
+ * 描    述：系统动画工具， 透明度动画，位置变换动画
  * 修订历史：
  * ================================================
  */
@@ -41,6 +41,7 @@ public class AnimHelper {
         ViewCompat.animate(view).alpha(1.0f).setDuration(duration).setListener(listener).setInterpolator(INTERPOLATOR).withLayer().start();
     }
 
+    //渐隐动画
     public static void alphaHideByMs(View view, int duration, ViewPropertyAnimatorListener listener) {
         if (duration == 0) {
             duration = DURATION;
@@ -48,6 +49,7 @@ public class AnimHelper {
         ViewCompat.animate(view).alpha(0f).setDuration(duration).setListener(listener).setInterpolator(INTERPOLATOR).withLayer().start();
     }
 
+    //渐显动画
     public static void alphaShow(View view, ViewPropertyAnimatorListener listener) {
         ViewCompat.animate(view).alpha(1.0f).setDuration(DURATION).setListener(listener).setInterpolator(INTERPOLATOR).withLayer().start();
     }

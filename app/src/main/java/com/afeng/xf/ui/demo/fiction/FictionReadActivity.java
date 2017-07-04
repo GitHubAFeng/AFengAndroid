@@ -7,6 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MotionEvent;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -48,6 +51,9 @@ public class FictionReadActivity extends BaseActivity {
 
     @BindView(R.id.read_content)
     TextView mTextView;
+
+//    @BindView(R.id.read_webview)
+//    WebView mRead_webview;
 
 
     ByeBurgerBehavior mBehavior, mBehavior2;
@@ -106,6 +112,28 @@ public class FictionReadActivity extends BaseActivity {
 
         });
 
+//        mRead_webview.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    if (mBehavior.isShow()) {
+////                StatusBarUtil.hideSystemUI(this);
+//
+//                        mBehavior.hide();
+//                        mBehavior2.hide();
+//                    } else {
+//                        mBehavior.show();
+//                        mBehavior2.show();
+////                StatusBarUtil.showSystemUI(this);
+//
+//                    }
+//                }
+//
+//                return false;
+//            }
+//        });
+
+
         mBottomView.setOnNavigationItemSelectedListener(
                 item -> {
 
@@ -115,6 +143,10 @@ public class FictionReadActivity extends BaseActivity {
 
                             Observable.create((ObservableOnSubscribe<FictionContentEvent>) e -> {
                                 FictionContentEvent data = JsoupFictionContentManager.get().getData(preUrl);
+                                if (data == null) {
+                                    data.setFictionContent("内容读取错误，请重新打开页面");
+                                }
+
                                 e.onNext(data);
                             }).subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -135,6 +167,9 @@ public class FictionReadActivity extends BaseActivity {
 
                             Observable.create((ObservableOnSubscribe<FictionContentEvent>) e -> {
                                 FictionContentEvent data = JsoupFictionContentManager.get().getData(nestUrl);
+                                if (data == null) {
+                                    data.setFictionContent("内容读取错误，请重新打开页面");
+                                }
                                 e.onNext(data);
                             }).subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -188,7 +223,7 @@ public class FictionReadActivity extends BaseActivity {
         mread_toolbar_title.setText(event.getTitle());
 
         mTextView.setText(Html.fromHtml(event.getFictionContent()));
-
+//        mRead_webview.loadDataWithBaseURL(event.getCurrUrl(), event.getFictionContent(), "text/html", "utf-8", null);
 
     }
 

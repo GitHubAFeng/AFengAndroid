@@ -11,8 +11,8 @@
         android:id="@+id/bili_appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_gravity="top"
+        android:background="@color/white"
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
@@ -51,14 +51,24 @@
             android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <com.afeng.xf.widget.loadingview.SunBabyLoadingView
+        android:id="@+id/webview_loading"
+        android:layout_gravity="center"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ProgressBar
         android:id="@+id/bili_progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom"
-        android:layout_height="5dp"/>
+        android:layout_height="5dp"
+        android:layout_gravity="bottom" />
 
 </android.support.design.widget.CoordinatorLayout>
 

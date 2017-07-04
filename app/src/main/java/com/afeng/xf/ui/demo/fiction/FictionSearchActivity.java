@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afeng.xf.ui.constants.Constants;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -85,9 +86,15 @@ public class FictionSearchActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
+//        if (!EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().register(this);
+//        }
+
+        MySearchEvent mySearchEvent = (MySearchEvent) getIntentData(Constants.SEARCH_KEY);
+        if (mySearchEvent != null) {
+            fictionName = mySearchEvent.getSearchDesc();
         }
+
 
         initBar();
 
@@ -119,20 +126,20 @@ public class FictionSearchActivity extends BaseActivity {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 
-
+        initData(fictionName);
     }
 
 
-    @Override
-    public void onDestroy() {
-        MySearchEvent stickyEvent = EventBus.getDefault().getStickyEvent(MySearchEvent.class);
-        if (stickyEvent != null) {
-            EventBus.getDefault().removeStickyEvent(stickyEvent);
-        }
-
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        MySearchEvent stickyEvent = EventBus.getDefault().getStickyEvent(MySearchEvent.class);
+//        if (stickyEvent != null) {
+//            EventBus.getDefault().removeStickyEvent(stickyEvent);
+//        }
+//
+//        EventBus.getDefault().unregister(this);
+//        super.onDestroy();
+//    }
 
 
     //创建工具栏右上角菜单， 搜索工具
@@ -173,15 +180,15 @@ public class FictionSearchActivity extends BaseActivity {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void ReceviceMessage(MySearchEvent event) {
-        if (event != null) {
-            fictionName = event.getSearchDesc();
-            initData(fictionName);
-        }
-
-
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+//    public void ReceviceMessage(MySearchEvent event) {
+//        if (event != null) {
+//            fictionName = event.getSearchDesc();
+//            initData(fictionName);
+//        }
+//
+//
+//    }
 
 
     void initData(String name) {

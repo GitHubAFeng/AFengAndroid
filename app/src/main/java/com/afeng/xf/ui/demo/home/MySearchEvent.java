@@ -1,11 +1,15 @@
 package com.afeng.xf.ui.demo.home;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/6/30.
  */
 
 // 搜索事件
-public class MySearchEvent {
+public class MySearchEvent implements Serializable {
+
+    private static final long serialVersionUID = -8069666200010254632L;
 
     public String getSearchDesc() {
         return SearchDesc;

@@ -197,6 +197,7 @@ public class FictionChapterActivity extends AFengActivity {
                 String url = event.getDetailUrl();
 
                 List<FictionModel> data = JsoupFictionChapterManager.get().getData(url);
+
                 e.onNext(data);
             })
                     .subscribeOn(Schedulers.io())

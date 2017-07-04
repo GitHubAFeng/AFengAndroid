@@ -15,6 +15,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afeng.xf.widget.TBSWebView.WebEvent;
 import com.just.library.AgentWeb;
 import com.just.library.ChromeClientCallbackManager;
 import com.afeng.xf.R;

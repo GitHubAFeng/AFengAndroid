@@ -1,4 +1,4 @@
-package com.afeng.xf.ui.demo.home;
+package com.afeng.xf.widget.TBSWebView;
 
 import java.io.Serializable;
 
@@ -12,6 +12,7 @@ public class WebEvent implements Serializable{
     private String injectJS;
     private String webUrl;
     private String imgUrl;
+
 
     public WebEvent(String injectJS, String webUrl, String imgUrl) {
         this.injectJS = injectJS;

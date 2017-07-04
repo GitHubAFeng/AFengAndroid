@@ -1,6 +1,7 @@
 package com.afeng.xf.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import com.afeng.xf.utils.AFengUtils.SnackbarUtils;
 import com.afeng.xf.utils.AFengUtils.xToastUtil;
 import com.afeng.xf.utils.cache.ACache;
 import com.afeng.xf.utils.cache.AppSharePreferenceMgr;
+
+import java.io.Serializable;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -230,6 +233,65 @@ public abstract class AFengFragment extends SupportFragment {
     public Object xGet(String key, Object defaultObject) {
 
         return AppSharePreferenceMgr.get(mActivity, key, defaultObject);
+    }
+
+
+
+
+    /**
+     * 传递数据对象到新启动的Activity
+     *
+     * @param target 要启动的Activity
+     * @param key    键值
+     * @param event  要传递的对象，必须Serializable化
+     */
+    public void goToActivity(Class<?> target, String key, Serializable event) {
+
+        Intent intent = new Intent();
+        intent.setClass(mActivity, target);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(key, event);
+        intent.putExtras(bundle);
+        this.startActivity(intent);
+    }
+
+
+    /**
+     * 接收 来自 源Activity 的数据对象
+     *
+     * @param key
+     * @return
+     */
+    public Object getIntentData(String key) {
+
+        try {
+            Intent intent = mActivity.getIntent();
+            return intent.getSerializableExtra(key);
+
+        } catch (NullPointerException e) {
+            Logger.w(e.getMessage());
+        } catch (Exception e) {
+            Logger.w(e.getMessage());
+        }
+
+        return null;
+    }
+
+
+    /**
+     * 含有Bundle通过Class打开编辑界面
+     *
+     * @param cls
+     * @param bundle
+     * @param requestCode
+     */
+    public void goToActivityForResult(Class<?> cls, Bundle bundle, int requestCode) {
+        Intent intent = new Intent();
+        intent.setClass(mActivity, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
     }
 
 

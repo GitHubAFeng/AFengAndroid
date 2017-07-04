@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afeng.xf.base.BaseActivity;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
@@ -39,7 +40,6 @@ import com.avos.avoscloud.ProgressCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.afeng.xf.base.AFengActivity;
 import com.afeng.xf.R;
 
 import com.afeng.xf.ui.constants.Constants;
@@ -73,7 +73,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
 
 
 /**
@@ -81,7 +80,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * 时间：2017/2/26
  */
 
-public class MainActivity extends AFengActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.main_viewPager)
     ViewPager mMainViewPager;
@@ -111,7 +110,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     public String[] mTitles = {"首页", "小说", "妹纸", "读书", "电影", "更多"};
 
 
-    public SupportFragment[] mFragments = new SupportFragment[6];
+    public Fragment[] mFragments = new Fragment[6];
 
 
     FeedbackAgent agent = null;
@@ -162,39 +161,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
 
         agent.sync();  //通知用户新的反馈回复
 
-
-        //装载Fragments
-        if (savedInstanceState == null) {
-            mFragments[0] = SimpleFragment.getInstance();
-            mFragments[1] = FictionFragment.newInstance();
-            mFragments[2] = MeiZiFragment.getInstance();
-            mFragments[3] = BookFragment.newInstance();
-            mFragments[4] = MovieFragment.newInstance();
-            mFragments[5] = MoreFragment.getInstance();
-
-
-//            loadMultipleRootFragment(R.id.main_tab_container, MAIN
-//                    , mFragments[MAIN]
-//                    , mFragments[NEW]
-//                    , mFragments[MEIZI]
-//                    , mFragments[MORE]
-//                    , mFragments[BOOK]
-//                    , mFragments[MOVIEW]
-//
-//            );
-
-        } else {
-            // 这里库已经做了Fragment恢复工作，不需要额外的处理
-            // 这里我们需要拿到mFragments的引用，用下面的方法查找更方便些，也可以通过getSupportFragmentManager.getFragments()自行进行判断查找(效率更高些)
-            mFragments[0] = findFragment(SimpleFragment.class);
-            mFragments[1] = findFragment(FictionFragment.class);
-            mFragments[2] = findFragment(MeiZiFragment.class);
-            mFragments[3] = findFragment(BookFragment.class);
-            mFragments[4] = findFragment(MovieFragment.class);
-            mFragments[5] = findFragment(MoreFragment.class);
-
-
-        }
+        mFragments[0] = SimpleFragment.getInstance();
+        mFragments[1] = FictionFragment.newInstance();
+        mFragments[2] = MeiZiFragment.getInstance();
+        mFragments[3] = BookFragment.newInstance();
+        mFragments[4] = MovieFragment.newInstance();
+        mFragments[5] = MoreFragment.getInstance();
 
         initViewPager();
     }
@@ -210,7 +182,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
             @Override
             public void onTabSelect(int position) {
 
-                showHideFragment(mFragments[position]);  //使用这个 在点击选项卡时不会出现滑动
+
             }
 
             @Override
@@ -248,6 +220,7 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         mTitleThr.setOnClickListener(this);
         TitleMenuFra.setOnClickListener(this);
         mUserAva.setOnClickListener(this);
+        mUserName.setOnClickListener(this);
     }
 
     @Override
@@ -258,9 +231,6 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         initContent();
         //申请权限
         requestSomePermission();
-
-        initUser();
-        initNavHeadBG();
     }
 
 
@@ -268,29 +238,35 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     private void requestSomePermission() {
 
         List<PermissionItem> permissionItems = new ArrayList<>();
-        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "SD卡操作权限", R.drawable.permission_ic_storage));
-        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "访问电话状态", R.drawable.permission_ic_phone));
-        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_FINE_LOCATION, "GPS定位", R.drawable.permission_ic_location));
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "数据存储", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话状态", R.drawable.permission_ic_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_NETWORK_STATE, "网络状态", R.drawable.permission_ic_network));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_WIFI_STATE, "WIFI状态", R.drawable.permission_ic_wifi));
         HiPermission.create(MainActivity.this)
                 .title("权限申请")
                 .permissions(permissionItems)
-                .msg("此APP运行需要此项权限！")
+//                .msg("此APP运行需要此项权限！")
                 .animStyle(R.style.PermissionAnimFade)
                 .style(R.style.PermissionDefaultNormalStyle)
                 .checkMutiPermission(new PermissionCallback() {
                     @Override
                     public void onClose() {
+                        //用户关闭权限申请
 
                     }
 
                     @Override
                     public void onFinish() {
+                        //所有权限申请完成
+                        initUser();
+
+                        initNavHeadBG();
 
                     }
 
                     @Override
                     public void onDeny(String permission, int position) {
-
+                        //用户不同意
                     }
 
                     @Override
@@ -387,9 +363,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
         searchFragment = SearchFragment.newInstance();
         searchFragment.setOnSearchClickListener((info) ->
         {
-//            xToastUtil.showToast("搜索:" + info);
-            EventBus.getDefault().postSticky(new MySearchEvent(info));
-            startActivity(new Intent(this, FictionSearchActivity.class));
+//            EventBus.getDefault().postSticky(new MySearchEvent(info));
+//            startActivity(new Intent(this, FictionSearchActivity.class));
+
+            goToActivity(FictionSearchActivity.class, Constants.SEARCH_KEY, new MySearchEvent(info));
+
+
         });
     }
 
@@ -432,6 +411,12 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
                 userLoginOrReg();
 
                 break;
+
+            case R.id.main_user_name:
+                // 用户注册登录
+                userLoginOrReg();
+                break;
+
 
         }
     }
@@ -494,17 +479,15 @@ public class MainActivity extends AFengActivity implements View.OnClickListener,
     }
 
 
-    @Override
-    public void onBackPressedSupport() {
 
+    @Override
+    public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressedSupport();
+            super.onBackPressed();
         }
-
     }
-
 
     @Override
     public void onPageScrolled(int i, float v, int i1) {

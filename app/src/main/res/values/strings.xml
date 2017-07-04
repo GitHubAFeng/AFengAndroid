@@ -23,9 +23,9 @@
 
 
     <!--ByeBurger控件需要使用到的属性-->
-    <string name="bye_burger_float_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
-    <string name="bye_burger_bottom_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerBottomBehavior</string>
-    <string name="bye_burger_title_behavior">com.youth.xf.widget.byeburgernavigationview.ByeBurgerTitleBehavior</string>
+    <string name="bye_burger_float_behavior">.widget.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
+    <string name="bye_burger_bottom_behavior">.widget.byeburgernavigationview.ByeBurgerBottomBehavior</string>
+    <string name="bye_burger_title_behavior">.widget.byeburgernavigationview.ByeBurgerTitleBehavior</string>
 
 
     <string name="about_me">

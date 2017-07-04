@@ -75,35 +75,11 @@ public class WelcomeActivity extends AFengActivity {
     @Override
     protected void processLogic(Bundle savedInstanceState) {
 
-        requestSomePermission();
-
-        requestImage();
-        loadShowSplash();
-
-
-        mImageViewPic.setAlpha(0f);
         //默认启动图
         mImageViewDefPic.setImageDrawable(XOutdatedUtils.getDrawable(R.drawable.welcome_def));
 
-        Disposable dis = getObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Long>() {
-                    @Override
-                    public void onNext(Long aLong) {
+        requestSomePermission();
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        enterApp();
-                    }
-                });
-        addDisposable(dis);
     }
 
 
@@ -122,18 +98,40 @@ public class WelcomeActivity extends AFengActivity {
                 .checkMutiPermission(new PermissionCallback() {
                     @Override
                     public void onClose() {
-
+                        toShow();
                     }
 
                     @Override
                     public void onFinish() {
+                        requestImage();
 
+                        loadShowSplash();
+
+                        Disposable dis = getObservable()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeWith(new DisposableObserver<Long>() {
+                                    @Override
+                                    public void onNext(Long aLong) {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                        enterApp();
+                                    }
+                                });
+                        addDisposable(dis);
 
                     }
 
                     @Override
                     public void onDeny(String permission, int position) {
-
+                        toShow();
                     }
 
                     @Override
@@ -185,6 +183,7 @@ public class WelcomeActivity extends AFengActivity {
                             Glide.with(mActivity).load(img).into(mImageViewPic);
                             AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
                             AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+//                            mImageViewPic.setAlpha(0f);
                         }
                     }
                 } else {

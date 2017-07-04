@@ -4,12 +4,13 @@ import android.os.Bundle;
 
 import com.afeng.xf.R;
 import com.afeng.xf.base.AFengFragment;
+import com.afeng.xf.base.BaseFragment;
 
 /**
  * Created by Administrator on 2017/5/7.
  */
 
-public class MoreFragment extends AFengFragment {
+public class MoreFragment extends BaseFragment {
 
 
 

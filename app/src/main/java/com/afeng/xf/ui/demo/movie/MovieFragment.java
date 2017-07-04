@@ -1,5 +1,6 @@
 package com.afeng.xf.ui.demo.movie;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,10 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.afeng.xf.base.BaseFragment;
+import com.afeng.xf.widget.hipermission.HiPermission;
+import com.afeng.xf.widget.hipermission.PermissionCallback;
+import com.afeng.xf.widget.hipermission.PermissionItem;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -25,6 +30,8 @@ import com.afeng.xf.base.AFengFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,7 +46,7 @@ import io.reactivex.schedulers.Schedulers;
  * 电影列表页
  */
 
-public class MovieFragment extends AFengFragment {
+public class MovieFragment extends BaseFragment {
 
     @BindView(R.id.moive_recyclerView)
     RecyclerView mRecyclerView;
@@ -94,7 +101,7 @@ public class MovieFragment extends AFengFragment {
      */
     @Override
     protected void onLazyLoadOnce() {
-        setUpRecyclerView();
+        requestSomePermission();
     }
 
     /**
@@ -142,6 +149,47 @@ public class MovieFragment extends AFengFragment {
                 .setStartDelay(500)
                 .setDuration(ANIM_DURATION_FAB)
                 .start();
+
+    }
+
+
+    // 申请权限
+    private void requestSomePermission() {
+
+        List<PermissionItem> permissionItems = new ArrayList<>();
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "数据存储", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话状态", R.drawable.permission_ic_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_NETWORK_STATE, "网络状态", R.drawable.permission_ic_network));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_WIFI_STATE, "WIFI状态", R.drawable.permission_ic_wifi));
+        HiPermission.create(getContext())
+                .title("权限申请")
+                .permissions(permissionItems)
+//                .msg("此APP运行需要此项权限！")
+                .animStyle(R.style.PermissionAnimFade)
+                .style(R.style.PermissionDefaultNormalStyle)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+                        //用户关闭权限申请
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        //所有权限申请完成
+                        setUpRecyclerView();
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+                        //用户不同意
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
 
     }
 

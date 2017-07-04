@@ -11,7 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.afeng.xf.base.BaseFragment;
 import com.afeng.xf.ui.constants.Constants;
+import com.afeng.xf.widget.TBSWebView.WebEvent;
 import com.afeng.xf.widget.TBSWebView.X5WebViewActivity;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -21,13 +23,8 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.afeng.xf.R;
-import com.afeng.xf.base.AFengFragment;
 import com.afeng.xf.ui.data.HomeBannerItem;
 import com.afeng.xf.ui.data.HomeListItem;
-import com.afeng.xf.ui.demo.comic.ComicWebActivity;
-import com.afeng.xf.ui.demo.live.LiveWebActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,7 @@ import static com.avos.avoscloud.AVObject.createWithoutData;
 
 //此注解用来忽略检查
 @SuppressLint("ValidFragment")
-public class SimpleFragment extends AFengFragment implements View.OnClickListener {
+public class SimpleFragment extends BaseFragment implements View.OnClickListener {
     private static final String TYPE = "mType";
     private String mType = "Android";
 

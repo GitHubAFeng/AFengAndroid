@@ -10,6 +10,9 @@ public class Constants {
     //传递给X5WebView的 WebEvent 对象数据 KEY
     public static final String WEBEVENT = "webevent";
 
+    //传递给搜索页面 对象数据 KEY
+    public static final String SEARCH_KEY = "searchkey";
+
     // 用户信息缓存 KEY
     public static final String USER_INFO_KEY = "userinfocache";
 
@@ -30,6 +33,7 @@ public class Constants {
                     "document.getElementsByClassName('index__downloadBtn__src-home-topArea-')[0].style.display='none';" +
                     "document.getElementsByClassName('index__openClientBtn__src-videoPage-player-')[0].style.display='none';" +
                     "document.getElementsByClassName('index__downloadBtn__src-videoPage-topArea-')[0].style.display='none';" +
+                    "document.getElementsByClassName('index__lastTips__src-videoPage-player-')[0].style.display='none';" +
                     "})()";
 
 
@@ -69,6 +73,7 @@ public class Constants {
 
     //网易
 //    String temp = "javascript:(function() { document.getElementsByClassName('m-hometop')[0].style.display='none'; document.getElementsByClassName('ftwrap')[0].style.display='none';})()";
+
 
 
 }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import android.widget.Toast;
 import com.afeng.xf.R;
 import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.ui.constants.Constants;
-import com.afeng.xf.ui.demo.home.WebEvent;
+import com.afeng.xf.widget.loadingview.SunBabyLoadingView;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsResult;
 import com.tencent.smtt.sdk.CookieSyncManager;
@@ -44,6 +45,9 @@ import butterknife.BindView;
 public class X5WebViewActivity extends BaseActivity {
 
 
+    @BindView(R.id.webview_loading)
+    SunBabyLoadingView mLoading;
+
     @BindView(R.id.bili_swipe_container)
     SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.bili_toolbar)
@@ -62,7 +66,7 @@ public class X5WebViewActivity extends BaseActivity {
 
     WebView mWebView = null;
 
-    WebEvent mWebEvent = null;
+    WebEvent mWebEvent = null;  //传值，传入URL或者HTML
 
 
     @Override
@@ -186,7 +190,7 @@ public class X5WebViewActivity extends BaseActivity {
     }
 
 
-    private void initToolbar(){
+    private void initToolbar() {
 
         // 设置标题栏
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -202,7 +206,7 @@ public class X5WebViewActivity extends BaseActivity {
 
     }
 
-
+    //初始化传值数据
     private void initData() {
 
         try {
@@ -295,6 +299,12 @@ public class X5WebViewActivity extends BaseActivity {
             public void onProgressChanged(WebView webView, int progress) {
                 if (progress == 25) {
                     webView.loadUrl(mWebEvent.getInjectJS());  //插入JS
+                }
+
+                if (progress >= 30) {
+                    mLoading.setVisibility(View.GONE);
+                } else {
+                    mLoading.setVisibility(View.VISIBLE);
                 }
 
                 if (progress == 100) {

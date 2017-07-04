@@ -10,15 +10,26 @@ public class FictionContentEvent {
     private String prePageUrl;
     private String nextPageUrl;
     private String title;
+    private String CurrUrl;
+
 
     public FictionContentEvent() {
     }
 
-    public FictionContentEvent(String fictionContent, String prePageUrl, String nextPageUrl, String title) {
+    public FictionContentEvent(String fictionContent, String prePageUrl, String nextPageUrl, String title, String currUrl) {
         this.fictionContent = fictionContent;
         this.prePageUrl = prePageUrl;
         this.nextPageUrl = nextPageUrl;
         this.title = title;
+        CurrUrl = currUrl;
+    }
+
+    public String getCurrUrl() {
+        return CurrUrl;
+    }
+
+    public void setCurrUrl(String currUrl) {
+        CurrUrl = currUrl;
     }
 
     public String getTitle() {

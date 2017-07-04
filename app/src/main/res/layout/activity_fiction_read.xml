@@ -33,6 +33,7 @@
         android:titleTextColor="@android:color/white"
         app:layout_behavior="@string/bye_burger_title_behavior"
         app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_gravity="top"
         app:titleTextColor="@android:color/white">
         <!--app:navigationIcon="@drawable/cha"-->
 
@@ -60,6 +61,7 @@
             android:id="@+id/read_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <TextView
@@ -71,6 +73,13 @@
 
 
         </ScrollView>
+
+        <!--<WebView-->
+            <!--android:id="@+id/read_webview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+        <!--</WebView>-->
 
     </FrameLayout>
 
