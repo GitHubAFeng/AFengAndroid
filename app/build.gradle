@@ -16,7 +16,12 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
 
+        // 防止依赖库重复引用在打包时报错
+        multiDexEnabled true
+
     }
+
+
     buildTypes {
 
         debug {
@@ -68,6 +73,8 @@ android {
 
     lintOptions {
         abortOnError false
+        // 打包报错可尝试
+//        checkReleaseBuilds false
     }
 
     //这一段可心解决有些os库不支持64位CPU，模拟器无法运行APK的问题
@@ -75,7 +82,7 @@ android {
         abi {
             enable true
             reset()
-            include 'x86', 'armeabi-v7a','x86_64'
+            include 'x86', 'armeabi-v7a', 'x86_64'
             universalApk true
         }
     }

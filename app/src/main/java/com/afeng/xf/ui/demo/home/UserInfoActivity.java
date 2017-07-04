@@ -37,8 +37,6 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +76,8 @@ public class UserInfoActivity extends BaseActivity {
 
 
     private static final int REQUEST_CODE_CHOOSE = 23;
+    public static final int RESULT_CODE = 101;
+    public static final String RESULT_KEY = "101";
 
 
     @Override
@@ -146,10 +146,15 @@ public class UserInfoActivity extends BaseActivity {
 //        initCache();
     }
 
+    @Override
+    protected void onStop() {
+        saveData();
+        super.onStop();
+    }
 
     @Override
     public void finish() {
-        saveData();
+//        saveData();
 
         super.finish();
     }
@@ -164,26 +169,14 @@ public class UserInfoActivity extends BaseActivity {
             String nick = mNickname.getText().toString();
 
 
-            AVUser.getCurrentUser().setEmail(email);
-            AVUser.getCurrentUser().saveInBackground();
-
-            // 修改表数据
-            // 第一参数是 className,第二个参数是 objectId
-            AVObject todo = AVObject.createWithoutData("UserInfo", Constants.USER_INFO_ID);
-            // 修改 content
-            todo.put("desc", desc);
-            todo.put("nickname", nick);
-            // 保存到云端
-            todo.saveInBackground();
-
-
             Eventdata.setDesc(desc);
             Eventdata.setNickname(nick);
             Eventdata.setUserEmail(email);
 
-//            saveCache(Eventdata);
+            Intent intent = getIntentBySerializData(RESULT_KEY, Eventdata);
 
-            EventBus.getDefault().post(Eventdata);
+            setResult(RESULT_CODE, intent);
+
         }
 
     }
@@ -246,15 +239,6 @@ public class UserInfoActivity extends BaseActivity {
 
         mCache.put(Constants.USER_INFO_KEY, data);
 
-//        Observable.just(data)
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Consumer<UserInfoEvent>() {
-//                    @Override
-//                    public void accept(UserInfoEvent userInfoEvent) throws Exception {
-//                        mCache.put(Constants.USER_INFO_KEY, userInfoEvent);
-//                    }
-//                });
-
     }
 
 
@@ -283,32 +267,36 @@ public class UserInfoActivity extends BaseActivity {
                     mNickname.setText(nick);
                     mUserName.post(() -> mUserName.setText(name));
 
-                    // 把图片下载回来
-                    avatar.getDataInBackground(new GetDataCallback() {
-                        @Override
-                        public void done(byte[] bytes, AVException e) {
-                            // bytes 就是文件的数据流
-                            if (e == null) {
-                                if (bytes != null) {
+                    if (avatar != null) {
 
-                                    Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
-                                    ImgLoadUtil.displayCircle(mContext, mAvatar, img);
+                        // 把图片下载回来
+                        avatar.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] bytes, AVException e) {
+                                // bytes 就是文件的数据流
+                                if (e == null) {
+                                    if (bytes != null) {
+
+                                        Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                        ImgLoadUtil.displayCircle(mContext, mAvatar, img);
 
 //                                    Eventdata.setAvatar(bytes);
-                                    Eventdata.setDesc(desc);
-                                    Eventdata.setNickname(nick);
-                                    Eventdata.setUserName(name);
-                                    Eventdata.setUserEmail(email);
-                                    Eventdata.setUserPhone(phone);
+                                        Eventdata.setDesc(desc);
+                                        Eventdata.setNickname(nick);
+                                        Eventdata.setUserName(name);
+                                        Eventdata.setUserEmail(email);
+                                        Eventdata.setUserPhone(phone);
+                                    }
                                 }
                             }
-                        }
-                    }, new ProgressCallback() {
-                        @Override
-                        public void done(Integer integer) {
-                            // 下载进度数据，integer 介于 0 和 100。
-                        }
-                    });
+                        }, new ProgressCallback() {
+                            @Override
+                            public void done(Integer integer) {
+                                // 下载进度数据，integer 介于 0 和 100。
+                            }
+                        });
+                    }
+
 
                 }
             });

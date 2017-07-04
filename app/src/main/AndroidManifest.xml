@@ -106,8 +106,10 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 
+        // alwaysRetainTaskState 防止APP多开
         <activity
             android:name="com.afeng.xf.ui.demo.MainActivity"
+            android:alwaysRetainTaskState='true'
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 

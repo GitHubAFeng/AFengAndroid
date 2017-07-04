@@ -17,7 +17,7 @@
             app:banner_pointAutoPlayAble="false"
             app:banner_pointContainerBackground="@android:color/transparent"
             app:banner_pointDrawable="@drawable/bga_banner_selector_point_hollow"
-            app:banner_pointTopBottomMargin="15dp"
+            app:banner_pointTopBottomMargin="30dp"
             app:banner_transitionEffect="fade"/>
 
         <cn.bingoogolapple.bgabanner.BGABanner
@@ -28,7 +28,7 @@
             app:banner_pointAutoPlayAble="false"
             app:banner_pointContainerBackground="@android:color/transparent"
             app:banner_pointDrawable="@drawable/bga_banner_selector_point_hollow"
-            app:banner_pointTopBottomMargin="15dp"
+            app:banner_pointTopBottomMargin="30dp"
             app:banner_transitionEffect="alpha"/>
     </cn.bingoogolapple.bgabanner.BGAGuideLinkageLayout>
 
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/shape_start_btn"
         android:padding="8dp"
         android:text="Start"

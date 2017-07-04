@@ -50,16 +50,19 @@ public class JsoupFictionManager {
      */
     private void initHeader(List<FictionModel> list) {
         FictionModel kswModel;
-        Elements select = document.select("div.item");
-        for (Element element : select) {
-            kswModel = new FictionModel();
-            kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
-            kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
-            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
-            kswModel.setDesc(element.select("dd").text());  //描述
-            kswModel.setAuthor(element.select("span").text());  //作者
-            list.add(kswModel);
+        if (document != null) {
+            Elements select = document.select("div.item");
+            for (Element element : select) {
+                kswModel = new FictionModel();
+                kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
+                kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
+                kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
+                kswModel.setDesc(element.select("dd").text());  //描述
+                kswModel.setAuthor(element.select("span").text());  //作者
+                list.add(kswModel);
+            }
         }
+
     }
 
 
@@ -67,25 +70,23 @@ public class JsoupFictionManager {
      * 获取中间6个头部有封面的小说
      */
     private void initCenterHeader(List<FictionModel> list) {
-        FictionModel kswHomeModel;
-        Elements select = document.select("div.content");
-        int size = select.size();
-        for (int i = 0; i < size; i++) {
-            kswHomeModel = new FictionModel();
-            Elements topSelect = select.get(i).select("div.top");  //顶部区域
-            kswHomeModel.setCoverImg(topSelect.select("img[src]").attr("src"));  //封面
-            kswHomeModel.setTitle(topSelect.select("img[src]").attr("alt"));  //书名
-            kswHomeModel.setDetailUrl(topSelect.select("a:has(img)").attr("abs:href")); //拥有img标签的a标签，取a标签的绝对路径
-            kswHomeModel.setDesc(topSelect.select("dd").text());  //描述
-            list.add(kswHomeModel);
+        if (document != null) {
+            FictionModel kswHomeModel;
+            Elements select = document.select("div.content");
+            int size = select.size();
+            for (int i = 0; i < size; i++) {
+                kswHomeModel = new FictionModel();
+                Elements topSelect = select.get(i).select("div.top");  //顶部区域
+                kswHomeModel.setCoverImg(topSelect.select("img[src]").attr("src"));  //封面
+                kswHomeModel.setTitle(topSelect.select("img[src]").attr("alt"));  //书名
+                kswHomeModel.setDetailUrl(topSelect.select("a:has(img)").attr("abs:href")); //拥有img标签的a标签，取a标签的绝对路径
+                kswHomeModel.setDesc(topSelect.select("dd").text());  //描述
+                list.add(kswHomeModel);
+            }
+
         }
 
     }
-
-
-
-
-
 
 
 //TODO 我发现在有意思的是，例如用F12调试 ，选择区 如  "div#newscontent" 这样的标签，浏览器已经帮你筛选好了
@@ -95,18 +96,19 @@ public class JsoupFictionManager {
      */
     private void initRecent(List<FictionModel> list) {
 
-        FictionModel kswHomeModel;
-        Elements select = document.select("div#newscontent").select("div.l").select("span.s2").select("a");
-        for (Element element : select) {
-            kswHomeModel = new FictionModel();
-            kswHomeModel.setTitle(element.text());
-            kswHomeModel.setDetailUrl(element.attr("abs:href"));
-            list.add(kswHomeModel);
+        if (document != null) {
+            FictionModel kswHomeModel;
+            Elements select = document.select("div#newscontent").select("div.l").select("span.s2").select("a");
+            for (Element element : select) {
+                kswHomeModel = new FictionModel();
+                kswHomeModel.setTitle(element.text());
+                kswHomeModel.setDetailUrl(element.attr("abs:href"));
+                list.add(kswHomeModel);
+            }
         }
 
+
     }
-
-
 
 
 }

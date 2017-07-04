@@ -220,7 +220,7 @@ public class SplashActivity extends AFengActivity {
 
     private void initlocalBanner() {
 
-        mBackgroundBanner.setData(R.drawable.the_guide_background_1, R.drawable.the_guide_background_2, R.drawable.the_guide_background_3);
+        mBackgroundBanner.setData(R.drawable.the_guide_background_2, R.drawable.the_guide_background_1, R.drawable.the_guide_background_3);
         mForegroundBanner.setData(R.drawable.the_guide_foreground_1, R.drawable.the_guide_foreground_2, R.drawable.the_guide_foreground_3);
 
     }

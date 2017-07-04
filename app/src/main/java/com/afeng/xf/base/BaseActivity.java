@@ -200,12 +200,27 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     /**
+     * 存入对象并且返回Intent
+     * @param key
+     * @param data
+     * @return
+     */
+    public Intent getIntentBySerializData(String key, Serializable data) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(key, data);
+        intent.putExtras(bundle);
+        return intent;
+    }
+
+
+    /**
      * 接收 来自 源Activity 的数据对象
      *
      * @param key
      * @return
      */
-    public Object getIntentData(String key) {
+    public Object getSerializDataByKey(String key) {
 
         try {
             Intent intent = this.getIntent();

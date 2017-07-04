@@ -82,6 +82,8 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
+    public final static int USERINFO_REQUEST_CODE = 100;
+
     @BindView(R.id.main_viewPager)
     ViewPager mMainViewPager;
     @BindView(R.id.main_tab)
@@ -112,6 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public Fragment[] mFragments = new Fragment[6];
 
+    UserInfoEvent mEventdata = new UserInfoEvent();  //当前用户资料
 
     FeedbackAgent agent = null;
 
@@ -296,7 +299,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 case R.id.ll_nav_me:// 我的信息
 
                     if (AVUser.getCurrentUser() != null) {
-                        startActivity(new Intent(this, UserInfoActivity.class));
+//                        startActivity(new Intent(this, UserInfoActivity.class));
+                        goToActivityForResult(UserInfoActivity.class, null, USERINFO_REQUEST_CODE);
 
                     } else {
                         xToastShow("您还未登录用户！");
@@ -479,7 +483,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -557,6 +560,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == USERINFO_REQUEST_CODE) {
+            if (resultCode == UserInfoActivity.RESULT_CODE) {
+
+                UserInfoEvent userinfo = (UserInfoEvent) data.getSerializableExtra(UserInfoActivity.RESULT_KEY);
+                saveUserInfo(userinfo);
+            }
+        }
+
+    }
+
+
+    // 保存用户信息
+    private void saveUserInfo(UserInfoEvent data) {
+
+        if (AVUser.getCurrentUser() != null) {
+
+            String email = data.getUserEmail();
+            String desc = data.getDesc();
+            String nick = data.getNickname();
+
+            AVUser.getCurrentUser().setEmail(email);
+            AVUser.getCurrentUser().saveInBackground();
+
+            // 修改表数据
+            // 第一参数是 className,第二个参数是 objectId
+            AVObject todo = AVObject.createWithoutData("UserInfo", Constants.USER_INFO_ID);
+            // 修改 content
+            todo.put("desc", desc);
+            todo.put("nickname", nick);
+            // 保存到云端
+            todo.saveInBackground();
+
+            mCache.put(Constants.USER_INFO_KEY, data);
+
+        }
+
+    }
+
+
     //登录或者注册成功后
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ReceviceMessage(LoginEvent event) {
@@ -623,70 +668,105 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initUser() {
 
-        AVUser currentUser = AVUser.getCurrentUser();
-        if (currentUser != null) {
-            // 联表查询
-            AVObject _User = AVObject.createWithoutData("_User", currentUser.getObjectId());
-            _User.fetchInBackground("UserInfo", new GetCallback<AVObject>() {
-                @Override
-                public void done(AVObject avObject, AVException e) {
-                    if (e == null) {
-                        if (avObject != null) {
+        List<PermissionItem> permissionItems = new ArrayList<>();
+        permissionItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "数据存储", R.drawable.permission_ic_storage));
+        permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话状态", R.drawable.permission_ic_phone));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_NETWORK_STATE, "网络状态", R.drawable.permission_ic_network));
+        permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_WIFI_STATE, "WIFI状态", R.drawable.permission_ic_wifi));
+        HiPermission.create(MainActivity.this)
+                .title("权限申请")
+                .permissions(permissionItems)
+//                .msg("此APP运行需要此项权限！")
+                .animStyle(R.style.PermissionAnimFade)
+                .style(R.style.PermissionDefaultNormalStyle)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+                        //用户关闭权限申请
 
-                            AVObject info = avObject.getAVObject("UserInfo");
+                    }
 
-                            if (info != null) {
-                                String desc = info.getString("desc");
-                                AVFile avatar = info.getAVFile("avatar");
-                                String nickname = info.getString("nickname");  //昵称
-                                String username = TextUtils.isEmpty(nickname) ? currentUser.getUsername() : nickname;
+                    @Override
+                    public void onFinish() {
+                        //所有权限申请完成
 
-                                // 把图片下载回来
-                                avatar.getDataInBackground(new GetDataCallback() {
-                                    @Override
-                                    public void done(byte[] bytes, AVException e) {
-                                        // bytes 就是文件的数据流
-                                        if (e == null) {
-                                            if (bytes != null) {
-                                                Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
-                                                ImgLoadUtil.displayCircle(mContext, mUserAva, img);
-                                                ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
+                        AVUser currentUser = AVUser.getCurrentUser();
+                        if (currentUser != null) {
+                            // 联表查询
+                            AVObject _User = AVObject.createWithoutData("_User", currentUser.getObjectId());
+                            _User.fetchInBackground("UserInfo", new GetCallback<AVObject>() {
+                                @Override
+                                public void done(AVObject avObject, AVException e) {
+                                    if (e == null) {
+                                        if (avObject != null) {
+
+                                            AVObject info = avObject.getAVObject("UserInfo");
+
+                                            if (info != null) {
+                                                String desc = TextUtils.isEmpty(info.getString("desc")) ? "心情" : info.getString("desc");
+                                                AVFile avatar = info.getAVFile("avatar");
+                                                String nickname = info.getString("nickname");  //昵称
+                                                String username = TextUtils.isEmpty(nickname) ? currentUser.getUsername() : nickname;
+                                                if (avatar != null) {
+                                                    // 把图片下载回来
+                                                    avatar.getDataInBackground(new GetDataCallback() {
+                                                        @Override
+                                                        public void done(byte[] bytes, AVException e) {
+                                                            // bytes 就是文件的数据流
+                                                            if (e == null) {
+                                                                if (bytes != null) {
+                                                                    Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                                                    ImgLoadUtil.displayCircle(mContext, mUserAva, img);
+                                                                    ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
+                                                                }
+                                                            }
+                                                        }
+                                                    }, new ProgressCallback() {
+                                                        @Override
+                                                        public void done(Integer integer) {
+                                                            // 下载进度数据，integer 介于 0 和 100。
+                                                        }
+                                                    });
+                                                }
+
+                                                mUserName.post(() -> mUserName.setText(username));
+                                                mNavDesc.post(() -> mNavDesc.setText(desc));
+                                                mNavUserName.post(() -> mNavUserName.setText(username));
+
+                                                mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("登出用户");
+
+
+                                                Constants.USER_INFO_ID = info.getObjectId();  //保存用户关联的信息表，方便下次查询
+
+
+                                            } else {
+                                                xToastShow("info为空");
                                             }
+
+                                        } else {
+                                            xToastShow("avObject为空");
                                         }
                                     }
-                                }, new ProgressCallback() {
-                                    @Override
-                                    public void done(Integer integer) {
-                                        // 下载进度数据，integer 介于 0 和 100。
-                                    }
-                                });
+                                }
+                            });
 
-                                mUserName.post(() -> mUserName.setText(username));
-                                mNavDesc.post(() -> mNavDesc.setText(desc));
-                                mNavUserName.post(() -> mNavUserName.setText(username));
-
-                                mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("登出用户");
-
-
-                                Constants.USER_INFO_ID = info.getObjectId();  //保存用户关联的信息表，方便下次查询
-
-
-                            } else {
-                                xToastShow("info为空");
-                            }
 
                         } else {
-                            xToastShow("avObject为空");
-                        }
-                    }
-                }
-            });
-
-
-        } else {
 //            xToastShow("当前未登录");
-        }
+                        }
 
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+                        //用户不同意
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
 
     }
 

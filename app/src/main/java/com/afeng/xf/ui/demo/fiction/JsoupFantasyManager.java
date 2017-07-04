@@ -23,14 +23,14 @@ public class JsoupFantasyManager {
 
     public List<FictionModel> getData() {
         List<FictionModel> list = new ArrayList<>();
-        initHeader(list,"http://www.zwdu.com/xuanhuan/");
-        initHeader(list,"http://www.zwdu.com/xianxia/");
-        initHeader(list,"http://www.zwdu.com/dushi/");
-        initHeader(list,"http://www.zwdu.com/lishi/");
-        initHeader(list,"http://www.zwdu.com/wangyou/");
-        initHeader(list,"http://www.zwdu.com/kehuan/");
-        initHeader(list,"http://www.zwdu.com/yanqing/");
-        initHeader(list,"http://www.zwdu.com/qita/");
+        initHeader(list, "http://www.zwdu.com/xuanhuan/");
+        initHeader(list, "http://www.zwdu.com/xianxia/");
+        initHeader(list, "http://www.zwdu.com/dushi/");
+        initHeader(list, "http://www.zwdu.com/lishi/");
+        initHeader(list, "http://www.zwdu.com/wangyou/");
+        initHeader(list, "http://www.zwdu.com/kehuan/");
+        initHeader(list, "http://www.zwdu.com/yanqing/");
+        initHeader(list, "http://www.zwdu.com/qita/");
         return list;
     }
 
@@ -49,17 +49,21 @@ public class JsoupFantasyManager {
             e.printStackTrace();
         }
 
-        FictionModel kswModel;
-        Elements select = document.select("div.ll");
-        for (Element element : select) {
-            kswModel = new FictionModel();
-            kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
-            kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
-            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
-            kswModel.setDesc(element.select("dd").text());  //描述
-            kswModel.setAuthor(element.select("span").text());  //作者
-            list.add(kswModel);
+        if (document != null) {
+
+            FictionModel kswModel;
+            Elements select = document.select("div.ll");
+            for (Element element : select) {
+                kswModel = new FictionModel();
+                kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
+                kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
+                kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
+                kswModel.setDesc(element.select("dd").text());  //描述
+                kswModel.setAuthor(element.select("span").text());  //作者
+                list.add(kswModel);
+            }
         }
+
     }
 
 
@@ -77,22 +81,25 @@ public class JsoupFantasyManager {
             e.printStackTrace();
         }
 
-        FictionModel kswModel;
-        Elements select = document.select("div.ll");
-        for (Element element : select) {
-            kswModel = new FictionModel();
-            kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
-            kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
-            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
-            kswModel.setDesc(element.select("dd").text());  //描述
-            kswModel.setAuthor(element.select("span").text());  //作者
-            list.add(kswModel);
+        if (document != null) {
+
+            FictionModel kswModel;
+            Elements select = document.select("div.ll");
+            for (Element element : select) {
+                kswModel = new FictionModel();
+                kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
+                kswModel.setCoverImg(element.select("img[src]").attr("src"));  //封面
+                kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
+                kswModel.setDesc(element.select("dd").text());  //描述
+                kswModel.setAuthor(element.select("span").text());  //作者
+                list.add(kswModel);
+            }
         }
+
     }
 
 
-
-    private void initHeader(List<FictionModel> list , String pageurl) {
+    private void initHeader(List<FictionModel> list, String pageurl) {
 
         Document document = null;
         try {
@@ -103,21 +110,23 @@ public class JsoupFantasyManager {
             e.printStackTrace();
         }
 
-        FictionModel kswModel;
-        Elements select = document.select("div#hotcontent").select("div.ll").select("div.item");
-        for (Element element : select) {
-            kswModel = new FictionModel();
-            kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
-            kswModel.setCoverImg(element.select("img[src]").attr("abs:src"));  //封面
-            kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
-            kswModel.setDesc(element.select("dd").text());  //描述
-            kswModel.setAuthor(element.select("span").text());  //作者
-            list.add(kswModel);
+        if (document != null) {
+
+            FictionModel kswModel;
+            Elements select = document.select("div#hotcontent").select("div.ll").select("div.item");
+            for (Element element : select) {
+                kswModel = new FictionModel();
+                kswModel.setTitle(element.select("img[src]").attr("alt"));  //书名
+                kswModel.setCoverImg(element.select("img[src]").attr("abs:src"));  //封面
+                kswModel.setDetailUrl(element.select("a:has(img)").attr("abs:href")); //abs:href 返回绝对路径
+                kswModel.setDesc(element.select("dd").text());  //描述
+                kswModel.setAuthor(element.select("span").text());  //作者
+                list.add(kswModel);
+            }
+
         }
+
     }
-
-
-
 
 
 }

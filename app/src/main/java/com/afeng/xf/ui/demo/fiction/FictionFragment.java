@@ -120,6 +120,9 @@ public class FictionFragment extends BaseFragment {
     @Override
     protected void onVisibleToUser() {
 
+        if (fictionDatas.size() == 0) {
+            initData();
+        }
 
     }
 

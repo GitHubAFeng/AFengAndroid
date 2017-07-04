@@ -28,8 +28,6 @@ import com.afeng.xf.utils.AFengUtils.PerfectClickListener;
 import com.afeng.xf.widget.searchbox.SearchFragment;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +88,7 @@ public class FictionSearchActivity extends BaseActivity {
 //            EventBus.getDefault().register(this);
 //        }
 
-        MySearchEvent mySearchEvent = (MySearchEvent) getIntentData(Constants.SEARCH_KEY);
+        MySearchEvent mySearchEvent = (MySearchEvent) getSerializDataByKey(Constants.SEARCH_KEY);
         if (mySearchEvent != null) {
             fictionName = mySearchEvent.getSearchDesc();
         }
