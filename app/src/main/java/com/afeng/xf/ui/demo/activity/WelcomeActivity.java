@@ -103,29 +103,37 @@ public class WelcomeActivity extends AFengActivity {
 
                     @Override
                     public void onFinish() {
-                        requestImage();
+                        try {
 
-                        loadShowSplash();
+                            requestImage();
 
-                        Disposable dis = getObservable()
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeWith(new DisposableObserver<Long>() {
-                                    @Override
-                                    public void onNext(Long aLong) {
+                            loadShowSplash();
 
-                                    }
+                            Disposable dis = getObservable()
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeWith(new DisposableObserver<Long>() {
+                                        @Override
+                                        public void onNext(Long aLong) {
 
-                                    @Override
-                                    public void onError(Throwable e) {
+                                        }
 
-                                    }
+                                        @Override
+                                        public void onError(Throwable e) {
 
-                                    @Override
-                                    public void onComplete() {
-                                        enterApp();
-                                    }
-                                });
-                        addDisposable(dis);
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+                                            enterApp();
+                                        }
+                                    });
+                            addDisposable(dis);
+
+                        } catch (Exception e) {
+
+                            enterApp();
+                        }
+
 
                     }
 
@@ -149,7 +157,8 @@ public class WelcomeActivity extends AFengActivity {
         return Observable.timer(2, TimeUnit.SECONDS);
     }
 
-    //启动图
+
+    //网络启动图，多数为广告
     private void requestImage() {
 
 //        AVObject todoFolder = new AVObject("AdvertisingItem");// 构建对象

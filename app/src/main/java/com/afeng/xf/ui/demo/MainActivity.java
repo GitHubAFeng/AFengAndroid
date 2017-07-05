@@ -109,14 +109,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.main_user_name)
     TextView mUserName;
 
-    public String[] mTitles = {"首页", "小说", "妹纸", "读书", "电影", "更多"};
+    //tab的标题
+    public String[] mTitles = {
+            "首页",
+            "小说",
+            "妹纸",
+            "读书",
+            "电影",
+            "更多"
+    };
 
+    // 与标题对应的Fragment
+    public Fragment[] mFragments = {
 
-    public Fragment[] mFragments = new Fragment[6];
+            SimpleFragment.getInstance(),
+            FictionFragment.newInstance(),
+            MeiZiFragment.getInstance(),
+            BookFragment.newInstance(),
+            MovieFragment.newInstance(),
+            MoreFragment.getInstance()
+    };
 
     UserInfoEvent mEventdata = new UserInfoEvent();  //当前用户资料
 
-    FeedbackAgent agent = null;
+    FeedbackAgent agent = null;  //用户反馈模块
 
 
     @Override
@@ -163,13 +179,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
         agent.sync();  //通知用户新的反馈回复
-
-        mFragments[0] = SimpleFragment.getInstance();
-        mFragments[1] = FictionFragment.newInstance();
-        mFragments[2] = MeiZiFragment.getInstance();
-        mFragments[3] = BookFragment.newInstance();
-        mFragments[4] = MovieFragment.newInstance();
-        mFragments[5] = MoreFragment.getInstance();
 
         initViewPager();
     }
@@ -570,8 +579,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if (resultCode == UserInfoActivity.RESULT_CODE) {
 
                 try {
-                    UserInfoEvent userinfo = (UserInfoEvent) data.getSerializableExtra(UserInfoActivity.RESULT_KEY);
-                    saveUserInfo(userinfo);
+                    mEventdata = (UserInfoEvent) data.getSerializableExtra(UserInfoActivity.RESULT_KEY);
+                    saveUserInfo(mEventdata);
                 } catch (Exception e) {
                     xLogger(e.toString());
                 }

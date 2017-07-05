@@ -93,14 +93,20 @@ public class SplashActivity extends AFengActivity {
 
 
     private void initdata() {
-        if (isShowNet) {
-            // 网络
-            initNetBanner();
-            initNetBannerData();
 
-        } else {
-            // 本地
-            initlocalBanner();
+        try {
+            if (isShowNet) {
+                // 网络
+                initNetBanner();
+                initNetBannerData();
+
+            } else {
+                // 本地
+                initlocalBanner();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            finish();
         }
 
 
