@@ -376,7 +376,7 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
 
             Glide.with(img.getContext())
                     .load(item.getImg())
-                    .placeholder(R.drawable.loading_list_item)  //临时占位图
+                    .placeholder(R.drawable.img_loading_git)  //临时占位图
                     .error(R.drawable.load_err)  //加载错误时显示图
                     .fitCenter()
                     .into(img);

@@ -2,17 +2,20 @@ apply plugin: 'com.android.application'
 
 
 android {
+    signingConfigs {
+    }
+
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.afeng.xf"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 25
 
         //内部版本号，int类型
         versionCode 1
         //对外版本号，string
-        versionName "1.2"
+        versionName "1.0"
 
         //识别jniLibs目录下的子目录
         ndk {
@@ -23,8 +26,6 @@ android {
         multiDexEnabled true
 
     }
-
-
     buildTypes {
 
         debug {
@@ -42,18 +43,19 @@ android {
 
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            // 是否开启混淆
-//            minifyEnabled true
             //Zipalign资源对字节对齐优化
             zipAlignEnabled true
-            // 移除无用的resource文件,需要开启混淆
+
+            // 是否开启混淆
+//            minifyEnabled true
+
+            //移除无用的resource文件,需要开启混淆
 //            shrinkResources true
 
             //混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     // 默认是在 src/main/jniLibs
     //把so库统一放在libs目录
 //    sourceSets {
@@ -61,25 +63,20 @@ android {
 //            jniLibs.srcDirs = ['libs']
 //        }
 //    }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     //为了解决部分第三方库重复打包了META-INF的问题
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-
     lintOptions {
         abortOnError false
         // 打包报错可尝试
         checkReleaseBuilds false
     }
-
     //这一段可心解决有些os库不支持64位CPU，模拟器无法运行APK的问题
     splits {
         abi {
@@ -88,6 +85,9 @@ android {
             include 'x86', 'armeabi-v7a', 'x86_64'
             universalApk true
         }
+    }
+
+    productFlavors {
     }
 
 
@@ -191,5 +191,5 @@ dependencies {
     compile 'com.zhihu.android:matisse:0.4.3'
 
     //腾讯第三方X5内核WedView
-    implementation files('libs/tbs_sdk_thirdapp_v3.2.0.1104_43200_sharewithdownload_withfilereader_withoutGame_obfs_20170609_115346.jar')
+    implementation files('libs/tbs_sdk.jar')
 }

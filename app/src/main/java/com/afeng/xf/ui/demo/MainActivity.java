@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afeng.xf.base.BaseActivity;
+import com.afeng.xf.widget.TBSWebView.WebEvent;
+import com.afeng.xf.widget.TBSWebView.X5WebViewActivity;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
@@ -396,6 +398,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mTitleOne.setSelected(false);
 
                 xToastUtil.showToast("频道3正在内测,敬请期待");
+                //A站文章区
+                goToX5WebViewActivity(new WebEvent(Constants.ACFUN_WEI_JS_CODE, "http://m.acfun.cn/list/#channel=110"));
 
                 break;
             case R.id.iv_title_two:
@@ -404,6 +408,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mTitleOne.setSelected(false);
 
                 xToastUtil.showToast("2频道正在内测,敬请期待");
+                //游记
+                goToX5WebViewActivity(new WebEvent(Constants.None_JS_CODE, "http://chanyouji.com/destinations"));
+
 
                 break;
             case R.id.iv_title_one:
@@ -412,6 +419,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mTitleOne.setSelected(true);
 
                 xToastUtil.showToast("1频道正在内测,敬请期待");
+                //P站
+                goToX5WebViewActivity(new WebEvent(Constants.P_JS_CODE, "https://touch.pixiv.net/"));
+
 
                 break;
             case R.id.ll_title_menu:
@@ -433,6 +443,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         }
     }
+
+
+    private void goToX5WebViewActivity(WebEvent event) {
+
+        Intent intent = new Intent();
+        intent.setClass(this, X5WebViewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.WEBEVENT, event);
+        intent.putExtras(bundle);
+
+        this.startActivity(intent);
+
+    }
+
 
 
     // 用户注册登录
@@ -462,7 +486,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initContent() {
 
         //默认选中第一项
-        mTitleOne.setSelected(true);
+//        mTitleOne.setSelected(true);
+
     }
 
 

@@ -63,12 +63,31 @@ public class Constants {
                     "})()";
 
 
-    // 漫画 嵌入JS
+    // 173漫画 嵌入JS
     public static String COMIC_JS_CODE =
 
             "javascript:(function() {" +
                     "document.getElementsByClassName('register-download')[0].style.display='none'; " +
+                    "document.getElementById('ad').style.display='none'; " +
                     "})()";
+
+
+    // A站文章区 嵌入JS
+    public static String ACFUN_WEI_JS_CODE =
+
+            "javascript:(function() {" +
+                    "document.getElementById('prompt-box').style.display='none'; " +
+                    "document.getElementById('btn-app').style.display='none'; " +
+                    "})()";
+
+
+    // P站 嵌入JS
+    public static String P_JS_CODE =
+
+            "javascript:(function() {" +
+                    "document.getElementsByClassName('signup-black')[0].style.display='none'; " +
+                    "})()";
+
 
 
     //网易

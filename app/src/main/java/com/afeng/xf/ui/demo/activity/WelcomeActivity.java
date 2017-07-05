@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.utils.AFengUtils.StatusBarUtil;
 import com.afeng.xf.widget.hipermission.HiPermission;
 import com.afeng.xf.widget.hipermission.PermissionCallback;
@@ -41,7 +42,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by AFeng on 2017/3/12.
  */
 
-public class WelcomeActivity extends AFengActivity {
+public class WelcomeActivity extends BaseActivity {
 
     private static final String WELCOME_KEY = "welcome";
     private boolean isInMain;
@@ -64,7 +65,7 @@ public class WelcomeActivity extends AFengActivity {
     protected void initView(Bundle savedInstanceState) {
         mActivity = this;
         //此页面隐藏状态栏
-        StatusBarUtil.hideSystemUI(this);
+//        StatusBarUtil.hideSystemUI(this);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.utils.AFengUtils.StatusBarUtil;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -25,7 +26,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
  * Created by AFeng on 2017/3/8.
  */
 
-public class SplashActivity extends AFengActivity {
+public class SplashActivity extends BaseActivity {
 
     private BGABanner mBackgroundBanner;
     private BGABanner mForegroundBanner;
@@ -54,7 +55,7 @@ public class SplashActivity extends AFengActivity {
         isShowNet = intent.getBooleanExtra("isshownet", false);
 
         //此页面隐藏状态栏
-        StatusBarUtil.hideSystemUI(this);
+//        StatusBarUtil.hideSystemUI(this);
 
         mBackgroundBanner = getViewById(R.id.banner_guide_background);
         mForegroundBanner = getViewById(R.id.banner_guide_foreground);

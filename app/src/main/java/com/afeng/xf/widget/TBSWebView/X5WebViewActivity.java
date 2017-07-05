@@ -189,6 +189,21 @@ public class X5WebViewActivity extends BaseActivity {
 
     }
 
+    // 关闭时清除所以子VIEW，防止窗体泄露
+    @Override
+    public void finish() {
+
+        //  API 11之前，在finish时，从view层级中删除webview
+        if (mWebView != null) {
+            ViewGroup viewgroup = (ViewGroup) (mWebView.getParent());
+            viewgroup.removeView(mWebView);
+        }
+
+        ViewGroup view = (ViewGroup) getWindow().getDecorView();
+        view.removeAllViews();
+
+        super.finish();
+    }
 
     private void initToolbar() {
 
@@ -236,6 +251,8 @@ public class X5WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+
+                view.loadUrl(mWebEvent.getInjectJS());  //插入JS
 
                 if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 16)
                     changGoForwardButton(view);
@@ -297,9 +314,9 @@ public class X5WebViewActivity extends BaseActivity {
              */
             @Override
             public void onProgressChanged(WebView webView, int progress) {
-                if (progress == 25) {
-                    webView.loadUrl(mWebEvent.getInjectJS());  //插入JS
-                }
+//                if (progress == 25) {
+//                    webView.loadUrl(mWebEvent.getInjectJS());  //插入JS
+//                }
 
                 if (progress >= 30) {
                     mLoading.setVisibility(View.GONE);
@@ -441,6 +458,9 @@ public class X5WebViewActivity extends BaseActivity {
         webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
                 .getPath());
         webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+
+        //  API 11之后，不显示缩放按钮
+        webSetting.setDisplayZoomControls(false);
 
 
         long time = System.currentTimeMillis();

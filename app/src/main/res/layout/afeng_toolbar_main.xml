@@ -91,28 +91,33 @@
                         <com.zhy.autolayout.AutoLinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             app:theme="@style/AppTheme">
 
                             <ImageView
                                 android:id="@+id/iv_title_one"
-                                android:layout_width="90px"
-                                android:layout_height="match_parent"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/titlebar_music" />
 
                             <ImageView
                                 android:id="@+id/iv_title_two"
-                                android:layout_width="90px"
-                                android:layout_height="wrap_content"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="5dp"
                                 android:layout_gravity="center"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/titlebar_disco" />
 
                             <ImageView
                                 android:id="@+id/iv_title_thr"
-                                android:layout_width="90px"
-                                android:layout_height="match_parent"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/titlebar_friends" />
 
