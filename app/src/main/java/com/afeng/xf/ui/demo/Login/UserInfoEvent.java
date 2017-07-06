@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by Administrator on 2017/6/29.
  */
 
-public class UserInfoEvent implements Serializable{
+public class UserInfoEvent implements Serializable {
 
     private static final long serialVersionUID = 406016641791080595L;
 
@@ -18,12 +18,29 @@ public class UserInfoEvent implements Serializable{
     private String userName;
     private String userEmail;
     private String userPhone;
+    private boolean isEmailVerified;  //邮箱是否验证
+    private boolean isPhoneVerified;  //手机是否验证
 
+    public boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        isEmailVerified = emailVerified;
+    }
+
+    public boolean isPhoneVerified() {
+        return isPhoneVerified;
+    }
+
+    public void setPhoneVerified(boolean phoneVerified) {
+        isPhoneVerified = phoneVerified;
+    }
 
     public UserInfoEvent() {
     }
 
-    public UserInfoEvent(String nickname, String desc, boolean isAvatarUpdate, byte[] avatar, String userName, String userEmail, String userPhone) {
+    public UserInfoEvent(String nickname, String desc, boolean isAvatarUpdate, byte[] avatar, String userName, String userEmail, String userPhone, boolean isEmailVerified, boolean isPhoneVerified) {
         this.nickname = nickname;
         this.desc = desc;
         this.isAvatarUpdate = isAvatarUpdate;
@@ -31,6 +48,8 @@ public class UserInfoEvent implements Serializable{
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPhone = userPhone;
+        this.isEmailVerified = isEmailVerified;
+        this.isPhoneVerified = isPhoneVerified;
     }
 
     public String getUserName() {
@@ -65,7 +84,6 @@ public class UserInfoEvent implements Serializable{
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
-
 
 
     public boolean isAvatarUpdate() {

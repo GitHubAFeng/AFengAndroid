@@ -6,18 +6,25 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afeng.xf.utils.AFengUtils.PerfectClickListener;
+import com.afeng.xf.widget.button.CountDownTimerButton;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.ProgressCallback;
+import com.avos.avoscloud.RequestEmailVerifyCallback;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,6 +45,7 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,6 +79,9 @@ public class UserInfoActivity extends BaseActivity {
     @BindView(R.id.user_info_avatar)
     ImageView mAvatar;
 
+    @BindView(R.id.user_info_email_verified)
+    CountDownTimerButton mEmailButton;
+
 
     UserInfoEvent Eventdata = new UserInfoEvent();
 
@@ -88,10 +99,22 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
+        mEmailButton.setClickAfter("秒后可点击");
+        mEmailButton.setClickBeffor("验证邮箱");
+
     }
 
     @Override
     protected void setListener() {
+
+
+        mEmailButton.setOnClickListener(new PerfectClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                VerifyEmail();
+            }
+        });
+
 
         mAvatar.setOnClickListener(v -> getImg());
 //
@@ -155,6 +178,56 @@ public class UserInfoActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+
+    private void VerifyEmail() {
+
+        String temp = mEmail.getText().toString().trim();
+
+        // 查询邮箱是否已经被注册
+        AVQuery<AVObject> query = new AVQuery<>("_User");
+        query.whereNotEqualTo("objectId", AVUser.getCurrentUser().getObjectId());
+        query.whereEqualTo("email", temp);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                String email;
+                boolean isequals = false;
+
+                if (list != null) {
+                    for (AVObject avObject : list) {
+                        email = avObject.getString("email");
+
+                        if (temp.equals(email)) {
+                            isequals = true;
+                            break;
+                        }
+                    }
+                } else {
+                    xLogger("email列表为空");
+                }
+
+                if (isequals) {
+                    xToastShow("此邮箱地址已经被注册");
+                } else {
+
+                    //开始倒计
+                    mEmailButton.startTimer();
+                    xToastShow("正在发送邮件");
+
+                    AVUser.requestEmailVerifyInBackground(temp, new RequestEmailVerifyCallback() {
+                        @Override
+                        public void done(AVException e) {
+                            if (e == null) {
+                                // 求重发验证邮件成功
+                                xToastShow("邮件发送成功");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+    }
 
 
     // 退出时保存
@@ -244,11 +317,34 @@ public class UserInfoActivity extends BaseActivity {
         if (AVUser.getCurrentUser() != null) {
 
             String username = AVUser.getCurrentUser().getUsername();
-            String email = AVUser.getCurrentUser().getEmail();
             String phone = AVUser.getCurrentUser().getMobilePhoneNumber();
 
             mPhone.post(() -> mPhone.setText(phone));
-            mEmail.post(() -> mEmail.setText(email));
+
+
+            // 查询用户邮箱与手机是否验证
+            AVQuery<AVObject> userQuery = new AVQuery<>("_User");
+            userQuery.getInBackground(AVUser.getCurrentUser().getObjectId(), new GetCallback<AVObject>() {
+                @Override
+                public void done(AVObject avObject, AVException e) {
+                    boolean isemailVerified = avObject.getBoolean("emailVerified");
+                    boolean isphoneVerified = avObject.getBoolean("mobilePhoneVerified");
+                    Eventdata.setEmailVerified(isemailVerified);
+                    Eventdata.setPhoneVerified(isphoneVerified);
+
+                    String email = avObject.getString("email");
+                    mEmail.post(() -> mEmail.setText(email));
+                    Eventdata.setUserEmail(email);
+
+
+                    if (isemailVerified) {
+                        mEmailButton.setVisibility(View.GONE);
+                    } else {
+                        mEmailButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
 
             AVQuery<AVObject> avQuery = new AVQuery<>("UserInfo");
             avQuery.getInBackground(Constants.USER_INFO_ID, new GetCallback<AVObject>() {
@@ -282,7 +378,6 @@ public class UserInfoActivity extends BaseActivity {
                                         Eventdata.setDesc(desc);
                                         Eventdata.setNickname(nick);
                                         Eventdata.setUserName(name);
-                                        Eventdata.setUserEmail(email);
                                         Eventdata.setUserPhone(phone);
                                     }
                                 }
@@ -298,7 +393,6 @@ public class UserInfoActivity extends BaseActivity {
 
                 }
             });
-
 
         }
 

@@ -15,7 +15,7 @@ public class Constants {
 
     // 用户信息缓存 KEY
     public static final String USER_INFO_KEY = "userinfocache";
-
+    // 当前用户信息ID
     public static String USER_INFO_ID = "";
 
     public static final String WELCOME_PIC = "http://oki2v8p4s.bkt.clouddn.com/wec_1.jpg";   //启动图

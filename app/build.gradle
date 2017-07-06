@@ -104,6 +104,10 @@ dependencies {
     // 动画库
     compile 'com.android.support:support-compat:25.4.0'
 
+    //material-dialogs  对话框
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
+
     //内存泄露检测
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'

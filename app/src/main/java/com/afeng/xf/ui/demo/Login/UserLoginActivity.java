@@ -21,6 +21,7 @@ import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.ui.demo.MainActivity;
 import com.afeng.xf.utils.AFengUtils.AppValidationMgr;
 import com.afeng.xf.widget.snackbarlight.Light;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -195,6 +196,23 @@ public class UserLoginActivity extends BaseActivity {
         finish();
 
     }
+
+
+    private void forgetPassWord(){
+
+        AVUser.requestPasswordResetInBackground("", new RequestPasswordResetCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
 
 
 }

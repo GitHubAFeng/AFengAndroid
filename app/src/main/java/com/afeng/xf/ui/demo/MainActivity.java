@@ -458,7 +458,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
     // 用户注册登录
     private void userLoginOrReg() {
 
@@ -621,7 +620,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         if (AVUser.getCurrentUser() != null) {
 
-            String email = data.getUserEmail();
+            String email = data.getUserEmail().trim();
             String desc = data.getDesc();
             String nick = data.getNickname();
 
@@ -634,8 +633,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mNavDesc.post(() -> mNavDesc.setText(desc));
             }
 
-            AVUser.getCurrentUser().setEmail(email);
-            AVUser.getCurrentUser().saveInBackground();
+            if(!email.equals(AVUser.getCurrentUser().getEmail())){
+
+                // 第一参数是 className,第二个参数是 objectId
+                AVObject user = AVObject.createWithoutData("_User", AVUser.getCurrentUser().getObjectId());
+                // 修改 content
+                user.put("email", email);
+                // 保存到云端
+                user.saveInBackground();
+
+            }
 
             // 修改表数据
             // 第一参数是 className,第二个参数是 objectId
