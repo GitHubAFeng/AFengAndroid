@@ -183,22 +183,25 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public void done(List<AVObject> list, AVException e) {
 
-                if (list.size() > 0) {
-                    for (AVObject avObject : list) {
+                if (list != null) {
+                    if (list.size() > 0) {
+                        for (AVObject avObject : list) {
 
 //                        String desc = avObject.getString("desc");
-                        String img = avObject.getString("img");
+                            String img = avObject.getString("img");
 
-                        if (!mActivity.isFinishing()) {
-                            Glide.with(mActivity).load(img).into(mImageViewPic);
-                            AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
-                            AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
+                            if (!mActivity.isFinishing()) {
+                                Glide.with(mActivity).load(img).into(mImageViewPic);
+                                AnimHelper.alphaHideByMs(mImageViewDefPic, 1000, ProAnimListener);
+                                AnimHelper.alphaShow(mImageViewPic, ProAnimListener);
 //                            mImageViewPic.setAlpha(0f);
+                            }
                         }
-                    }
-                } else {
+                    } else {
 
+                    }
                 }
+
 
             }
         });

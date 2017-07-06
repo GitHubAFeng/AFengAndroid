@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.transition.Explode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afeng.xf.utils.AFengUtils.PerfectClickListener;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
@@ -26,6 +30,7 @@ import com.avos.avoscloud.RequestPasswordResetCallback;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
+
 
 /**
  * Created by AFeng on 2017/3/26.
@@ -98,6 +103,13 @@ public class UserLoginActivity extends BaseActivity {
 
 
         mIdBtnGo.setOnClickListener((View v) -> userLogin());
+
+        mForget.setOnClickListener(new PerfectClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                forgetPassWord();
+            }
+        });
 
     }
 
@@ -198,21 +210,41 @@ public class UserLoginActivity extends BaseActivity {
     }
 
 
-    private void forgetPassWord(){
+    private void forgetPassWord() {
 
-        AVUser.requestPasswordResetInBackground("", new RequestPasswordResetCallback() {
-            @Override
-            public void done(AVException e) {
-                if (e == null) {
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+        new MaterialDialog.Builder(this)
+                .title("找回密码")
+                .content("请填写账号绑定的电子邮箱地址")
+                .inputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                .inputRange(2, 20)
+                .positiveText("确定")
+                .input(
+                        "",
+                        "",
+                        false,
+                        (dialog, input) -> {
+                            if (!TextUtils.isEmpty(input.toString())) {
+
+                                AVUser.requestPasswordResetInBackground(input.toString().trim(), new RequestPasswordResetCallback() {
+                                    @Override
+                                    public void done(AVException e) {
+                                        if (e == null) {
+                                            xToastShow("重置密码邮件已发送至" + input.toString().trim() + "，请注意及时确定");
+                                        } else {
+                                            if (e.getCode() == 205) {
+                                                xToastShow("找不到此电子邮箱地址绑定的用户");
+                                            }
+
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+
+                        }
+                )
+                .show();
     }
-
-
-
 
 
 }

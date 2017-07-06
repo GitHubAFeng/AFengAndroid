@@ -190,40 +190,49 @@ public class UserInfoActivity extends BaseActivity {
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
-                String email;
-                boolean isequals = false;
+                if (e == null) {
+                    String email;
+                    boolean isequals = false;
 
-                if (list != null) {
-                    for (AVObject avObject : list) {
-                        email = avObject.getString("email");
+                    if (list != null) {
+                        for (AVObject avObject : list) {
+                            email = avObject.getString("email");
 
-                        if (temp.equals(email)) {
-                            isequals = true;
-                            break;
-                        }
-                    }
-                } else {
-                    xLogger("email列表为空");
-                }
-
-                if (isequals) {
-                    xToastShow("此邮箱地址已经被注册");
-                } else {
-
-                    //开始倒计
-                    mEmailButton.startTimer();
-                    xToastShow("正在发送邮件");
-
-                    AVUser.requestEmailVerifyInBackground(temp, new RequestEmailVerifyCallback() {
-                        @Override
-                        public void done(AVException e) {
-                            if (e == null) {
-                                // 求重发验证邮件成功
-                                xToastShow("邮件发送成功");
+                            if (temp.equals(email)) {
+                                isequals = true;
+                                break;
                             }
                         }
-                    });
+                    } else {
+                        xLogger("email列表为空");
+                    }
+
+                    if (isequals) {
+                        xToastShow("此邮箱地址已经被注册");
+                    } else {
+
+                        //开始倒计
+                        mEmailButton.startTimer();
+                        xToastShow("正在发送邮件");
+
+                        AVUser.requestEmailVerifyInBackground(temp, new RequestEmailVerifyCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    // 求重发验证邮件成功
+                                    xToastShow("邮件发送成功");
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    xToastShow("" + e.getCode());
+                    if (e.getCode() == 403) {
+                        xToastShow("此邮箱地址已经被注册");
+                    }
                 }
+
+
             }
         });
 
@@ -327,21 +336,26 @@ public class UserInfoActivity extends BaseActivity {
             userQuery.getInBackground(AVUser.getCurrentUser().getObjectId(), new GetCallback<AVObject>() {
                 @Override
                 public void done(AVObject avObject, AVException e) {
-                    boolean isemailVerified = avObject.getBoolean("emailVerified");
-                    boolean isphoneVerified = avObject.getBoolean("mobilePhoneVerified");
-                    Eventdata.setEmailVerified(isemailVerified);
-                    Eventdata.setPhoneVerified(isphoneVerified);
+                    if (avObject != null) {
 
-                    String email = avObject.getString("email");
-                    mEmail.post(() -> mEmail.setText(email));
-                    Eventdata.setUserEmail(email);
+                        boolean isemailVerified = avObject.getBoolean("emailVerified");
+                        boolean isphoneVerified = avObject.getBoolean("mobilePhoneVerified");
+                        Eventdata.setEmailVerified(isemailVerified);
+                        Eventdata.setPhoneVerified(isphoneVerified);
+
+                        String email = avObject.getString("email");
+                        mEmail.post(() -> mEmail.setText(email));
+                        Eventdata.setUserEmail(email);
 
 
-                    if (isemailVerified) {
-                        mEmailButton.setVisibility(View.GONE);
-                    } else {
-                        mEmailButton.setVisibility(View.VISIBLE);
+                        if (isemailVerified) {
+                            mEmailButton.setVisibility(View.GONE);
+                        } else {
+                            mEmailButton.setVisibility(View.VISIBLE);
+                        }
+
                     }
+
                 }
             });
 
@@ -351,46 +365,46 @@ public class UserInfoActivity extends BaseActivity {
                 @Override
                 public void done(AVObject avObject, AVException e) {
 
-                    String desc = avObject.getString("desc");
-                    String nick = avObject.getString("nickname");
-                    AVFile avatar = avObject.getAVFile("avatar");
+                    if (avObject != null) {
 
-                    String name = TextUtils.isEmpty(nick) ? username : nick;
+                        String desc = avObject.getString("desc");
+                        String nick = avObject.getString("nickname");
+                        AVFile avatar = avObject.getAVFile("avatar");
 
-                    mDesc.setText(desc);
-                    mNickname.setText(nick);
-                    mUserName.post(() -> mUserName.setText(name));
+                        String name = TextUtils.isEmpty(nick) ? username : nick;
 
-                    if (avatar != null) {
+                        mDesc.setText(desc);
+                        mNickname.setText(nick);
+                        mUserName.post(() -> mUserName.setText(name));
 
-                        // 把图片下载回来
-                        avatar.getDataInBackground(new GetDataCallback() {
-                            @Override
-                            public void done(byte[] bytes, AVException e) {
-                                // bytes 就是文件的数据流
-                                if (e == null) {
-                                    if (bytes != null) {
+                        if (avatar != null) {
 
-                                        Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
-                                        ImgLoadUtil.displayCircle(mContext, mAvatar, img);
+                            // 把图片下载回来
+                            avatar.getDataInBackground(new GetDataCallback() {
+                                @Override
+                                public void done(byte[] bytes, AVException e) {
+                                    // bytes 就是文件的数据流
+                                    if (e == null) {
+                                        if (bytes != null) {
 
-//                                    Eventdata.setAvatar(bytes);
-                                        Eventdata.setDesc(desc);
-                                        Eventdata.setNickname(nick);
-                                        Eventdata.setUserName(name);
-                                        Eventdata.setUserPhone(phone);
+                                            Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                            ImgLoadUtil.displayCircle(mContext, mAvatar, img);
+
+                                            Eventdata.setDesc(desc);
+                                            Eventdata.setNickname(nick);
+                                            Eventdata.setUserName(name);
+                                            Eventdata.setUserPhone(phone);
+                                        }
                                     }
                                 }
-                            }
-                        }, new ProgressCallback() {
-                            @Override
-                            public void done(Integer integer) {
-                                // 下载进度数据，integer 介于 0 和 100。
-                            }
-                        });
+                            }, new ProgressCallback() {
+                                @Override
+                                public void done(Integer integer) {
+                                    // 下载进度数据，integer 介于 0 和 100。
+                                }
+                            });
+                        }
                     }
-
-
                 }
             });
 
@@ -405,8 +419,6 @@ public class UserInfoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             if (data != null) {
-
-                //xLogger("Uris: " + Matisse.obtainResult(data));
 
                 Glide.with(mContext)
                         .load(Matisse.obtainResult(data).get(0))
