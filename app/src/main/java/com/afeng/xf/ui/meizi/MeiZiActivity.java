@@ -3,18 +3,20 @@ package com.afeng.xf.ui.meizi;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.afeng.xf.base.BaseFragment;
+import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.widget.hipermission.HiPermission;
 import com.afeng.xf.widget.hipermission.PermissionCallback;
 import com.afeng.xf.widget.hipermission.PermissionItem;
@@ -50,12 +52,15 @@ import static com.afeng.xf.utils.network.NetworkAvailableUtils.isNetworkAvailabl
  * Created by Administrator on 2017/5/6.
  */
 
-public class MeiZiFragment extends BaseFragment {
+public class MeiZiActivity extends BaseActivity {
 
     @BindView(R.id.meizi_recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.meizi_progressBar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.meizi_list_toolbar)
+    Toolbar mToolbar;
 
     private String cacheKey = "meiziurl";
     private String id = "福利";
@@ -64,32 +69,19 @@ public class MeiZiFragment extends BaseFragment {
 
     private List<GankIoDataBean.ResultBean> mMeizhiList = new ArrayList<>();
 
-    MeiZiFragment.oneAdapter mAdapter = null;
+    MeiZiActivity.oneAdapter mAdapter = null;
 
-
-    private static MeiZiFragment instance;
-
-    public static MeiZiFragment getInstance() {
-        if (instance == null) {
-            synchronized (MeiZiFragment.class) {
-                if (instance == null) {
-                    instance = new MeiZiFragment();
-                }
-            }
-        }
-        return instance;
-    }
 
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_meizi;
+        return R.layout.activity_meizi;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
-        mAdapter = new MeiZiFragment.oneAdapter(R.layout.item_meizi, mMeizhiList);
+        initToolBar();
+        mAdapter = new MeiZiActivity.oneAdapter(R.layout.item_meizi, mMeizhiList);
         mAdapter.setEnableLoadMore(true);  //开启上拉加载
         //第一个参数表示列数或者行数，第二个参数表示滑动方向,瀑布流
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -112,7 +104,7 @@ public class MeiZiFragment extends BaseFragment {
 
             EventBus.getDefault().postSticky(new MeiziEvent(position, imgUrlList));
 
-            startActivity(new Intent(getContext(), MeiZiBigImageActivity.class));
+            startActivity(new Intent(this, MeiZiBigImageActivity.class));
 
         });
 
@@ -135,6 +127,7 @@ public class MeiZiFragment extends BaseFragment {
 
     }
 
+
     /**
      * 懒加载一次。如果只想在对用户可见时才加载数据，并且只加载一次数据，在子类中重写该方法
      */
@@ -144,22 +137,22 @@ public class MeiZiFragment extends BaseFragment {
         requestSomePermission();
     }
 
-    /**
-     * 对用户可见时触发该方法。如果只想在对用户可见时才加载数据，在子类中重写该方法
-     */
-    @Override
-    protected void onVisibleToUser() {
 
+    private void initToolBar(){
 
+        // 设置标题栏
+        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setSupportActionBar(mToolbar);
+
+        // 设置了回退按钮，及点击事件的效果
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(v -> finish());
     }
 
-    /**
-     * 对用户不可见时触发该方法
-     */
-    @Override
-    protected void onInvisibleToUser() {
-
-    }
 
 
     // 申请权限
@@ -170,7 +163,7 @@ public class MeiZiFragment extends BaseFragment {
         permissionItems.add(new PermissionItem(Manifest.permission.READ_PHONE_STATE, "电话状态", R.drawable.permission_ic_phone));
         permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_NETWORK_STATE, "网络状态", R.drawable.permission_ic_network));
         permissionItems.add(new PermissionItem(Manifest.permission.ACCESS_WIFI_STATE, "WIFI状态", R.drawable.permission_ic_wifi));
-        HiPermission.create(getContext())
+        HiPermission.create(this)
                 .title("权限申请")
                 .permissions(permissionItems)
 //                .msg("此APP运行需要此项权限！")
@@ -211,7 +204,7 @@ public class MeiZiFragment extends BaseFragment {
         mProgressBar.setVisibility(View.VISIBLE);
         mAdapter.openLoadAnimation();
 
-        if (isNetworkAvailable(getContext())) {
+        if (isNetworkAvailable(this)) {
 
             MeiZiRepository.getInstance().getGankIoData(id, page, per_page, id, isupdate)
                     .subscribeOn(Schedulers.io())

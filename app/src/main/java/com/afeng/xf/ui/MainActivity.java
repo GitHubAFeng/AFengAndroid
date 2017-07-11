@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afeng.xf.base.BaseActivity;
+import com.afeng.xf.ui.fuli.FuLiFragment;
 import com.afeng.xf.widget.TBSWebView.WebEvent;
 import com.afeng.xf.widget.TBSWebView.X5WebViewActivity;
 import com.avos.avoscloud.AVException;
@@ -55,7 +56,6 @@ import com.afeng.xf.ui.home.AboutMeActivity;
 import com.afeng.xf.ui.home.MySearchEvent;
 import com.afeng.xf.ui.home.SimpleFragment;
 import com.afeng.xf.ui.home.UserInfoActivity;
-import com.afeng.xf.ui.meizi.MeiZiFragment;
 import com.afeng.xf.ui.more.MoreFragment;
 import com.afeng.xf.ui.movie.MovieFragment;
 import com.afeng.xf.utils.AFengUtils.AppImageMgr;
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public String[] mTitles = {
             "首页",
             "小说",
-            "妹纸",
+            "福利",
             "读书",
             "电影",
             "更多"
@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             SimpleFragment.getInstance(),
             FictionFragment.newInstance(),
-            MeiZiFragment.getInstance(),
+            FuLiFragment.getInstance(),
             BookFragment.newInstance(),
             MovieFragment.newInstance(),
             MoreFragment.getInstance()

@@ -15,9 +15,11 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+
 
 import java.io.*;
 import java.lang.ref.WeakReference;
@@ -96,6 +98,8 @@ public class AppImageMgr {
     }
 
 
+
+
     /**
      * 根据drawable id获取Bitmap
      *
@@ -109,6 +113,10 @@ public class AppImageMgr {
         }
         return ((WeakReference<Bitmap>) mBitmaps.get(resource)).get();
     }
+
+
+
+
 
     /**
      * 根据drawable id获取Drawable

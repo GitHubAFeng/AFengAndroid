@@ -190,6 +190,9 @@ dependencies {
     //图片选择库
     implementation 'com.zhihu.android:matisse:0.4.3'
 
+    //圆形图片头像
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
     //腾讯第三方X5内核WedView
     implementation files('libs/tbs_sdk.jar')
 }

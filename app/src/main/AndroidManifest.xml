@@ -154,6 +154,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.meizi.MeiZiActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.fiction.FictionChapterActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
