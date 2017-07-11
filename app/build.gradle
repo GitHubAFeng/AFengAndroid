@@ -13,9 +13,11 @@ android {
         targetSdkVersion 25
 
         //内部版本号，int类型
-        versionCode 1
+        versionCode 11
         //对外版本号，string
-        versionName "1.0"
+        versionName "1.1"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //识别jniLibs目录下的子目录
         ndk {
@@ -73,9 +75,12 @@ android {
         exclude 'META-INF/NOTICE.txt'
     }
     lintOptions {
+//        lint检查到错误时不中断编译
         abortOnError false
-        // 打包报错可尝试
+        // 打包时不检查
         checkReleaseBuilds false
+
+        disable 'MissingTranslation', 'ExtraTranslation'
     }
     //这一段可心解决有些os库不支持64位CPU，模拟器无法运行APK的问题
     splits {
@@ -93,106 +98,97 @@ android {
 
 }
 
+
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation 'junit:junit:4.12'
     //noinspection GradleCompatible
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:cardview-v7:25.4.0'
-
-    // 动画库
-    compile 'com.android.support:support-compat:25.4.0'
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:design:25.4.0'
+    implementation 'com.android.support:cardview-v7:25.4.0'
+    implementation 'com.android.support:support-compat:25.4.0'
+    implementation 'com.android.support:recyclerview-v7:25.4.0'
 
     //material-dialogs  对话框
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-    compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
 
     //内存泄露检测
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
     //图片处理
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     //RX
-    compile 'io.reactivex.rxjava2:rxjava:2.0.7'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.0.7'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     //网络请求库
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
 
-    // 基类 appcompat v7包是必须的,fragment管理器
-    compile 'me.yokeyword:fragmentation:1.0.4'
 
     // 爬虫解析库
-    compile 'org.jsoup:jsoup:1.10.2'
+    implementation 'org.jsoup:jsoup:1.10.2'
 
-    //底部工具条
-    compile 'com.roughike:bottom-bar:2.3.1'
+    //底部bar工具条
+//    implementation 'com.roughike:bottom-bar:2.3.1'
 
     // 详情页面布局
-    compile 'com.github.florent37:arclayout:1.0.2'
+    implementation 'com.github.florent37:arclayout:1.0.2'
 
     // 详情页面幻灯片
-    compile 'com.flaviofaria:kenburnsview:1.0.7'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
 
     //自适应布局
-    compile 'com.zhy:autolayout:1.4.5'
+//    implementation 'com.zhy:autolayout:1.4.5'
 
     //选项卡库
-    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
-    compile 'com.lcodecorex:tkrefreshlayout:1.0.5'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.5'
 
     //轮播图
-    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
+    implementation 'cn.bingoogolapple:bga-banner:2.1.7@aar'
 
-    //兼容包
-    compile 'com.daimajia.easing:library:2.0@aar'
-    compile 'com.daimajia.androidanimations:library:2.2@aar'
+    //简易动画插件包
+//    implementation 'com.daimajia.easing:library:2.0@aar'
+//    implementation 'com.daimajia.androidanimations:library:2.2@aar'
 
     //RecyclerView下拉上拉 适配器
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.20'
-    compile 'com.orhanobut:logger:1.15'
-
-    //日志
-    compile 'com.afollestad.material-dialogs:core:0.9.4.1'
-
-    //弹窗
-
-    //compile 'com.afollestad.material-dialogs:commons:0.9.4.1' //提示颜色选择器、文件选择弹窗
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.20'
 
     //牛油刀
-    compile 'com.jakewharton:butterknife:8.5.1'
+    implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     //图片手势缩放
-    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    implementation 'com.github.chrisbanes:PhotoView:1.2.6'
 
-    //数据传递
-    compile 'org.greenrobot:eventbus:3.0.0'
+    //事件传递
+    implementation 'org.greenrobot:eventbus:3.0.0'
 
     //数据持久化
-    compile 'xiaofei.library:android-data-storage:1.3.0'
+    implementation 'xiaofei.library:android-data-storage:1.3.0'
 
-    //WEBVIEW库
-    compile 'com.just.agentweb:agentweb:1.2.3'
-
-    //云后端
+    //第三方WebView封装库
+    implementation 'com.just.agentweb:agentweb:1.2.3'
 
     // LeanCloud 基础包
-    compile 'cn.leancloud.android:avoscloud-sdk:v4.1.0'
-
+    implementation 'cn.leancloud.android:avoscloud-sdk:v4.1.0'
     // LeanCloud 用户反馈包
-    compile 'cn.leancloud.android:avoscloud-feedback:v4.1.0@aar'
+    implementation 'cn.leancloud.android:avoscloud-feedback:v4.1.0@aar'
 
     //图片选择库
-    compile 'com.zhihu.android:matisse:0.4.3'
+    implementation 'com.zhihu.android:matisse:0.4.3'
 
     //腾讯第三方X5内核WedView
     implementation files('libs/tbs_sdk.jar')

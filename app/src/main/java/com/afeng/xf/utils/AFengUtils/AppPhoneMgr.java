@@ -27,8 +27,6 @@ import android.util.Xml;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
-
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
@@ -593,7 +591,6 @@ public class AppPhoneMgr {
             // 不用了关闭游标
             cursor.close();
         } catch (Exception e) {
-            Logger.e("ToolPhone", e.getMessage());
         }
 
         return bm;

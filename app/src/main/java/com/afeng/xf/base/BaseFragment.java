@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+import com.afeng.xf.utils.AFengUtils.AppLogMessageMgr;
 import com.afeng.xf.utils.AFengUtils.SnackbarUtils;
 import com.afeng.xf.utils.AFengUtils.xToastUtil;
 import com.afeng.xf.utils.cache.ACache;
@@ -79,7 +79,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void xLogger(String s) {
-        Logger.e(s);
+        AppLogMessageMgr.e(s);
     }
 
     /**
@@ -174,7 +174,7 @@ public abstract class BaseFragment extends Fragment {
         try {
             return (E) mContentView.findViewById(id);
         } catch (ClassCastException ex) {
-            Logger.w("视图元素类型强制失败！", ex);
+            xLogger("视图元素类型强制失败："+ ex);
             throw ex;
         }
     }
@@ -263,9 +263,9 @@ public abstract class BaseFragment extends Fragment {
             return intent.getSerializableExtra(key);
 
         } catch (NullPointerException e) {
-            Logger.w(e.getMessage());
+            xLogger(e.getMessage());
         } catch (Exception e) {
-            Logger.w(e.getMessage());
+            xLogger(e.getMessage());
         }
 
         return null;

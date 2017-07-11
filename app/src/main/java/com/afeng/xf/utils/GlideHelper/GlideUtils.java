@@ -17,7 +17,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
-import com.orhanobut.logger.Logger;
 import com.afeng.xf.R;
 import com.afeng.xf.base.App;
 import com.afeng.xf.utils.AFengUtils.DensityUtil;
@@ -121,7 +120,6 @@ public abstract class GlideUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.e("Glide的Context错误");
         }
 
         return type;
@@ -172,7 +170,6 @@ public abstract class GlideUtils {
         @Override
         public boolean onException(Exception e, T model, Target<K> target, boolean isFirstResource) {
 
-            Logger.e("Glide图片加载失败:" + e + " 地址为:" + url);
 
             if (imageLoadListener != null) {
                 imageLoadListener.onLoadingError(url, e);
@@ -451,7 +448,6 @@ public abstract class GlideUtils {
      * @param context 上下文
      */
     public static void cancelAllTasks(Context context) {
-        Logger.e("取消请求");
         Glide.with(context).pauseRequests();
     }
 

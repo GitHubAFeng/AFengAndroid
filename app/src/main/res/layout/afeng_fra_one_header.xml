@@ -1,10 +1,10 @@
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.demo.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <!--首页正文内容-->
     <!--轮播-->
@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="133dp"
         android:layout_marginTop="3dp"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
 
     <!--导航按钮-->
     <RelativeLayout
@@ -48,8 +47,8 @@
                             android:id="@+id/home_mv_btn"
                             android:layout_width="53dp"
                             android:layout_height="53dp"
-                            android:scaleType="centerCrop"
-                            android:background="@drawable/home_mv" />
+                            android:background="@drawable/home_mv"
+                            android:scaleType="centerCrop" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -77,16 +76,16 @@
                             android:id="@+id/fl_everyday"
                             android:layout_width="53dp"
                             android:layout_height="53dp"
-                            android:scaleType="centerCrop"
-                            android:clickable="true">
+                            android:clickable="true"
+                            android:scaleType="centerCrop">
 
                             <ImageView
                                 android:id="@+id/comic_btn"
                                 android:layout_width="53dp"
                                 android:layout_height="53dp"
                                 android:layout_marginTop="5dp"
-                                android:scaleType="centerCrop"
-                                android:background="@drawable/home_com" />
+                                android:background="@drawable/home_com"
+                                android:scaleType="centerCrop" />
 
 
                         </FrameLayout>
@@ -121,8 +120,8 @@
                             android:layout_width="53dp"
                             android:layout_height="53dp"
                             android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:background="@drawable/home_live" />
+                            android:background="@drawable/home_live"
+                            android:scaleType="centerCrop" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -148,4 +147,4 @@
     </RelativeLayout>
 
 
-</com.zhy.autolayout.AutoLinearLayout>
+</LinearLayout>

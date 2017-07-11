@@ -5,10 +5,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 
+import com.afeng.xf.utils.AFengUtils.AppLogMessageMgr;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
-import com.orhanobut.logger.LogLevel;
-import com.orhanobut.logger.Logger;
+
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.smtt.sdk.QbSdk;
 import com.afeng.xf.BuildConfig;
@@ -19,9 +19,6 @@ import com.afeng.xf.ui.data.NetConfig;
 import com.afeng.xf.ui.data.SplashBannerItem;
 import com.afeng.xf.ui.data.UserInfo;
 import com.afeng.xf.utils.cache.ACache;
-
-import me.yokeyword.fragmentation.Fragmentation;
-import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
 
 public class App extends Application {
@@ -65,35 +62,8 @@ public class App extends Application {
 
         ///////////////////后端云设置结束
 
-
-        if (BuildConfig.DEBUG) {
-            Logger
-                    .init("AFeng")              // default PRETTYLOGGER or use just init()
-                    .methodCount(3)                 // default 2
-                    .logLevel(LogLevel.FULL)        // default LogLevel.FULL
-                    .methodOffset(2)                // default 0
-            ;
-        }
-
-
-        //Fragment管理器， 栈视图等功能，建议在Application里初始化
-        Fragmentation.builder()
-                // 设置 栈视图 模式为 悬浮球模式  BUBBLE 可见，  SHAKE: 摇一摇唤出   NONE：隐藏
-                .stackViewMode(Fragmentation.NONE)
-                // ture时，遇到异常："Can not perform this action after onSaveInstanceState!"时，会抛出
-                // false时，不会抛出，会捕获，可以在handleException()里监听到
-                .debug(BuildConfig.DEBUG)
-                // 在debug=false时，即线上环境时，上述异常会被捕获并回调ExceptionHandler
-                .handleException(new ExceptionHandler() {
-                    @Override
-                    public void onException(Exception e) {
-                        // 建议在该回调处上传至我们的Crash监测服务器
-                        // 以Bugtags为例子: 手动把捕获到的 Exception 传到 Bugtags 后台。
-                        // Bugtags.sendException(e);
-                        Logger.e(e.toString());
-                    }
-                })
-                .install();
+        // 是否开启日志
+        AppLogMessageMgr.isEnableDebug(BuildConfig.DEBUG);
 
 
         initTBS();  //预加载 TBS浏览器
@@ -122,7 +92,6 @@ public class App extends Application {
             public void onViewInitFinished(boolean arg0) {
                 // TODO Auto-generated method stub
                 //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                Logger.d("app", " onViewInitFinished is " + arg0);
             }
 
             @Override

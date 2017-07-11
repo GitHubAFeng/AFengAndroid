@@ -2,7 +2,6 @@ package com.afeng.xf.utils.AFengUtils;
 
 import android.annotation.SuppressLint;
 
-import com.orhanobut.logger.Logger;
 
 import java.io.*;
 import java.text.ParseException;
@@ -354,7 +353,7 @@ public class AppValidationMgr {
         //================ 身份证号码的长度 15位或18位 ================
         if (IDCardNo.length() != 15 && IDCardNo.length() != 18) {
             errmsg = "身份证号码长度应该为15位或18位!";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
 
@@ -366,7 +365,7 @@ public class AppValidationMgr {
         }
         if (isNumber(Ai) == false) {
             errmsg = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
 
@@ -379,7 +378,7 @@ public class AppValidationMgr {
         String strDay = Ai.substring(12, 14);
         if (getDateIsTrue(strYear, strMonth, strDay) == false) {
             errmsg = "身份证生日无效";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
         GregorianCalendar gc = new GregorianCalendar();
@@ -387,28 +386,28 @@ public class AppValidationMgr {
         try {
             if ((gc.get(Calendar.YEAR) - Integer.parseInt(strYear)) > 150 || (gc.getTime().getTime() - s.parse(strYear + "-" + strMonth + "-" + strDay).getTime()) < 0) {
                 errmsg = "身份证生日不在有效范围";
-                Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+                AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
                 return false;
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             errmsg = "身份证生日不在有效范围";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg  + e.getMessage());
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg  + e.getMessage());
             return false;
         } catch (ParseException e1) {
             e1.printStackTrace();
             errmsg = "身份证生日不在有效范围";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg + e1.getMessage());
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg + e1.getMessage());
             return false;
         }
         if (Integer.parseInt(strMonth) > 12 || Integer.parseInt(strMonth) == 0) {
             errmsg = "身份证月份无效";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
         if (Integer.parseInt(strDay) > 31 || Integer.parseInt(strDay) == 0) {
             errmsg = "身份证日期无效";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
 
@@ -416,7 +415,7 @@ public class AppValidationMgr {
         Hashtable hashtable = AppInfoMgr.getAreaCodeAll();
         if (hashtable.get(Ai.substring(0, 2)) == null) {
             errmsg = "身份证地区编码错误";
-            Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+            AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
             return false;
         }
 
@@ -431,7 +430,7 @@ public class AppValidationMgr {
         if (IDCardNo.length() == 18) {
             if (Ai.equals(IDCardNo) == false) {
                 errmsg = "身份证无效，不是合法的身份证号码";
-                Logger.e("AppValidationMgr-->>isIDCard", errmsg);
+                AppLogMessageMgr.e("AppValidationMgr-->>isIDCard", errmsg);
                 return false;
             }
         } else {
@@ -850,7 +849,7 @@ public class AppValidationMgr {
             simpledateformat.parse(data);
         } catch (ParseException e) {
             e.printStackTrace();
-            Logger.e("AppSysDateMgr-->>getDateIsTrue", e.getMessage().toString());
+            AppLogMessageMgr.e("AppSysDateMgr-->>getDateIsTrue", e.getMessage().toString());
             return false;
         }
         return true;

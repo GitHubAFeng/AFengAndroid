@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".ui.demo.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <!--<View-->
     <!--android:id="@+id/statusBar"-->
@@ -54,8 +54,8 @@
                             android:id="@+id/iv_title_menu"
                             android:layout_width="15dp"
                             android:layout_height="wrap_content"
-                            android:scaleY="1.5"
                             android:layout_marginTop="2dp"
+                            android:scaleY="1.5"
                             android:src="@drawable/titlebar_menu" />
 
                         <ImageView
@@ -88,12 +88,11 @@
                         android:layout_alignParentRight="true"
                         android:gravity="center">
 
-                        <com.zhy.autolayout.AutoLinearLayout
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            app:theme="@style/AppTheme">
+                            android:background="?attr/selectableItemBackgroundBorderless">
 
                             <ImageView
                                 android:id="@+id/iv_title_one"
@@ -107,8 +106,8 @@
                                 android:id="@+id/iv_title_two"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_marginLeft="5dp"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/titlebar_disco" />
 
@@ -121,7 +120,7 @@
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/titlebar_friends" />
 
-                        </com.zhy.autolayout.AutoLinearLayout>
+                        </LinearLayout>
                     </HorizontalScrollView>
 
                 </RelativeLayout>
@@ -165,4 +164,4 @@
     <!--标题结束-->
 
 
-</com.zhy.autolayout.AutoLinearLayout>
+</LinearLayout>

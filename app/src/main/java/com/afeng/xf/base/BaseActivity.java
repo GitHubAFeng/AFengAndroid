@@ -1,6 +1,5 @@
 package com.afeng.xf.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.orhanobut.logger.Logger;
+import com.afeng.xf.utils.AFengUtils.AppLogMessageMgr;
 import com.afeng.xf.utils.AFengUtils.SnackbarUtils;
 import com.afeng.xf.utils.AFengUtils.xToastUtil;
 import com.afeng.xf.utils.GlideHelper.GlideUtils;
@@ -49,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void xLogger(String s) {
-        Logger.e(s);
+        AppLogMessageMgr.e(s);
     }
 
 
@@ -106,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         try {
             return (E) findViewById(id);
         } catch (ClassCastException ex) {
-            Logger.w("视图元素类型强制失败！", ex);
+            xLogger("视图元素类型强制失败：" + ex);
             throw ex;
         }
     }
@@ -201,6 +200,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 存入对象并且返回Intent
+     *
      * @param key
      * @param data
      * @return
@@ -227,9 +227,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             return intent.getSerializableExtra(key);
 
         } catch (NullPointerException e) {
-            Logger.w(e.getMessage());
+            xLogger(e.getMessage());
         } catch (Exception e) {
-            Logger.w(e.getMessage());
+            xLogger(e.getMessage());
         }
 
         return null;
