@@ -1,7 +1,6 @@
 package com.afeng.xf.ui.fuli;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
 
@@ -13,11 +12,11 @@ public class FuLiHeadBean implements Serializable {
     private static final long serialVersionUID = 8393746841070408553L;
 
     private String imgUrl;
-    private Drawable imgRes;
+    private Bitmap imgRes;
     private String name;
     private String tag;  //标记是什么
 
-    public FuLiHeadBean(String imgUrl, Drawable imgRes, String name, String tag) {
+    public FuLiHeadBean(String imgUrl, Bitmap imgRes, String name, String tag) {
         this.imgUrl = imgUrl;
         this.imgRes = imgRes;
         this.name = name;
@@ -32,11 +31,11 @@ public class FuLiHeadBean implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public Drawable getImgRes() {
+    public Bitmap getImgRes() {
         return imgRes;
     }
 
-    public void setImgRes(Drawable imgRes) {
+    public void setImgRes(Bitmap imgRes) {
         this.imgRes = imgRes;
     }
 

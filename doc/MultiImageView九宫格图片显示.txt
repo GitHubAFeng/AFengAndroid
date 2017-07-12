@@ -1,0 +1,277 @@
+
+http://blog.csdn.net/sw5131899/article/details/52838261
+
+MultiImageView九宫格图片显示
+标签： Android图片
+2016-10-17 14:12 994人阅读 评论(6) 收藏 举报
+
+ 分类：
+Android（72）
+
+版权声明：【码字不易，转载请标明出处，http://blog.csdn.net/sw5131899的博客，欢迎转载】
+这是一个很方便的自定义图片显示控件，只需要把图片的Url放在数组传给控件就可。加载逻辑和显示逻辑都做了相应的封装。
+看看例子。
+
+
+直接粘出控件源码
+[java] view plain copy
+ print?
+  1. package com.raspberry.library.view;
+  2.
+  3. import android.content.Context;
+  4. import android.util.AttributeSet;
+  5. import android.view.View;
+  6. import android.widget.ImageView;
+  7. import android.widget.LinearLayout;
+  8.
+  9. import com.bumptech.glide.Glide;
+  10. import com.bumptech.glide.load.engine.DiskCacheStrategy;
+  11. import com.raspberry.library.util.DisplayUtils;
+  12.
+  13. import java.util.List;
+  14.
+  15.
+  16. /**
+  17.  * @author shuwen
+  18.  * @ClassName MultiImageView.java
+  19.  * @Description: 显示1~N张图片的View
+  20.  */
+  21.
+  22. public class MultiImageView extends LinearLayout {
+  23.     public static int MAX_WIDTH = 0;
+  24.
+  25.     // 照片的Url列表
+  26.     private List<String> imagesList;
+  27.
+  28.     /**
+  29.      * 长度 单位为Pixel
+  30.      **/
+  31.     private int pxOneMaxWandH;  // 单张图最大允许宽高
+  32.     private int pxMoreWandH = 0;// 多张图的宽高
+  33.     private int pxImagePadding = DisplayUtils.dip2px(getContext(), 3);// 图片间的间距
+  34.
+  35.     private int MAX_PER_ROW_COUNT = 3;// 每行显示最大数
+  36.
+  37.     private LayoutParams onePicPara;
+  38.     private LayoutParams morePara, moreParaColumnFirst;
+  39.     private LayoutParams rowPara;
+  40.
+  41.     private OnItemClickListener mOnItemClickListener;
+  42.
+  43.     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+  44.         mOnItemClickListener = onItemClickListener;
+  45.     }
+  46.
+  47.     public MultiImageView(Context context) {
+  48.         super(context);
+  49.     }
+  50.
+  51.     public MultiImageView(Context context, AttributeSet attrs) {
+  52.         super(context, attrs);
+  53.     }
+  54.
+  55.     public void setList(List<String> lists) throws IllegalArgumentException {
+  56.         if (lists == null) {
+  57.             throw new IllegalArgumentException("imageList is null...");
+  58.         }
+  59.         imagesList = lists;
+  60.
+  61.         if (MAX_WIDTH > 0) {
+  62.             pxMoreWandH = (MAX_WIDTH - pxImagePadding * 2) / 3; //解决右侧图片和内容对不齐问题
+  63.             pxOneMaxWandH = MAX_WIDTH * 2 / 3;
+  64.             initImageLayoutParams();
+  65.         }
+  66.
+  67.         initView();
+  68.     }
+  69.
+  70.     @Override
+  71.     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  72.         if (MAX_WIDTH == 0) {
+  73.             int width = measureWidth(widthMeasureSpec);
+  74.             if (width > 0) {
+  75.                 MAX_WIDTH = width;
+  76.                 if (imagesList != null && imagesList.size() > 0) {
+  77.                     setList(imagesList);
+  78.                 }
+  79.             }
+  80.         }
+  81.         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+  82.     }
+  83.
+  84.     /**
+  85.      * Determines the width of this view
+  86.      *
+  87.      * @param measureSpec A measureSpec packed into an int
+  88.      * @return The width of the view, honoring constraints from measureSpec
+  89.      */
+  90.     private int measureWidth(int measureSpec) {
+  91.         int result = 0;
+  92.         int specMode = MeasureSpec.getMode(measureSpec);
+  93.         int specSize = MeasureSpec.getSize(measureSpec);
+  94.
+  95.         if (specMode == MeasureSpec.EXACTLY) {
+  96.             // We were told how big to be
+  97.             result = specSize;
+  98.         } else {
+  99.             // Measure the text
+  100.             // result = (int) mTextPaint.measureText(mText) + getPaddingLeft()
+  101.             // + getPaddingRight();
+  102.             if (specMode == MeasureSpec.AT_MOST) {
+  103.                 // Respect AT_MOST value if that was what is called for by
+  104.                 // measureSpec
+  105.                 result = Math.min(result, specSize);
+  106.             }
+  107.         }
+  108.         return result;
+  109.     }
+  110.
+  111.     private void initImageLayoutParams() {
+  112.         int wrap = LayoutParams.WRAP_CONTENT;
+  113.         int match = LayoutParams.MATCH_PARENT;
+  114.
+  115.         onePicPara = new LayoutParams(wrap, wrap);
+  116.
+  117.         moreParaColumnFirst = new LayoutParams(pxMoreWandH, pxMoreWandH);
+  118.         morePara = new LayoutParams(pxMoreWandH, pxMoreWandH);
+  119.         morePara.setMargins(pxImagePadding, 0, 0, 0);
+  120.
+  121.         rowPara = new LayoutParams(match, wrap);
+  122.     }
+  123.
+  124.     // 根据imageView的数量初始化不同的View布局,还要为每一个View作点击效果
+  125.     private void initView() {
+  126.         this.setOrientation(VERTICAL);
+  127.         this.removeAllViews();
+  128.         if (MAX_WIDTH == 0) {
+  129.             //为了触发onMeasure()来测量MultiImageView的最大宽度，MultiImageView的宽设置为match_parent
+  130.             addView(new View(getContext()));
+  131.             return;
+  132.         }
+  133.
+  134.         if (imagesList == null || imagesList.size() == 0) {
+  135.             return;
+  136.         }
+  137.
+  138.         if (imagesList.size() == 1) {
+  139.             addView(createImageView(0, false));
+  140.         } else {
+  141.             int allCount = imagesList.size();
+  142.             if (allCount == 4) {
+  143.                 MAX_PER_ROW_COUNT = 2;
+  144.             } else {
+  145.                 MAX_PER_ROW_COUNT = 3;
+  146.             }
+  147.             int rowCount = allCount / MAX_PER_ROW_COUNT + (allCount % MAX_PER_ROW_COUNT > 0 ? 1 : 0);// 行数
+  148.             for (int rowCursor = 0; rowCursor < rowCount; rowCursor++) {
+  149.                 LinearLayout rowLayout = new LinearLayout(getContext());
+  150.                 rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+  151.
+  152.                 rowLayout.setLayoutParams(rowPara);
+  153.                 if (rowCursor != 0) {
+  154.                     rowLayout.setPadding(0, pxImagePadding, 0, 0);
+  155.                 }
+  156.
+  157.                 int columnCount = allCount % MAX_PER_ROW_COUNT == 0 ? MAX_PER_ROW_COUNT : allCount %
+  158.                         MAX_PER_ROW_COUNT;//每行的列数
+  159.                 if (rowCursor != rowCount - 1) {
+  160.                     columnCount = MAX_PER_ROW_COUNT;
+  161.                 }
+  162.                 addView(rowLayout);
+  163.
+  164.                 int rowOffset = rowCursor * MAX_PER_ROW_COUNT;// 行偏移
+  165.                 for (int columnCursor = 0; columnCursor < columnCount; columnCursor++) {
+  166.                     int position = columnCursor + rowOffset;
+  167.                     rowLayout.addView(createImageView(position, true));
+  168.                 }
+  169.             }
+  170.         }
+  171.     }
+  172.
+  173.     private ImageView createImageView(int position, final boolean isMultiImage) {
+  174.         String url = imagesList.get(position);
+  175.         ImageView imageView = new ColorFilterImageView(getContext());
+  176.         if (isMultiImage) {
+  177.             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+  178.             imageView.setLayoutParams(position % MAX_PER_ROW_COUNT == 0 ? moreParaColumnFirst : morePara);
+  179.         } else {
+  180.             imageView.setAdjustViewBounds(true);
+  181.             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+  182.             imageView.setMaxHeight(pxOneMaxWandH);
+  183.             imageView.setLayoutParams(onePicPara);
+  184.         }
+  185.
+  186.         imageView.setId(url.hashCode());
+  187.         imageView.setOnClickListener(new ImageOnClickListener(position));
+  188.         Glide.with(getContext()).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+  189.         return imageView;
+  190.     }
+  191.
+  192.     private class ImageOnClickListener implements View.OnClickListener {
+  193.
+  194.         private int position;
+  195.
+  196.         public ImageOnClickListener(int position) {
+  197.             this.position = position;
+  198.         }
+  199.
+  200.         @Override
+  201.         public void onClick(View view) {
+  202.             if (mOnItemClickListener != null) {
+  203.                 mOnItemClickListener.onItemClick(view, position);
+  204.             }
+  205.         }
+  206.     }
+  207.
+  208.     public interface OnItemClickListener {
+  209.         public void onItemClick(View view, int position);
+  210.     }
+  211. }
+使用也非常简单，想要了解具体逻辑的，请看源码。xml文件
+[java] view plain copy
+ print?
+  1. <LinearLayout
+  2.        android:layout_margin="@dimen/margin_size_6_dp"
+  3.        android:layout_width="match_parent"
+  4.        android:layout_height="wrap_content">
+  5.        <com.raspberry.library.view.MultiImageView
+  6.            android:id="@+id/patient_detail_table_pictures"
+  7.            android:layout_width="match_parent"
+  8.            android:layout_height="wrap_content">
+  9.
+  10.        </com.raspberry.library.view.MultiImageView>
+  11.    </LinearLayout>
+使用Butterknife注解
+[java] view plain copy
+ print?
+  1. @Bind(R.id.patient_detail_table_pictures)
+  2.    MultiImageView patient_detail_table_pictures;
+
+[html] view plain copy
+ print?
+  1. private List<String>tableImgs=new ArrayList<>();
+[html] view plain copy
+ print?
+  1. tableImgs.add("http://p3.so.qhmsg.com/bdr/_240_/t01530591c4a0e6c033.jpg");
+  2.        tableImgs.add("http://p2.so.qhmsg.com/bdr/_240_/t01ab43c649e752002c.jpg");
+  3.        tableImgs.add("http://p2.so.qhmsg.com/bdr/_240_/t01dce1c2b41d8e272c.jpg");
+  4.        tableImgs.add("http://p1.so.qhmsg.com/bdr/_240_/t01974c03c076598946.jpg");
+  5.        tableImgs.add("http://p0.so.qhmsg.com/bdr/_240_/t0123c14f8d0d2be925.jpg");
+  6.        tableImgs.add("http://p1.so.qhmsg.com/bdr/_240_/t01938dc3846fae8de1.jpg");
+  7.        patient_detail_table_pictures.setList(tableImgs);
+再加上网络请求权限
+[html] view plain copy
+ print?
+  1. <!-- 访问网络连接 -->
+  2.     <uses-permission android:name="android.permission.INTERNET" />
+如果想要添加点击事件
+[html] view plain copy
+ print?
+  1. patient_detail_table_pictures.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+  2.             @Override
+  3.             public void onItemClick(View view, int position) {
+  4.                 //点击图片相应的逻辑处理
+  5.             }
+  6.         });
+这样就可以实现GridView或者RecyclerView的九宫格图片展示，很方便，快速开发必备！觉得有用给个赞呗~
+git项目地址：https://github.com/SingleShu/MultipleImageView

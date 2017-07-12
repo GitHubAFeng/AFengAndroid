@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 public class DensityUtil {
 
 
-
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
@@ -41,7 +40,6 @@ public class DensityUtil {
     }
 
 
-
     /**
      * dp转px
      *
@@ -52,6 +50,18 @@ public class DensityUtil {
         final float scale = AFengConfig.getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
+    /**
+     * dp转px
+     *
+     * @param dpValue dp值
+     * @return px值
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 
     /**
      * px转dp
@@ -70,10 +80,22 @@ public class DensityUtil {
      * @param spValue sp值
      * @return px值
      */
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * sp转px
+     *
+     * @param spValue sp值
+     * @return px值
+     */
     public static int sp2px(float spValue) {
         final float fontScale = AFengConfig.getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
+
 
     /**
      * px转sp

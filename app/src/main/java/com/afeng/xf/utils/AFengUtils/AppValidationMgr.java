@@ -639,7 +639,7 @@ public class AppValidationMgr {
     }
 
     /**
-     * 描述：截取字符串到指定字节长度.
+     * 描述：截取字符串到指定字节长度,并且以省略符号代替
      *
      * @param str
      *            文本

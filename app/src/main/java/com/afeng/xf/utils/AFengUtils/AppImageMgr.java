@@ -40,6 +40,7 @@ import java.util.WeakHashMap;
 
 /*
 
+drawableToBitmap           : 根据drawable获取Bitmap
 getBitmap                  : 根据drawable id获取Bitmap
 getDrawable                : 根据drawable id获取Drawable
 bitmapToDrawble            : bitmap转drawable
@@ -113,7 +114,6 @@ public class AppImageMgr {
         }
         return ((WeakReference<Bitmap>) mBitmaps.get(resource)).get();
     }
-
 
 
 

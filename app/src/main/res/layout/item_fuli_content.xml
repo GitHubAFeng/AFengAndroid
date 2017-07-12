@@ -80,16 +80,25 @@
 
         </RelativeLayout>
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/item_fuli_content_subrv"
-            android:layout_width="wrap_content"
+        <com.afeng.xf.widget.multipleImageView.MultiImageView
+            android:id="@+id/item_fuli_content_sub"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/temp_fuli_01"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </com.afeng.xf.widget.multipleImageView.MultiImageView>
+
+        <TextView
+            android:id="@+id/item_fuli_content_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_fuli_content_sub"
+            android:layout_marginTop="10dp"
+            android:text="描述"
+            android:textSize="14sp"
+            android:textColor="@color/grey" />
+
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
