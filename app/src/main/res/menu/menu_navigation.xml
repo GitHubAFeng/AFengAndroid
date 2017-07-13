@@ -10,6 +10,18 @@
             android:title="我的信息" />
     </group>
 
+    <group android:id="@+id/g3_nav_admin">
+        <item
+            android:id="@+id/ll_nav_admin"
+            android:icon="@drawable/nav_admin"
+            android:title="管理员" />
+
+        <item
+            android:id="@+id/ll_nav_contribute"
+            android:icon="@drawable/nav_contribute"
+            android:title="我的投稿" />
+    </group>
+
     <group android:id="@+id/g1">
         <item
             android:id="@+id/ll_nav_deedback"

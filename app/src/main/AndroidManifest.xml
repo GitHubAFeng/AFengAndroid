@@ -94,6 +94,12 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
+            android:name=".ui.contribute.ContributeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
             android:name=".ui.movie.MovieDetailActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

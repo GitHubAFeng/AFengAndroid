@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.afeng.xf.base.BaseActivity;
 import com.afeng.xf.ui.fuli.FuLiFragment;
+import com.afeng.xf.ui.contribute.ContributeActivity;
 import com.afeng.xf.widget.TBSWebView.WebEvent;
 import com.afeng.xf.widget.TBSWebView.X5WebViewActivity;
 import com.avos.avoscloud.AVException;
@@ -338,6 +339,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }
 
                     break;
+
+                case R.id.ll_nav_admin:// 管理员
+
+                    xToastShow("管理员");
+                    startActivity(new Intent(this, ContributeActivity.class));
+
+                    break;
+
+                case R.id.ll_nav_contribute:// 投稿
+
+                    xToastShow("投稿");
+
+                    break;
             }
 
             return true;
@@ -633,7 +647,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mNavDesc.post(() -> mNavDesc.setText(desc));
             }
 
-            if(!email.equals(AVUser.getCurrentUser().getEmail())){
+            if (!email.equals(AVUser.getCurrentUser().getEmail())) {
 
                 // 第一参数是 className,第二个参数是 objectId
                 AVObject user = AVObject.createWithoutData("_User", AVUser.getCurrentUser().getObjectId());

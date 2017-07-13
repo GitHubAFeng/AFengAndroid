@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 
+import com.afeng.xf.ui.data.FuLiContentBean;
+import com.afeng.xf.ui.data.FuLiHeadBean;
 import com.afeng.xf.utils.AFengUtils.AppLogMessageMgr;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
@@ -47,12 +49,14 @@ public class App extends Application {
         ///////////////////后端云设置开始
 
         // 注册此类为数据表
-        AVObject.registerSubclass(HomeListItem.class);
-        AVObject.registerSubclass(HomeBannerItem.class);
-        AVObject.registerSubclass(AdvertisingItem.class);
-        AVObject.registerSubclass(UserInfo.class);
-        AVObject.registerSubclass(NetConfig.class);
+        AVObject.registerSubclass(HomeListItem.class);  //主页下拉
+        AVObject.registerSubclass(HomeBannerItem.class);  //主页轮播
+        AVObject.registerSubclass(AdvertisingItem.class);  //广告
+        AVObject.registerSubclass(UserInfo.class);  //用户信息
+        AVObject.registerSubclass(NetConfig.class); //网络配置
         AVObject.registerSubclass(SplashBannerItem.class);  //引导图
+        AVObject.registerSubclass(FuLiHeadBean.class);  //福利头部
+        AVObject.registerSubclass(FuLiContentBean.class);  //福利内容
 
         // 节省流量
         AVOSCloud.setLastModifyEnabled(true);

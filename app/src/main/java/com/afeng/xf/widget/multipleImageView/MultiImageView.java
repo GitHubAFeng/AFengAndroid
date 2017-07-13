@@ -80,6 +80,7 @@ public class MultiImageView extends LinearLayout {
         initView();
     }
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.i("tag00", "onMeasure() widthMeasureSpec:" + widthMeasureSpec + "    heightMeasureSpec:" + heightMeasureSpec);

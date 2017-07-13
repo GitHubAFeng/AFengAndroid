@@ -3,6 +3,7 @@ package com.afeng.xf.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -52,6 +53,9 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
 
     private BGABanner mBGABanner;
 
+    @BindView(R.id.one_content_SwipeRefresh)
+    SwipeRefreshLayout mSwipeLayout;
+
     @BindView(R.id.one_rv_list)
     RecyclerView mRecyclerView;
 
@@ -80,8 +84,14 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void initView(Bundle savedInstanceState) {
 
+        mSwipeLayout.setColorSchemeResources(R.color.holo_blue_bright,
+                R.color.holo_green_light, R.color.holo_orange_light,
+                R.color.holo_red_light);
+
         adapter = new oneAdapter(R.layout.afeng_one_item, listDatas);
         adapter.openLoadAnimation();  //默认渐隐动画
+        adapter.setEnableLoadMore(true);
+        adapter.setUpFetchEnable(false);
 
         if (getArguments() != null) {
             mType = getArguments().getString(TYPE);
@@ -105,6 +115,20 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
         headerView.findViewById(R.id.home_live).setOnClickListener(this);
 
         adapter.setOnLoadMoreListener(() -> initItemData());
+
+
+        //下拉刷新
+        mSwipeLayout.setOnRefreshListener(() -> {
+            if (!mSwipeLayout.isRefreshing()) {
+                mSwipeLayout.setRefreshing(true);
+            }
+
+            SwipeBannerData();
+            SwipeItemData();
+
+            mSwipeLayout.setRefreshing(false);
+
+        });
     }
 
     @Override
@@ -166,28 +190,31 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void done(List<AVObject> list, AVException e) {
 
-                if (list.size() > 0) {
-                    for (AVObject avObject : list) {
+                if (list != null) {
+                    if (list.size() > 0) {
+                        for (AVObject avObject : list) {
 
-                        String desc = avObject.getString("desc");
-                        String img = avObject.getString("img");
-                        String url = avObject.getString("url");
-                        String jsCode = avObject.getString("jsCode");
+                            String desc = avObject.getString("desc");
+                            String img = avObject.getString("img");
+                            String url = avObject.getString("url");
+                            String jsCode = avObject.getString("jsCode");
 
-                        HomeBannerItem data = new HomeBannerItem();
-                        data.setDesc(desc);
-                        data.setJsCode(jsCode);
-                        data.setUrl(url);
-                        data.setImg(img);
-                        BannerDatas.add(data);
-                        BannerTips.add(desc);
+                            HomeBannerItem data = new HomeBannerItem();
+                            data.setDesc(desc);
+                            data.setJsCode(jsCode);
+                            data.setUrl(url);
+                            data.setImg(img);
+                            BannerDatas.add(data);
+                            BannerTips.add(desc);
+                        }
+                    } else {
+
                     }
-                } else {
 
+                    //绑定轮播图片与提示
+                    mBGABanner.setData(BannerDatas, BannerTips);
                 }
 
-                //绑定轮播图片与提示
-                mBGABanner.setData(BannerDatas, BannerTips);
             }
         });
 
@@ -232,6 +259,21 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
         });
 
     }
+
+
+    private void SwipeBannerData(){
+        BannerDatas.clear();
+        BannerTips.clear();
+        initBannerData();
+    }
+
+
+    private void SwipeItemData() {
+
+        skipCount = 0;  //跳过的数量
+        initItemData();
+    }
+
 
     private void initItemData() {
 

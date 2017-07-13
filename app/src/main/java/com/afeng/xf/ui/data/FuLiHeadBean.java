@@ -1,24 +1,25 @@
-package com.afeng.xf.ui.fuli;
+package com.afeng.xf.ui.data;
 
 import android.graphics.Bitmap;
+
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
 
 import java.io.Serializable;
 
 /**
  * Created by Administrator on 2017/7/11.
  */
-
-public class FuLiHeadBean implements Serializable {
+@AVClassName("FuLiHeadBean")
+public class FuLiHeadBean extends AVObject implements Serializable {
     private static final long serialVersionUID = 8393746841070408553L;
 
     private String imgUrl;
-    private Bitmap imgRes;
     private String name;
     private String tag;  //标记是什么
 
-    public FuLiHeadBean(String imgUrl, Bitmap imgRes, String name, String tag) {
+    public FuLiHeadBean(String imgUrl, String name, String tag) {
         this.imgUrl = imgUrl;
-        this.imgRes = imgRes;
         this.name = name;
         this.tag = tag;
     }
@@ -29,14 +30,6 @@ public class FuLiHeadBean implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
-
-    public Bitmap getImgRes() {
-        return imgRes;
-    }
-
-    public void setImgRes(Bitmap imgRes) {
-        this.imgRes = imgRes;
     }
 
     public String getName() {
