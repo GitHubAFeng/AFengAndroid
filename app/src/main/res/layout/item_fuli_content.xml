@@ -28,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/item_fuli_content_photo"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:scaleType="centerCrop"
                 android:layout_alignParentLeft="true" />
 
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="名字"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/item_fuli_content_time"
@@ -54,7 +54,7 @@
                     android:layout_below="@+id/item_fuli_content_name"
                     android:text="发布时间"
                     android:textColor="@color/grey"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/item_fuli_content_watch"
@@ -65,29 +65,45 @@
                     android:layout_toRightOf="@+id/item_fuli_content_time"
                     android:text="阅读量"
                     android:textColor="@color/grey"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
             </RelativeLayout>
 
 
             <ImageView
                 android:id="@+id/item_fuli_content_btn"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_expand_small_holo_light" />
 
         </RelativeLayout>
 
-        <com.afeng.xf.widget.multipleImageView.MultiImageView
+        <!--<com.afeng.xf.widget.multipleImageView.MultiImageView-->
+            <!--android:id="@+id/item_fuli_content_sub"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/temp_fuli_01"-->
+            <!--android:layout_marginTop="10dp">-->
+
+        <!--</com.afeng.xf.widget.multipleImageView.MultiImageView>-->
+
+        <com.afeng.xf.widget.ninegrid.NineGridView
             android:id="@+id/item_fuli_content_sub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:ngv_gridSpacing="3dp"
+            app:ngv_maxSize="9"
+            app:ngv_mode="grid"
+            app:ngv_singleImageRatio="1"
+            app:ngv_singleImageSize="250dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/temp_fuli_01"
-            android:layout_marginTop="10dp">
+            />
 
-        </com.afeng.xf.widget.multipleImageView.MultiImageView>
+
 
         <TextView
             android:id="@+id/item_fuli_content_desc"

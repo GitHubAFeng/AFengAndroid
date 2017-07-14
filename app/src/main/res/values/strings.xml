@@ -22,6 +22,7 @@
     <string name="permission_go_to_setting">去设置</string>
 
 
+
     <!--ByeBurger控件需要使用到的属性-->
     <string name="bye_burger_float_behavior">.widget.byeburgernavigationview.ByeBurgerFloatButtonBehavior</string>
     <string name="bye_burger_bottom_behavior">.widget.byeburgernavigationview.ByeBurgerBottomBehavior</string>

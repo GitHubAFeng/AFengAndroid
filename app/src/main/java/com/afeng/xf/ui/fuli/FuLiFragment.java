@@ -30,6 +30,11 @@ import com.afeng.xf.utils.AFengUtils.AppValidationMgr;
 import com.afeng.xf.utils.AFengUtils.PerfectClickListener;
 import com.afeng.xf.utils.GlideHelper.ImgLoadUtil;
 import com.afeng.xf.widget.multipleImageView.MultiImageView;
+import com.afeng.xf.widget.ninegrid.GlideImageLoader;
+import com.afeng.xf.widget.ninegrid.ImageInfo;
+import com.afeng.xf.widget.ninegrid.MyMeiZiClickViewAdapter;
+import com.afeng.xf.widget.ninegrid.NineGridView;
+import com.afeng.xf.widget.ninegrid.NineGridViewClickAdapter;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
@@ -80,6 +85,13 @@ public class FuLiFragment extends BaseFragment {
     List<FuLiHeadBean> mFuLiHeadList = new ArrayList<>();
     List<FuLiContentBean> mFuLiContentList = new ArrayList<>();
 
+    int limitCount = 10;  //每页数量
+    int skipCount = 0;  //跳过的数量
+
+
+    int headlimitCount = 10;  // 头部每页数量
+    int headskipCount = 0;  //头部跳过的数量
+
 
     private static FuLiFragment instance;
 
@@ -102,6 +114,8 @@ public class FuLiFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+//        NineGridView.setImageLoader(new GlideImageLoader());  //设置九宫格图片加载器
 
         mSwipeLayout.setColorSchemeResources(R.color.holo_blue_bright,
                 R.color.holo_green_light, R.color.holo_orange_light,
@@ -135,7 +149,8 @@ public class FuLiFragment extends BaseFragment {
             mFuLiHeadList.clear();
 
             initHeadData();
-            initContentData();
+
+            SwipeContentData();
 
             mSwipeLayout.setRefreshing(false);
 
@@ -146,11 +161,11 @@ public class FuLiFragment extends BaseFragment {
 //            xToastShow("上拉加载");
 //        });
 //
-//        mContentAdapter.setOnLoadMoreListener(() -> {
-//                    xToastShow("上拉加载");
-//
-//                }
-//        );
+
+        mContentAdapter.setOnLoadMoreListener(() -> {
+                    initContentData();
+                }
+        );
 
 
     }
@@ -175,7 +190,8 @@ public class FuLiFragment extends BaseFragment {
 
     @Override
     protected void onVisibleToUser() {
-
+        mHeadAdapter.notifyDataSetChanged();
+        mContentAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -223,27 +239,30 @@ public class FuLiFragment extends BaseFragment {
 
     private void initHeadData() {
 
+        FuLiHeadBean fuLiHeadBean = new FuLiHeadBean();
+        fuLiHeadBean.setImgUrl("http://d.hiphotos.baidu.com/zhidao/pic/item/43a7d933c895d143b6a31c4270f082025baf07fd.jpg");
+        fuLiHeadBean.setName("Genk妹子");
+        fuLiHeadBean.setTag("meizi");
 
-        String test = AppValidationMgr.cutString("Genk妹子妹子妹子妹子", 8, "…");
+        mFuLiHeadList.add(fuLiHeadBean);
 
-        mFuLiHeadList.add(
-                new FuLiHeadBean("http://d.hiphotos.baidu.com/zhidao/pic/item/43a7d933c895d143b6a31c4270f082025baf07fd.jpg",
-                        test,
-                        "meizi"));
-
-
+        mHeadAdapter.notifyDataSetChanged();
     }
 
     private void initContentData() {
 
         AVQuery<AVObject> avQuery = new AVQuery<>("FuLiContentBean");
         avQuery.orderByAscending("updatedAt");
+        avQuery.limit(limitCount);// 最多返回 10 条结果
+        avQuery.skip(skipCount);// 跳过
         avQuery.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
 
                 if (list != null && list.size() > 0) {
                     for (AVObject avObject : list) {
+
+                        FuLiContentBean fuLiContentBean = new FuLiContentBean();
 
                         ArrayList<String> temps = new ArrayList<>();
 
@@ -268,78 +287,79 @@ public class FuLiFragment extends BaseFragment {
 
                         }
 
-
-//
-//                        // 联表查询
-//                        AVObject _User = AVObject.createWithoutData("_User", userid);
-//                        _User.fetchInBackground("UserInfo", new GetCallback<AVObject>() {
-//                            @Override
-//                            public void done(AVObject avObject, AVException e) {
-//                                if (e == null) {
-//                                    if (avObject != null) {
-//
-//                                        AVObject info = avObject.getAVObject("UserInfo");
-//
-//                                        if (info != null) {
-//                                            String desc = TextUtils.isEmpty(info.getString("desc")) ? "心情" : info.getString("desc");
-//                                            AVFile avatar = info.getAVFile("avatar");
-//                                            String nickname = info.getString("nickname");  //昵称
-//
-//                                            if (avatar != null) {
-//                                                // 把图片下载回来
-//                                                avatar.getDataInBackground(new GetDataCallback() {
-//                                                    @Override
-//                                                    public void done(byte[] bytes, AVException e) {
-//                                                        // bytes 就是文件的数据流
-//                                                        if (e == null) {
-//                                                            if (bytes != null) {
-//                                                                Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
-//                                                                ImgLoadUtil.displayCircle(mContext, mUserAva, img);
-//                                                                ImgLoadUtil.displayCircle(mContext, mNavAvatar, img);
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                }, new ProgressCallback() {
-//                                                    @Override
-//                                                    public void done(Integer integer) {
-//                                                        // 下载进度数据，integer 介于 0 和 100。
-//                                                    }
-//                                                });
-//                                            }
-//
-//
-//                                        } else {
-//                                            xToastShow("info为空");
-//                                        }
-//
-//                                    } else {
-//                                        xToastShow("avObject为空");
-//                                    }
-//                                }
-//                            }
-//                        });
-//
+                        fuLiContentBean.setImgUrlList(temps);
+                        fuLiContentBean.setTime(date);
+                        fuLiContentBean.setWatch(0);
+                        fuLiContentBean.setDesc(desc);
 
 
-                        mFuLiContentList.add(
-                                new FuLiContentBean(
-                                        temps,
-                                        "http://p3.music.126.net/nJEZBQBh7SaNAwyw7dHOEw==/5806520906507733.jpg",
-                                        "昵称",
-                                        date,
-                                        0,
-                                        desc,
-                                        ""
-                                ));
+                        AVQuery<AVUser> userQuery = new AVQuery<>("_User");
+                        userQuery.getInBackground(userid, new GetCallback<AVUser>() {
+                            @Override
+                            public void done(AVUser user, AVException e) {
+
+                                if (e == null) {
+                                    if (user != null) {
+                                        fuLiContentBean.setName(user.getUsername());
+                                    }
+                                }
+                            }
+                        });
 
 
-                        mContentAdapter.notifyDataSetChanged();
+                        // 联表查询
+                        AVObject _User = AVObject.createWithoutData("_User", userid);
+                        _User.fetchInBackground("UserInfo", new GetCallback<AVObject>() {
+                            @Override
+                            public void done(AVObject avObject, AVException e) {
+                                if (e == null) {
+                                    if (avObject != null) {
+
+                                        AVObject info = avObject.getAVObject("UserInfo");
+
+                                        if (info != null) {
+                                            AVFile avatar = info.getAVFile("avatar");
+                                            String nickname = info.getString("nickname");  //昵称
+
+                                            if (!TextUtils.isEmpty(nickname)) {
+                                                fuLiContentBean.setName(nickname);
+                                            }
+
+                                            if (avatar != null) {
+                                                fuLiContentBean.setAvatar(avatar);
+                                            }
+
+                                            mFuLiContentList.add(fuLiContentBean);
+
+                                            mContentAdapter.notifyDataSetChanged();
+                                            skipCount += limitCount;
+                                            mContentAdapter.loadMoreComplete();
+
+                                        } else {
+                                            xToastShow("info为空");
+                                        }
+
+                                    } else {
+                                        xToastShow("avObject为空");
+                                    }
+                                }
+                            }
+                        });
+
                     }
+                } else {
+                    mContentAdapter.loadMoreEnd();
                 }
             }
         });
+    }
 
 
+    //下拉刷新
+    private void SwipeContentData() {
+
+        skipCount = 0;  //跳过的数量
+        initContentData();
     }
 
 
@@ -356,7 +376,9 @@ public class FuLiFragment extends BaseFragment {
             ImageView imageView = helper.getView(R.id.item_fuli_head_image);
             TextView textView = helper.getView(R.id.item_fuli_head_name);
 
-            textView.setText(item.getName());
+            //缩省过长的名字
+            String name = AppValidationMgr.cutString(item.getName(), 8, "…");
+            textView.setText(name);
 
             if (!TextUtils.isEmpty(item.getImgUrl())) {
                 Glide.with(helper.getConvertView().getContext())
@@ -385,8 +407,10 @@ public class FuLiFragment extends BaseFragment {
             TextView time = helper.getView(R.id.item_fuli_content_time);
             TextView desc = helper.getView(R.id.item_fuli_content_desc);
             TextView watch = helper.getView(R.id.item_fuli_content_watch);
-            MultiImageView multiImageView = helper.getView(R.id.item_fuli_content_sub);
             ImageView btnImg = helper.getView(R.id.item_fuli_content_btn);
+
+//            MultiImageView multiImageView = helper.getView(R.id.item_fuli_content_sub);
+            NineGridView multiImageView = helper.getView(R.id.item_fuli_content_sub);
 
 
             btnImg.setOnClickListener(new PerfectClickListener() {
@@ -400,19 +424,51 @@ public class FuLiFragment extends BaseFragment {
 
             if (!TextUtils.isEmpty(item.getAvaUrl())) {
                 ImgLoadUtil.displayCircle(mContext, avaimg, item.getAvaUrl());
-            }
-
-            if (item.getImgUrlList() != null && item.getImgUrlList().size() > 0) {
-                multiImageView.setList(item.getImgUrlList());
-                multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+            } else if (item.getAvatar() != null) {
+                // 把图片下载回来
+                item.getAvatar().getDataInBackground(new GetDataCallback() {
                     @Override
-                    public void onItemClick(View view, int position) {
-//                        xToastShow("选中了" + position + "号小姐~");
-                        EventBus.getDefault().postSticky(new MeiziEvent(position, item.getImgUrlList()));
-
-                        startActivity(new Intent(getContext(), MeiZiBigImageActivity.class));
+                    public void done(byte[] bytes, AVException e) {
+                        // bytes 就是文件的数据流
+                        if (e == null) {
+                            if (bytes != null) {
+                                Bitmap img = AppImageMgr.getBitmapByteArray(bytes, 512, 512);
+                                ImgLoadUtil.displayCircle(mContext, avaimg, img);
+                            }
+                        }
+                    }
+                }, new ProgressCallback() {
+                    @Override
+                    public void done(Integer integer) {
+                        // 下载进度数据，integer 介于 0 和 100。
                     }
                 });
+            }
+
+
+            if (item.getImgUrlList() != null && item.getImgUrlList().size() > 0) {
+//                multiImageView.setList(item.getImgUrlList());
+//                multiImageView.setOnItemClickListener(new MultiImageView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        EventBus.getDefault().postSticky(new MeiziEvent(position, item.getImgUrlList()));
+//
+//                        startActivity(new Intent(getContext(), MeiZiBigImageActivity.class));
+//                    }
+//                });
+
+                List<ImageInfo> imageInfos = new ArrayList<>();
+                for (String s : item.getImgUrlList()) {
+
+                    imageInfos.add(new ImageInfo(s));
+                }
+
+//                multiImageView.setAdapter(new NineGridViewClickAdapter(mContext, imageInfos));
+                multiImageView.setAdapter(new MyMeiZiClickViewAdapter(mContext, imageInfos));
+
+                if (item.getImgUrlList() != null && item.getImgUrlList().size() == 1) {
+                    multiImageView.setSingleImageRatio(1);
+                }
             }
 
             name.setText(item.getName());

@@ -23,6 +23,7 @@ import android.view.MotionEvent;
  *
  * @author Chris Banes
  */
+/** 修复图片在ViewPager控件中缩放报错的BUG */
 public class HackyViewPager extends ViewPager {
 
     public HackyViewPager(Context context) {
@@ -41,4 +42,18 @@ public class HackyViewPager extends ViewPager {
             return false;
         }
     }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        try {
+            return super.onTouchEvent(ev);
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+
+
 }

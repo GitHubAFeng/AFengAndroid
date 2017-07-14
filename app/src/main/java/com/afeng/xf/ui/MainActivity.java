@@ -311,7 +311,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 case R.id.ll_nav_me:// 我的信息
 
                     if (AVUser.getCurrentUser() != null) {
-//                        startActivity(new Intent(this, UserInfoActivity.class));
                         goToActivityForResult(UserInfoActivity.class, null, USERINFO_REQUEST_CODE);
 
                     } else {
@@ -342,22 +341,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 case R.id.ll_nav_admin:// 管理员
 
-                    xToastShow("管理员");
                     startActivity(new Intent(this, ContributeActivity.class));
 
                     break;
 
                 case R.id.ll_nav_contribute:// 投稿
 
-                    xToastShow("投稿");
+                    xToastShow("投稿功能暂时未开放");
 
                     break;
+
+                case R.id.ll_nav_topup:// 充值
+
+                    xToastShow("充值功能暂时未开放");
+
+                    break;
+
             }
 
             return true;
         });
 
     }
+
+
 
 
     //创建工具栏右上角菜单
@@ -807,6 +814,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                                                 mNavigationView.getMenu().findItem(R.id.ll_nav_exit).setTitle("登出用户");
 
+                                                // 暂时定为管理员
+                                                if (!AVUser.getCurrentUser().getObjectId().equals("59587f92128fe100583a96a8")) {
+                                                    mNavigationView.getMenu().findItem(R.id.ll_nav_admin).setVisible(false);
+                                                }
 
                                                 Constants.USER_INFO_ID = info.getObjectId();  //保存用户关联的信息表，方便下次查询
 

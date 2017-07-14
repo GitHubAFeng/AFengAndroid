@@ -3,6 +3,7 @@ package com.afeng.xf.ui.data;
 import android.graphics.Bitmap;
 
 import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 
 import java.io.Serializable;
@@ -14,14 +15,17 @@ import java.io.Serializable;
 public class FuLiHeadBean extends AVObject implements Serializable {
     private static final long serialVersionUID = 8393746841070408553L;
 
+    private AVFile avatar;  //头像
     private String imgUrl;
     private String name;
     private String tag;  //标记是什么
 
-    public FuLiHeadBean(String imgUrl, String name, String tag) {
-        this.imgUrl = imgUrl;
-        this.name = name;
-        this.tag = tag;
+    public AVFile getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(AVFile avatar) {
+        this.avatar = avatar;
     }
 
     public String getImgUrl() {

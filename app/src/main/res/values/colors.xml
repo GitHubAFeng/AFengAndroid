@@ -108,6 +108,10 @@
     <color name="permissionBgColorBlue">#ee447AA4</color>
 
 
+    <!--ninegrid九宫格图片蒙版-->
+    <color name="ic_default_bg_color">#33000000</color>
+
+
     <!--颜色配置大全-->
     <color name="colorPrimary">#3F51B5</color><!--首要颜色-->
     <color name="colorPrimaryDark">#303F9F</color><!--首要颜色暗色-->

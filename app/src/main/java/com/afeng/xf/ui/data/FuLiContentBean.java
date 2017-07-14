@@ -2,6 +2,7 @@ package com.afeng.xf.ui.data;
 
 
 import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 
 import java.io.Serializable;
@@ -23,19 +24,18 @@ public class FuLiContentBean extends AVObject implements Serializable {
     private Date time;
     private long watch;
     private String desc;
+    private AVFile avatar;  //头像
+
+    public AVFile getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(AVFile avatar) {
+        this.avatar = avatar;
+    }
 
     public String getDesc() {
         return desc;
-    }
-
-    public FuLiContentBean(ArrayList<String> imgUrlList, String avaUrl, String name, Date time, long watch, String desc, String tag) {
-        this.imgUrlList = imgUrlList;
-        this.avaUrl = avaUrl;
-        this.name = name;
-        this.time = time;
-        this.watch = watch;
-        this.desc = desc;
-        this.tag = tag;
     }
 
     public void setDesc(String desc) {
@@ -100,8 +100,4 @@ public class FuLiContentBean extends AVObject implements Serializable {
         this.tag = tag;
     }
 
-
-
-    public FuLiContentBean() {
-    }
 }

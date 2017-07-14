@@ -201,6 +201,13 @@
         <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
 
 
+        <!--ninegrid九宫格挂件大图展示-->
+        <activity
+            android:name=".widget.ninegrid.ImagePreviewActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+
         <meta-data
             android:name="design_width"
             android:value="768" />

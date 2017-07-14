@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="内容制作中，正在寻找更多的开源API"
+        android:text="内容制作中…"
         android:layout_gravity="center_horizontal"
         />
 

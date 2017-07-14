@@ -8,39 +8,45 @@
             android:id="@+id/ll_nav_me"
             android:icon="@drawable/nav_me"
             android:title="我的信息" />
-    </group>
-
-    <group android:id="@+id/g3_nav_admin">
-        <item
-            android:id="@+id/ll_nav_admin"
-            android:icon="@drawable/nav_admin"
-            android:title="管理员" />
-
         <item
             android:id="@+id/ll_nav_contribute"
             android:icon="@drawable/nav_contribute"
             android:title="我的投稿" />
+
+        <item
+            android:id="@+id/ll_nav_topup"
+            android:icon="@drawable/nav_menu_topup"
+            android:title="我要充值" />
+
     </group>
+
 
     <group android:id="@+id/g1">
         <item
             android:id="@+id/ll_nav_deedback"
             android:icon="@drawable/ic_nav_deedback"
             android:title="问题反馈" />
-        <!--<item-->
-        <!--android:id="@+id/wallet"-->
-        <!--android:icon="@mipmap/ic_launcher"-->
-        <!--android:title="钱包"/>-->
+
     </group>
+
     <group android:id="@+id/g2">
+
+        <item
+            android:id="@+id/ll_nav_admin"
+            android:icon="@drawable/nav_admin"
+            android:title="管理员" />
+
         <item
             android:id="@+id/ll_nav_about"
             android:icon="@drawable/ic_nav_about"
             android:title="关于作者" />
+
     </group>
+
     <item
         android:id="@+id/ll_nav_exit"
         android:icon="@drawable/ic_nav_exit"
         android:title="用户登录" />
+
 
 </menu>
