@@ -72,11 +72,11 @@
 
             <ImageView
                 android:id="@+id/item_fuli_content_btn"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_expand_small_holo_light" />
+                android:src="@drawable/fuli_download" />
 
         </RelativeLayout>
 

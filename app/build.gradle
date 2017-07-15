@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+def configInfo = rootProject.ext.android
 
 android {
     signingConfigs {
@@ -13,9 +14,9 @@ android {
         targetSdkVersion 25
 
         //内部版本号，int类型
-        versionCode 11
+        versionCode configInfo.versionCode
         //对外版本号，string
-        versionName "1.1"
+        versionName configInfo.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -190,8 +191,15 @@ dependencies {
     //图片选择库
     implementation 'com.zhihu.android:matisse:0.4.3'
 
+    //Luban（鲁班） —— Android图片压缩工具，仿微信朋友圈压缩策略。
+    implementation 'top.zibin:Luban:1.1.2'
+
     //圆形图片头像
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    //七牛，需要依赖两个SDK
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.+'
+    implementation 'com.qiniu:qiniu-java-sdk:7.2.+'
 
     //腾讯第三方X5内核WedView
     implementation files('libs/tbs_sdk.jar')

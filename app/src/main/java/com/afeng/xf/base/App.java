@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.util.Log;
 
 import com.afeng.xf.ui.data.FuLiContentBean;
 import com.afeng.xf.ui.data.FuLiHeadBean;
@@ -11,6 +12,9 @@ import com.afeng.xf.utils.AFengUtils.AppLogMessageMgr;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.smtt.sdk.QbSdk;
 import com.afeng.xf.BuildConfig;
@@ -21,6 +25,8 @@ import com.afeng.xf.ui.data.NetConfig;
 import com.afeng.xf.ui.data.SplashBannerItem;
 import com.afeng.xf.ui.data.UserInfo;
 import com.afeng.xf.utils.cache.ACache;
+
+import org.json.JSONObject;
 
 
 public class App extends Application {
@@ -68,7 +74,6 @@ public class App extends Application {
 
         // 是否开启日志
         AppLogMessageMgr.isEnableDebug(BuildConfig.DEBUG);
-
 
         initTBS();  //预加载 TBS浏览器
 
@@ -147,6 +152,10 @@ public class App extends Application {
         }
         return pi;
     }
+
+
+
+
 
 
 }

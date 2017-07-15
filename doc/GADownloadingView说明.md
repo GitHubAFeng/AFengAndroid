@@ -1,5 +1,7 @@
 如何使用:
 
+https://github.com/Ajian-studio/GADownloading/blob/master/README_CN.md
+
 注：
 1.整体实现均使用色值，未使用任何图片资源，核心色彩都已添加自定义属性；
 2.整体宽高自行定义，内部元素均根据整体宽高自动缩放适应，但由于整体效果限制，建议宽度不要低于100dp，否则效果不佳；

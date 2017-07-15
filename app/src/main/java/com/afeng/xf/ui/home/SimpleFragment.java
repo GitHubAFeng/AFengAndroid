@@ -269,7 +269,7 @@ public class SimpleFragment extends BaseFragment implements View.OnClickListener
 
 
     private void SwipeItemData() {
-
+        listDatas.clear();
         skipCount = 0;  //跳过的数量
         initItemData();
     }

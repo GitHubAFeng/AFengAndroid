@@ -81,6 +81,8 @@ public class HomeRvItemContributeFragment extends BaseFragment {
         });
 
         mJsBtn.setOnClickListener(v -> clooseJS());
+
+
     }
 
     @Override

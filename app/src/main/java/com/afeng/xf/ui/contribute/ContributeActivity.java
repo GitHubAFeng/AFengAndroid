@@ -1,6 +1,9 @@
 package com.afeng.xf.ui.contribute;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,12 +11,30 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.widget.ProgressBar;
 
 import com.afeng.xf.R;
 import com.afeng.xf.base.BaseActivity;
+import com.afeng.xf.utils.AFengUtils.AppImageMgr;
+import com.afeng.xf.utils.AFengUtils.QinIuManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadOptions;
+import com.zhihu.matisse.Matisse;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 
@@ -33,12 +54,17 @@ public class ContributeActivity extends BaseActivity {
     Toolbar toolbar;
 
 
+    @BindView(R.id.contribute_progressBar)
+    ProgressBar mProgressBar;
+
+
     //tab的标题
     public String[] mTitles = {
             "首页轮播",
             "首页下拉",
             "福利头部",
-            "福利下拉"
+            "福利下拉",
+            "图片上传"
     };
 
     // 与标题对应的Fragment
@@ -47,7 +73,8 @@ public class ContributeActivity extends BaseActivity {
             HomeBannerContributeFragment.getInstance(),
             HomeRvItemContributeFragment.getInstance(),
             FuLiHeadContributeFragment.getInstance(),
-            FuLiContributeFragment.getInstance()
+            FuLiContributeFragment.getInstance(),
+            QinIuImgUpdataFragment.getInstance()
     };
 
 
@@ -139,6 +166,26 @@ public class ContributeActivity extends BaseActivity {
 
         mMainViewPager.setCurrentItem(0);
     }
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FuLiContributeFragment.REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+
+            EventBus.getDefault().post(data);
+        }
+
+        if (requestCode == QinIuImgUpdataFragment.REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+
+            EventBus.getDefault().post(new QinIuEvent(data));
+        }
+
+    }
+
+
 
 
     class MainViewPagerAdapter extends FragmentPagerAdapter {

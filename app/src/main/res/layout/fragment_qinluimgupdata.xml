@@ -29,79 +29,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:text="标题："
-                            android:textSize="13sp" />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:textColorHint="#c5c5c5">
-
-                            <EditText
-                                android:id="@+id/contribute_fuli_item_title"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_login_bg_edit"
-                                android:hint="请输入文章标题(最长为20个字符)"
-                                android:inputType="text"
-                                android:maxLength="30"
-
-                                android:textColor="#2fa881"
-                                android:textCursorDrawable="@drawable/selector_login_bg_input_cursor"
-                                android:textSize="13sp" />
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="简介："
-                            android:textSize="13sp" />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:textColorHint="#c5c5c5">
-
-                            <EditText
-                                android:id="@+id/contribute_fuli_item_desc"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/selector_login_bg_edit"
-                                android:gravity="left|top"
-                                android:hint="请输入文章简介(最长为50个字符)"
-                                android:inputType="textMultiLine"
-                                android:maxLength="80"
-                                android:minHeight="80dp"
-                                android:textColor="#2fa881"
-                                android:textCursorDrawable="@drawable/selector_login_bg_input_cursor"
-                                android:textSize="13sp" />
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -124,12 +51,12 @@
                             android:textColorHint="#c5c5c5">
 
                             <EditText
-                                android:id="@+id/contribute_fuli_item_addr"
+                                android:id="@+id/contribute_qiniu_addr"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/selector_login_bg_edit"
                                 android:gravity="left|top"
-                                android:hint="请输入分享链接(例如百度云下载)"
+                                android:hint="显示图片地址"
                                 android:inputType="textMultiLine"
                                 android:minHeight="80dp"
                                 android:textColor="#2fa881"
@@ -144,15 +71,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <Button
-                            android:id="@+id/contribute_fuli_item_btn"
-                            android:layout_width="96dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/btn_temp"
-                            android:text="网络图片" />
 
                         <Button
-                            android:id="@+id/contribute_fuli_item_loaclbtn"
+                            android:id="@+id/contribute_qiniu_loaclbtn"
                             android:layout_width="96dp"
                             android:layout_height="28dp"
                             android:layout_marginLeft="10dp"
@@ -169,7 +90,7 @@
                             android:textSize="13sp" />
 
                         <TextView
-                            android:id="@+id/contribute_fuli_item_addcount"
+                            android:id="@+id/contribute_qiniu_addcount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -181,27 +102,16 @@
                     </LinearLayout>
 
 
-                    <Button
-                        android:id="@+id/contribute_fuli_item_go"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/shape_login_btn"
-                        android:stateListAnimator="@drawable/selector_register_state_list_animator_z"
-                        android:text="投稿"
-                        android:textColor="#FFCC00" />
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
 
             <Button
-                android:id="@+id/contribute_fuli_item_clear"
+                android:id="@+id/contribute_qiniu_clear"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:background="@drawable/shape_login_btn"
+                android:layout_marginTop="20dp"
                 android:stateListAnimator="@drawable/selector_register_state_list_animator_z"
                 android:text="清空图片"
                 android:textColor="@color/chocolate" />
@@ -218,7 +128,7 @@
                 app:cardUseCompatPadding="true">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/contribute_fuli_item_imgrv"
+                    android:id="@+id/contribute_qiniu_imgrv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 

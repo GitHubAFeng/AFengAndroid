@@ -1,5 +1,7 @@
 package com.afeng.xf.ui.fuli;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -8,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,6 +38,7 @@ import com.afeng.xf.widget.ninegrid.ImageInfo;
 import com.afeng.xf.widget.ninegrid.MyMeiZiClickViewAdapter;
 import com.afeng.xf.widget.ninegrid.NineGridView;
 import com.afeng.xf.widget.ninegrid.NineGridViewClickAdapter;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
@@ -44,6 +48,7 @@ import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.ProgressCallback;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -240,7 +245,7 @@ public class FuLiFragment extends BaseFragment {
     private void initHeadData() {
 
         FuLiHeadBean fuLiHeadBean = new FuLiHeadBean();
-        fuLiHeadBean.setImgUrl("http://d.hiphotos.baidu.com/zhidao/pic/item/43a7d933c895d143b6a31c4270f082025baf07fd.jpg");
+        fuLiHeadBean.setImgUrl("http://ot2y5fs2o.bkt.clouddn.com/3075.jpg");
         fuLiHeadBean.setName("Genk妹子");
         fuLiHeadBean.setTag("meizi");
 
@@ -252,7 +257,7 @@ public class FuLiFragment extends BaseFragment {
     private void initContentData() {
 
         AVQuery<AVObject> avQuery = new AVQuery<>("FuLiContentBean");
-        avQuery.orderByAscending("updatedAt");
+        avQuery.orderByDescending("updatedAt");
         avQuery.limit(limitCount);// 最多返回 10 条结果
         avQuery.skip(skipCount);// 跳过
         avQuery.findInBackground(new FindCallback<AVObject>() {
@@ -270,6 +275,7 @@ public class FuLiFragment extends BaseFragment {
                         String title = avObject.getString("title");
                         Date date = avObject.getUpdatedAt();
                         String userid = avObject.getString("userId");
+                        String add = avObject.getString("address");
 
                         JSONArray imgUrlList = avObject.getJSONArray("imgUrlList");
                         if (imgUrlList != null) {
@@ -291,7 +297,7 @@ public class FuLiFragment extends BaseFragment {
                         fuLiContentBean.setTime(date);
                         fuLiContentBean.setWatch(0);
                         fuLiContentBean.setDesc(desc);
-
+                        fuLiContentBean.setAddress(add);
 
                         AVQuery<AVUser> userQuery = new AVQuery<>("_User");
                         userQuery.getInBackground(userid, new GetCallback<AVUser>() {
@@ -357,7 +363,7 @@ public class FuLiFragment extends BaseFragment {
 
     //下拉刷新
     private void SwipeContentData() {
-
+        mFuLiContentList.clear();
         skipCount = 0;  //跳过的数量
         initContentData();
     }
@@ -417,7 +423,18 @@ public class FuLiFragment extends BaseFragment {
                 @Override
                 protected void onNoDoubleClick(View v) {
 
-                    xToastShow("点击菜单按钮");
+                    // 从API11开始android推荐使用android.content.ClipboardManager
+                    // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+                    ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    // 将文本内容放到系统剪贴板里。
+                    cm.setText(item.getAddress());
+
+//                    xToastShow(item.getAddress());
+                    new MaterialDialog.Builder(mActivity)
+                            .title("资源下载链接")
+                            .content("地址已经自动复制到剪切板:\n" + item.getAddress())
+                            .positiveText("确定")
+                            .show();
 
                 }
             });

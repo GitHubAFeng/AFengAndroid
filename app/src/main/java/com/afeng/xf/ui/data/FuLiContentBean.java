@@ -23,8 +23,18 @@ public class FuLiContentBean extends AVObject implements Serializable {
     private String name;
     private Date time;
     private long watch;
+    private String address;
     private String desc;
     private AVFile avatar;  //头像
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public AVFile getAvatar() {
         return avatar;

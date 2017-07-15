@@ -87,7 +87,7 @@
                             android:background="@drawable/selector_login_bg_edit"
                             android:gravity="left|top"
                             android:hint="请输入文章简介(最长为50个字符)"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:maxLength="80"
                             android:minHeight="80dp"
                             android:textColor="#2fa881"
@@ -130,6 +130,7 @@
                             android:textCursorDrawable="@drawable/selector_login_bg_input_cursor"
                             android:textSize="13sp" />
                     </android.support.design.widget.TextInputLayout>
+
 
                 </LinearLayout>
 
@@ -211,7 +212,7 @@
                             android:background="@drawable/selector_login_bg_edit"
                             android:gravity="left|top"
                             android:hint="请填写要嵌入的JS代码"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:minHeight="80dp"
                             android:textColor="#2fa881"
                             android:textCursorDrawable="@drawable/selector_login_bg_input_cursor"

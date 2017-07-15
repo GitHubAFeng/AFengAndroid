@@ -93,7 +93,7 @@ public class HomeBannerContributeFragment extends BaseFragment {
 
     @Override
     protected void onLazyLoadOnce() {
-        initData();
+
     }
 
     @Override
