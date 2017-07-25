@@ -150,11 +150,8 @@ public class FuLiFragment extends BaseFragment {
                 mSwipeLayout.setRefreshing(true);
             }
 
-            mFuLiContentList.clear();
-            mFuLiHeadList.clear();
 
-            initHeadData();
-
+            SwipeHeadData();
             SwipeContentData();
 
             mSwipeLayout.setRefreshing(false);
@@ -360,6 +357,12 @@ public class FuLiFragment extends BaseFragment {
         });
     }
 
+
+    private void SwipeHeadData(){
+
+        mFuLiHeadList.clear();
+        initHeadData();
+    }
 
     //下拉刷新
     private void SwipeContentData() {
