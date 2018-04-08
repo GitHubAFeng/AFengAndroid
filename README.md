@@ -23,5 +23,5 @@
 ## 联系我
 > 扫码加我QQ  
 
-![QQ][preview/qq.jpg]
+![QQ](preview/qq.jpg)
 
